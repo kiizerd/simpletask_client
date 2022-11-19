@@ -18,14 +18,15 @@ const getAllProjects = async (): Promise<Project[]> => {
   return data;
 };
 
-const newProject = async (title: string, desc: string): Promise<Project> => {
+const newProject = async (title: string, description: string): Promise<Project> => {
   const request = {
     method: "POST",
-    body: `project[title]=${title}&project[desc]=${desc}`,
+    headers: { 'Content-Type': 'application/json' },
+    body : JSON.stringify({ project: { title, description} }),
   };
   const response = await fetch(projectsRoute, request);
   const data = await response.json();
-  const project = { title: data.title, description: data.description };
+  const project = { ...data };
 
   return project;
 };
