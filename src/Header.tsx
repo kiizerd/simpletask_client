@@ -7,6 +7,7 @@ import {
   Burger,
   Paper,
   Transition,
+  Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link, useLocation } from "react-router-dom";
@@ -16,8 +17,11 @@ const HEADER_HEIGHT = 60;
 const useStyles = createStyles((theme) => ({
   root: {
     position: "relative",
-    zIndex: 1,
-    marginBottom: "2rem",
+    zIndex: 100,
+    marginBottom: "1rem",
+    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+      marginBottom: "2rem",
+    },
   },
 
   dropdown: {
@@ -99,13 +103,13 @@ interface HeaderResponsiveProps {
 
 const HeaderResponsive = ({ links }: HeaderResponsiveProps) => {
   const [opened, { toggle, close }] = useDisclosure(false);
-  const [active, setActive] = useState('');
+  const [active, setActive] = useState("");
   const { classes, cx } = useStyles();
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
 
   useEffect(() => {
-    setActive(pathname)
-  }, [])
+    setActive(pathname);
+  }, [pathname]);
 
   const items = links.map((link) => (
     <Link
@@ -126,6 +130,9 @@ const HeaderResponsive = ({ links }: HeaderResponsiveProps) => {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
+        <Link to="/" style={{ all: "unset", cursor: "pointer" }}>
+          <Title order={3}>SimpleTask</Title>
+        </Link>
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
