@@ -9,9 +9,9 @@ import {
   Title,
 } from "@mantine/core";
 import { IconDotsVertical } from "@tabler/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { getProject as getRemoteProject } from "../api/api";
+import { deleteProject } from "../api/api";
 import { Project } from "../types/models";
 
 const useStyles = createStyles((theme) => ({
@@ -70,23 +70,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface ProjectCardProps {
-  id: number;
   image: string;
+  project?: Project;
+  updateIndex(): void;
 }
 
-const ProjectCard = ({ id, image }: ProjectCardProps) => {
-  const [project, setProject] = useState<Project>();
+const ProjectCard = ({ image, project, updateIndex }: ProjectCardProps) => {
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const { classes } = useStyles();
-
-  useEffect(() => {
-    const getProject = async () => {
-      const apiResponse = await getRemoteProject(id);
-      setProject(apiResponse);
-    };
-
-    getProject();
-  }, []);
 
   if (!project) return <></>;
   return (
@@ -116,21 +107,32 @@ const ProjectCard = ({ id, image }: ProjectCardProps) => {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item>
-                <Link className={classes.link} to={`projects/${id}/edit`}>
-                  Edit
-                </Link>
+              <Menu.Item
+                component={Link}
+                className={classes.link}
+                // Assign from search parameter to allow returning
+                // to index page on edit completion or cancellation
+                to={`projects/${project.id}/edit?from=root`}
+              >
+                Edit
               </Menu.Item>
-              <Menu.Item>
-                <Link className={classes.link} to={`projects/${id}/delete`}>
-                  Delete
-                </Link>
+              <Menu.Item
+                className={classes.link}
+                onClick={async () => {
+                  const apiResponse = await deleteProject(project.id);
+                  console.log(apiResponse);
+                  updateIndex();
+                }}
+              >
+                Delete
               </Menu.Item>
               <Menu.Divider />
-              <Menu.Item>
-                <Link className={classes.link} to={`projects/${id}/share`}>
-                  Share
-                </Link>
+              <Menu.Item
+                component={Link}
+                className={classes.link}
+                to={`projects/${project.id}/share`}
+              >
+                Share
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
@@ -140,12 +142,7 @@ const ProjectCard = ({ id, image }: ProjectCardProps) => {
           {project.description}
         </Text>
       </div>
-      <Button
-        component={Link}
-        to={`/projects/${id}`}
-        variant="white"
-        color="dark"
-      >
+      <Button component={Link} to={`/projects/${project.id}`}>
         View
       </Button>
     </Paper>

@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { getAllProjects } from "../api/api";
 import { Project } from "../types/models";
 import ProjectCard from "../components/ProjectCard";
-import imageUrl from "../../public/CountryRoadStormy.jpg";
-import anotherImageUrl from "../../public/DesertMountains.jpg";
-import oneMoreImageUrl from "../../public/MossyCanyon.jpg";
+import imageUrl from "../assets/CountryRoadStormy.jpg";
+import anotherImageUrl from "../assets/DesertMountains.jpg";
+import oneMoreImageUrl from "../assets/MossyCanyon.jpg";
 import { IconPlus } from "@tabler/icons";
 import { Link } from "react-router-dom";
 
@@ -13,13 +13,14 @@ const ProjectIndexPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    const getProjects = async () => {
-      const apiResponse = await getAllProjects();
-      setProjects(apiResponse);
-    };
-
-    getProjects();
+    updateProjects();
   }, []);
+
+  const updateProjects = async () => {
+    const projectList = await getAllProjects();
+
+    setProjects(projectList);
+  };
 
   const MOCK = [
     {
@@ -30,31 +31,26 @@ const ProjectIndexPage = () => {
     { image: anotherImageUrl },
     { image: oneMoreImageUrl },
   ];
-
-  const ProjectChildren = () => {
-    const randomImage = () =>
-      MOCK[Math.floor(Math.random() * MOCK.length)].image;
-    return projects.map((project, index) => (
-      <ProjectCard id={project.id} key={index} image={randomImage()} />
-    ));
-  };
+  const randomImage = () => MOCK[Math.floor(Math.random() * MOCK.length)].image;
 
   return (
     <Container>
-      <Group my={10} py={2} sx={{
-        '@media (max-width: 755px)': {
-          justifyContent: "space-between"
-        },}}>
+      <Group
+        mb={20}
+        py={2}
+        sx={{
+          "@media (max-width: 755px)": {
+            justifyContent: "space-between",
+          },
+        }}
+      >
         <Title order={3}>Projects</Title>
         <Button
-          compact
-          m={7}
           component={Link}
           to="/projects/new"
-          color="dark"
-          variant="white"
+          rightIcon={<IconPlus size={18} />}
         >
-          New Project <IconPlus size={18} />
+          New Project
         </Button>
       </Group>
       <SimpleGrid
@@ -66,7 +62,14 @@ const ProjectIndexPage = () => {
           { maxWidth: 550, cols: 1 },
         ]}
       >
-        {ProjectChildren()}
+        {projects.map((project, index) => (
+          <ProjectCard
+            project={project}
+            updateIndex={updateProjects}
+            key={index}
+            image={randomImage()}
+          />
+        ))}
       </SimpleGrid>
     </Container>
   );
