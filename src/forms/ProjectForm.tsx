@@ -47,19 +47,18 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
     });
   }, [project]);
 
+  const submit = async (formValues: ProjectFormValues) => {
+    const newProject = await (project
+      ? updateProject({ id: project.id, ...formValues })
+      : createProject(formValues));
+
+    if (originPage == "root") return navigate("/");
+
+    navigate(newProject ? `/projects/${newProject.id}` : "/projects");
+  };
+
   return (
-    <form
-      onSubmit={form.onSubmit(async (values) => {
-        const { title, description } = values;
-        const newProject = await (project
-          ? updateProject({ id: project.id, title, description })
-          : createProject({ title, description }));
-
-        if (originPage == "root") return navigate("/");
-
-        navigate(newProject ? `/projects/${newProject.id}` : "/projects");
-      })}
-    >
+    <form onSubmit={form.onSubmit(submit)}>
       <TextInput
         mt="md"
         withAsterisk
