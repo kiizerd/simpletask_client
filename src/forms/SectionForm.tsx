@@ -2,33 +2,35 @@ import { Button, Flex, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons";
 import { createProjectSection } from "../api/sections";
+import { Section } from "../types/models";
 
 interface SectionFormProps {
   projectId: number;
-  update(): void;
+  add(sectionData: Section): void;
 }
 
-interface SectionFormValues {
+export interface SectionFormValues {
   name: string;
 }
 
-const sectionNameValidation = (name: string) => {
-  if (name.length > 22) return "Cannot exceed 21 chars.";
+export const sectionNameValidation = (name: string) => {
+  const tooLongMsg = `Cannot exceed 21 chars. Currently ${name.length}`;
+  if (name.length > 21) return tooLongMsg;
   if (name.length == 0) return "Name is required.";
 
   return null;
 };
 
-const SectionForm = ({ projectId, update }: SectionFormProps) => {
+const SectionForm = ({ projectId, add }: SectionFormProps) => {
   const form = useForm({
     initialValues: { name: "" },
     validate: { name: sectionNameValidation },
   });
 
   const submit = async (formValues: SectionFormValues) => {
-    await createProjectSection(projectId, formValues);
+    const newSection = await createProjectSection(projectId, formValues);
     form.setValues({ name: "" });
-    update();
+    add(newSection);
   };
 
   return (
