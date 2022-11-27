@@ -9,35 +9,39 @@ interface ProjectFormProps {
   project?: Project;
 }
 
+interface ProjectFormValues {
+  title: string;
+  description: string;
+}
+
+const titleValidation = (title: string) => {
+  if (!title) return "Title is required.";
+  if (title.length < 3) return "Title too short.";
+  if (title.length > 32) return "Title too long.";
+
+  return null;
+};
+
+const descriptionValidation = (description?: string) => {
+  if (!description) return null;
+
+  const len = description.length;
+  if (len > 0 && len > 240) return "Description exceeds limit. (200)";
+
+  return null;
+};
+
 const ProjectForm = ({ project }: ProjectFormProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const originPage = String(Object.fromEntries([...searchParams]).from);
-  const titleValidation = (title: string) => {
-    if (!title) return "Title is required.";
-    if (title.length < 3) return "Title too short.";
-    if (title.length > 32) return "Title too long.";
-
-    return null;
-  };
-
-  const descriptionValidation = (description?: string) => {
-    if (!description) return null;
-
-    const len = description.length;
-    if (len > 0 && len > 240) return "Description exceeds limit. (200)";
-
-    return null;
-  };
 
   const form = useForm({
     initialValues: { title: "", description: "" },
-    validate: {
-      title: (value) => titleValidation(value),
-      description: (value) => descriptionValidation(value),
-    },
+    validate: { title: titleValidation, description: descriptionValidation },
   });
 
+  // If project exists (i.e. we are editing) set form values
   useEffect(() => {
     if (!project) return;
 
