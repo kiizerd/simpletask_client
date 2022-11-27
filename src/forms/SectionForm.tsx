@@ -1,4 +1,4 @@
-import { Button, Flex, TextInput } from "@mantine/core";
+import { ActionIcon, Box, Flex, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons";
 import { createProjectSection } from "../api/sections";
@@ -33,13 +33,25 @@ const SectionForm = ({ projectId, add }: SectionFormProps) => {
     add(newSection);
   };
 
+  const errorTimeout = () => setTimeout(() => form.clearErrors(), 3000);
   return (
     <form onSubmit={form.onSubmit(submit)}>
       <Flex gap="sm">
-        <TextInput placeholder="New Section" {...form.getInputProps("name")} />
-        <Button type="submit">
-          <IconPlus />
-        </Button>
+        <TextInput
+          w="100%"
+          placeholder="New Section"
+          {...form.getInputProps("name")}
+        />
+        <Box pt={4}>
+          <ActionIcon
+            variant="filled"
+            color="violet"
+            type="submit"
+            onClick={errorTimeout}
+          >
+            <IconPlus />
+          </ActionIcon>
+        </Box>
       </Flex>
     </form>
   );
