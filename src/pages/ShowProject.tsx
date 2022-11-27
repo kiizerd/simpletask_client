@@ -1,77 +1,44 @@
-import {
-  Box,
-  Button,
-  Container,
-  Group,
-  SimpleGrid,
-  Text,
-  Title,
-} from "@mantine/core";
-import { useEffect, useState } from "react";
+import { Box, Container, SimpleGrid } from "@mantine/core";
 import { useLoaderData } from "react-router-dom";
-import { getProject, getProjectSections } from "../api/api";
-import { Project, Section } from "../types/models";
 import SectionCard from "../components/SectionCard";
+import SectionForm from "../forms/SectionForm";
+import ProjectHeader from "../components/ProjectHeader";
+import useProject from "../hooks/useProject";
 
 const ShowProjectPage = () => {
   const id = Number(useLoaderData());
-  const [project, setProject] = useState<Project>();
-  const [sections, setSections] = useState<Section[]>([]);
+  const { project, sections, ...sectionControls } = useProject(id);
+  const { addSection, removeSection, updateSection } = sectionControls;
 
-  useEffect(() => {
-    getAndSetProject();
-    getAndSetSections();
-  }, []);
+  const sectionCards = sections.map((section) => (
+    <Box key={section.id}>
+      <SectionCard
+        section={section}
+        remove={removeSection}
+        update={updateSection}
+      />
+    </Box>
+  ));
 
-  useEffect(() => {
-    getAndSetSections();
-  }, [project]);
+  const SectionGrid = () => (
+    <SimpleGrid
+      cols={4}
+      spacing="lg"
+      breakpoints={[
+        { maxWidth: 980, cols: 3, spacing: "md" },
+        { maxWidth: 755, cols: 2, spacing: "sm" },
+        { maxWidth: 600, cols: 1, spacing: "sm" },
+      ]}
+    >
+      {sectionCards}
+      <SectionForm projectId={id} add={addSection} />
+    </SimpleGrid>
+  );
 
-  const getAndSetProject = async () => {
-    setProject(await getProject(id));
-  };
-
-  const getAndSetSections = async () => {
-    setSections(await getProjectSections(id));
-  };
-
-  if (!project) return <></>;
   return (
-    <Container>
-      <Group position="apart">
-        <Title>{project.title}</Title>
-        <Group>
-          <Button>Edit</Button>
-          <Button>Delete</Button>
-        </Group>
-      </Group>
-      <Text>{project.description}</Text>
-
-      <hr />
-      {/* <Title order={3}>Tasks</Title> */}
-      <SimpleGrid
-        cols={4}
-        spacing="lg"
-        breakpoints={[
-          { maxWidth: 980, cols: 3, spacing: "md" },
-          { maxWidth: 755, cols: 2, spacing: "sm" },
-          { maxWidth: 600, cols: 1, spacing: "sm" },
-        ]}
-      >
-        {sections.map((section) => (
-          <Box key={section.id} sx={{ transition: 'height 0.3s linear' }}>
-            <SectionCard
-              projectId={id}
-              section={section}
-              update={getAndSetSections}
-            />
-          </Box>
-        ))}
-        {/* --- */}
-        <Box>
-          <SectionCard projectId={id} update={getAndSetSections} />
-        </Box>
-      </SimpleGrid>
+    <Container size="lg" sx={{ position: "relative" }}>
+      <ProjectHeader project={project} />
+      <SectionGrid />
     </Container>
   );
 };
