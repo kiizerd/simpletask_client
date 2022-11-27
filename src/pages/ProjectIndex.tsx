@@ -64,10 +64,10 @@ const ProjectIndexPage = () => {
       >
         {projects.map((project, index) => (
           <ProjectCard
-            project={project}
-            updateIndex={updateProjects}
             key={index}
+            project={project}
             image={randomImage()}
+            updateIndex={updateProjects}
           />
         ))}
       </SimpleGrid>
