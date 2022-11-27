@@ -54,7 +54,7 @@ const getProjectTasks = async (projectId: number): Promise<Task[]> => {
 const createProjectTask = async (
   projectId: number,
   taskData: Partial<Task>
-): Promise<Task> => {
+): Promise<Task | null> => {
   const { name, details, sectionId } = taskData;
   const request = {
     method: "POST",
@@ -62,6 +62,8 @@ const createProjectTask = async (
     body: JSON.stringify({ task: { name, details, section_id: sectionId } }),
   };
   const response = await fetch(tasksRoute(projectId), request);
+  if (response.status != 200) return null
+
   const data = await response.json();
   const task: Task = {
     id: data.id,

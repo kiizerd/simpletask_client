@@ -13,6 +13,7 @@ const getProjectSection = async (
   const section: Section = {
     id: data.id,
     name: data.name,
+    projectId: data.project_id
   };
 
   return section;
@@ -24,6 +25,7 @@ const getProjectSections = async (projectId: number): Promise<Section[]> => {
   const sections = data.map((dataItem: Section) => ({
     id: dataItem.id,
     name: dataItem.name,
+    projectId: dataItem.project_id
   }));
 
   return sections;
@@ -44,6 +46,7 @@ const createProjectSection = async (
   const section: Section = {
     id: data.id,
     name: data.name,
+    projectId: data.project_id
   };
 
   return section;
@@ -65,6 +68,7 @@ const updateProjectSection = async (
   const section: Section = {
     id: data.id,
     name: data.name,
+    projectId: data.project_id
   };
 
   return section;

@@ -7,6 +7,8 @@ interface Project {
 interface Section {
   id: number;
   name: string;
+  projectId: number;
+  project_id?: number;
 }
 
 interface Task {
