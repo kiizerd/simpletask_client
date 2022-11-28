@@ -2,7 +2,7 @@ import { Box, Button, Flex, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useClickOutside } from "@mantine/hooks";
 import { updateProjectSection } from "../api/sections";
-import SectionFormStyles from "../styles/SectionFormStyles";
+import sectionFormStyles from "../styles/SectionFormStyles";
 import { Section } from "../types/models";
 import { SectionFormValues, sectionNameValidation } from "./SectionForm";
 
@@ -15,7 +15,7 @@ interface SectionFormProps {
 const EditSectionForm = (props: SectionFormProps) => {
   const { section, setEditMode, update } = props;
   const { id, name, projectId } = section;
-  const { classes } = SectionFormStyles();
+  const { classes } = sectionFormStyles();
   const ref = useClickOutside(() => setEditMode(false));
   const form = useForm({
     initialValues: { name },
