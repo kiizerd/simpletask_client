@@ -20,9 +20,11 @@ const modalOptions = {
 // Deletes the project matching the id passed
 //
 // Call update() if passed, otherwise navigate to root
-export default function useDeleteModal(projectId: number, update?: () => void) {
+function useDeleteModal(projectId?: number, update?: () => void) {
   const navigate = useNavigate();
   const onConfirm = async () => {
+    if (!projectId) return false;
+
     await deleteProject(projectId);
     update ? update() : navigate("/");
   };
@@ -31,3 +33,5 @@ export default function useDeleteModal(projectId: number, update?: () => void) {
 
   return { openModal };
 }
+
+export default useDeleteModal;
