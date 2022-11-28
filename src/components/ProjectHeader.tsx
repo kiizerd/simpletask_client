@@ -9,11 +9,12 @@ interface ProjectHeaderProps {
 }
 
 const ProjectHeader = ({ project }: ProjectHeaderProps) => {
+  // Keep calls to hooks above conditional render
+  //https://github.com/facebook/react/issues/24391#issuecomment-1131531946
+  const { openModal } = useDeleteModal(project?.id);
   if (!project) return <Loader />;
 
-  const { openModal } = useDeleteModal(project.id);
   const { id, title, description } = project;
-
   return (
     <Box
       sx={(theme) => ({
