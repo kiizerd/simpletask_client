@@ -5,7 +5,7 @@ import projectCardStyles from "../../styles/ProjectCardStyles";
 import ProjectCardMenu from "./ProjectCardMenu";
 
 interface ProjectCardProps {
-  image: string;
+  image: URL;
   project?: Project;
   updateIndex(): void;
 }
