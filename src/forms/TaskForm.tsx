@@ -15,11 +15,12 @@ interface TaskFormValues {
 }
 
 const nameValidation = (name: string) => {
-  if (name && name !== "" && name.length > 3 && name.length < 24) return null;
+  if (name && name !== "" && name.length > 3) return null;
+  // if (name && name !== "" && name.length > 3 && name.length < 24) return null;
 
   if (!name || name === "") return "Name is required.";
   if (name.length < 3) return "Name must be at 3 chars.";
-  if (name.length > 24) return "Name cannot exceed 24 chars.";
+  // if (name.length > 24) return "Name cannot exceed 24 chars.";
 };
 
 const TaskForm = ({ sectionId, add }: TaskFormProps) => {
