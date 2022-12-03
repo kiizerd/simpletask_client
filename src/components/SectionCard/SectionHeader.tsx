@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { ActionIcon, Group, Menu, Title } from "@mantine/core";
 import { IconCheck, IconEdit, IconTrash, IconX } from "@tabler/icons";
-import { Section } from "../types/models";
-import EditSectionForm from "../forms/EditSectionForm";
-import sectionCardStyles from "../styles/SectionCardStyles";
+import { Section } from "../../types/models";
+import EditSectionForm from "../../forms/EditSectionForm";
+import sectionCardStyles from "../../styles/SectionCardStyles";
 
 interface SectionHeaderProps {
   section: Section;
@@ -59,10 +59,12 @@ const SectionCardHeader = ({ section, remove, update }: SectionHeaderProps) => {
           </Menu.Target>
 
           <Menu.Dropdown>
-            <Menu.Label sx={{ fontSize: 14, color: 'white' }}>Delete section?</Menu.Label>
-            <Group position="center">
+            <Menu.Label sx={{ fontSize: 14, color: "white" }}>
+              Delete section?
+            </Menu.Label>
+            <Group position="center" my="xs">
               <ActionIcon color="red" onClick={() => setMenuOpened(false)}>
-                <IconX size={16} />
+                <IconX size={18} />
               </ActionIcon>
               <ActionIcon
                 color="green"
@@ -71,7 +73,7 @@ const SectionCardHeader = ({ section, remove, update }: SectionHeaderProps) => {
                   remove();
                 }}
               >
-                <IconCheck size={16} />
+                <IconCheck size={18} />
               </ActionIcon>
             </Group>
           </Menu.Dropdown>

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Box, Card, Loader } from "@mantine/core";
-import { Section, Task } from "../types/models";
-import { getSectionTasks } from "../api/tasks";
-import { deleteProjectSection } from "../api/sections";
+import { Section, Task } from "../../types/models";
+import { getSectionTasks } from "../../api/tasks";
+import { deleteProjectSection } from "../../api/sections";
 import SectionCardHeader from "./SectionHeader";
-import SectionTask from "./SectionTask";
-import TaskForm from "../forms/TaskForm";
+import SectionTask from "../TaskCard/TaskCard";
+import TaskForm from "../../forms/TaskForm";
 
 interface SectionCardProps {
   section: Section;
