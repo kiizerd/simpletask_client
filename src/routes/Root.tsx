@@ -1,6 +1,6 @@
 import { Outlet, useMatch } from "react-router-dom";
-import Header from "../Header";
-import MantineApp from "../Mantine";
+import Header from "../components/Header";
+import MantineApp from "../styles/Mantine";
 import ProjectIndexPage from "../pages/ProjectIndex";
 
 const Root = () => {

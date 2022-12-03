@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link, useLocation } from "react-router-dom";
-import headerStyles, { HEADER_HEIGHT } from "./styles/HeaderStyles";
+import headerStyles, { HEADER_HEIGHT } from "../styles/HeaderStyles";
 
 interface HeaderResponsiveProps {
   links: { link: string; label: string }[];

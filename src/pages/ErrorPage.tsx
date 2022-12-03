@@ -7,7 +7,7 @@ import {
   Group,
 } from "@mantine/core";
 import { Link, useRouteError } from "react-router-dom";
-import MantineApp from "../Mantine";
+import MantineApp from "../styles/Mantine";
 
 const useStyles = createStyles((theme) => ({
   root: {
