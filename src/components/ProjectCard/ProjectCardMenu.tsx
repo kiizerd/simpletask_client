@@ -2,8 +2,8 @@ import { ActionIcon, Menu } from "@mantine/core";
 import { IconDotsVertical } from "@tabler/icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import useDeleteModal from "../hooks/useDeleteModal";
-import { Project } from "../types/models";
+import { Project } from "../../types/models";
+import useDeleteModal from "../../hooks/useDeleteModal";
 
 interface CardMenuProps {
   classNames: { link: string };

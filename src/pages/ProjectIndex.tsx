@@ -2,7 +2,7 @@ import { Button, Container, Group, SimpleGrid, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getAllProjects } from "../api/api";
 import { Project } from "../types/models";
-import ProjectCard from "../components/ProjectCard";
+import ProjectCard from "../components/ProjectCard/ProjectCard";
 import imageUrl from "../assets/CountryRoadStormy.jpg";
 import anotherImageUrl from "../assets/DesertMountains.jpg";
 import oneMoreImageUrl from "../assets/MossyCanyon.jpg";

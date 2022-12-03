@@ -1,7 +1,7 @@
 import { Text, Button, Group, Paper, Title } from "@mantine/core";
 import { Link } from "react-router-dom";
-import projectCardStyles from "../styles/ProjectCardStyles";
-import { Project } from "../types/models";
+import { Project } from "../../types/models";
+import projectCardStyles from "../../styles/ProjectCardStyles";
 import ProjectCardMenu from "./ProjectCardMenu";
 
 interface ProjectCardProps {
@@ -14,6 +14,7 @@ const ProjectCard = ({ image, project, updateIndex }: ProjectCardProps) => {
   const { classes } = projectCardStyles();
 
   if (!project) return <></>;
+
   return (
     <Paper
       shadow="md"
