@@ -1,7 +1,7 @@
 import { Project } from "../types/models";
 
 // const apiURL = import.meta.env.API_URL;
-const apiURL = "http://localhost:3000";
+const apiURL = "http://localhost:5100";
 const projectsRoute = apiURL + "/projects";
 
 const getProject = async (id: number): Promise<Project> => {

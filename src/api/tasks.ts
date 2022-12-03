@@ -22,20 +22,23 @@ const getProjectTask = async (
   return task;
 };
 
-const getSectionTasks = async (projectId: number, sectionId: number): Promise<Task[]> => {
-  const sectionTasksRoute = `${sectionsRoute(projectId)}/${sectionId}/tasks`
+const getSectionTasks = async (
+  projectId: number,
+  sectionId: number
+): Promise<Task[]> => {
+  const sectionTasksRoute = `${sectionsRoute(projectId)}/${sectionId}/tasks`;
   const response = await fetch(sectionTasksRoute);
   const data = await response.json();
   const tasks = data.map((dataItem: Task) => ({
     id: dataItem.id,
     name: dataItem.name,
     details: dataItem.details,
-    projectId: dataItem.projectId,
-    sectionId: dataItem.sectionId,
+    projectId: dataItem.project_id,
+    sectionId: dataItem.section_id,
   }));
 
   return tasks;
-}
+};
 
 const getProjectTasks = async (projectId: number): Promise<Task[]> => {
   const response = await fetch(tasksRoute(projectId));
@@ -62,7 +65,7 @@ const createProjectTask = async (
     body: JSON.stringify({ task: { name, details, section_id: sectionId } }),
   };
   const response = await fetch(tasksRoute(projectId), request);
-  if (response.status != 200) return null
+  if (response.status != 200) return null;
 
   const data = await response.json();
   const task: Task = {
