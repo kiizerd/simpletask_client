@@ -1,4 +1,5 @@
-import { Section } from "../types/models";
+import { backToFrontTask } from "../helpers/apiHelpers";
+import { Section, Task } from "../types/models";
 import { projectsRoute } from "./projects";
 
 const sectionsRoute = (projectId: number): string =>
@@ -13,7 +14,8 @@ const getProjectSection = async (
   const section: Section = {
     id: data.id,
     name: data.name,
-    projectId: data.project_id
+    projectId: data.project_id,
+    tasks: data.tasks.map((task: Task) => backToFrontTask(task)),
   };
 
   return section;
@@ -25,7 +27,7 @@ const getProjectSections = async (projectId: number): Promise<Section[]> => {
   const sections = data.map((dataItem: Section) => ({
     id: dataItem.id,
     name: dataItem.name,
-    projectId: dataItem.project_id
+    projectId: dataItem.project_id,
   }));
 
   return sections;
@@ -46,7 +48,7 @@ const createProjectSection = async (
   const section: Section = {
     id: data.id,
     name: data.name,
-    projectId: data.project_id
+    projectId: data.project_id,
   };
 
   return section;
@@ -68,7 +70,7 @@ const updateProjectSection = async (
   const section: Section = {
     id: data.id,
     name: data.name,
-    projectId: data.project_id
+    projectId: data.project_id,
   };
 
   return section;

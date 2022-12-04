@@ -1,4 +1,7 @@
-import { Project } from "../types/models";
+import { backToFrontSection } from "../helpers/apiHelpers";
+import { Project, Section } from "../types/models";
+
+// Clean these up and use SWR library to fetch and Zod to validate data
 
 // const apiURL = import.meta.env.API_URL;
 const apiURL = "http://localhost:5100";
@@ -11,6 +14,9 @@ const getProject = async (id: number): Promise<Project> => {
     id: data.id,
     title: data.title,
     description: data.description,
+    sections: data.sections.map((section: Section) =>
+      backToFrontSection(section)
+    ),
   };
 
   return project;
