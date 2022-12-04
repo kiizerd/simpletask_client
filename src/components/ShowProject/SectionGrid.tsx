@@ -4,7 +4,7 @@ import SectionForm from "../../forms/SectionForm";
 import SectionCard from "../SectionCard/SectionCard";
 
 interface SectionGridProps {
-  projectData: ProjectHookData | undefined;
+  projectData: ProjectHookData;
 }
 
 interface ProjectHookData {
@@ -16,14 +16,12 @@ interface ProjectHookData {
 }
 
 const SectionGrid = ({ projectData }: SectionGridProps) => {
-  if (!projectData) return <></>;
-
-  const { project, sections, ...sectionControls } = projectData;
+  const { project, ...sectionControls } = projectData;
   const { addSection, removeSection, updateSection } = sectionControls;
 
-  if (!project || !sections) return <></>;
+  if (!project || !project.sections) return <></>;
 
-  const sectionCards = sections.map((section) => (
+  const sectionCards = project.sections.map((section) => (
     <Box key={section.id}>
       <SectionCard
         section={section}

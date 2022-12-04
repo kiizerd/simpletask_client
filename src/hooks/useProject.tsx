@@ -1,42 +1,43 @@
 import { useEffect, useState } from "react";
 import { getProject } from "../api/projects";
-import { getProjectSections } from "../api/sections";
 import { Project, Section } from "../types/models";
 
 export default function useProject(projectId: number) {
   const [project, setProject] = useState<Project>();
-  const [sections, setSections] = useState<Section[]>([]);
 
   useEffect(() => {
     const setup = async () => {
       setProject(await getProject(projectId));
-      setSections(await getProjectSections(projectId));
     };
 
     setup();
   }, []);
 
   const addSection = async (newSection: Section) => {
-    setSections([...sections, newSection]);
+    if (!project || !project.sections) return;
+
+    setProject({ ...project, sections: [...project.sections, newSection] });
   };
 
   const updateSection = async (sectionId: number, newName: string) => {
-    const newSections = sections.map((section) => {
-      if (section.id == sectionId) {
-        return { ...section, name: newName };
-      } else return section;
+    if (!project || !project.sections) return;
+
+    const newSections = project.sections.map((section) => {
+      return section.id == sectionId ? { ...section, name: newName } : section;
     });
 
-    setSections(newSections);
+    setProject({ ...project, sections: newSections });
   };
 
   const removeSection = async (sectionId: number) => {
-    const updatedSectionList = sections.filter(
+    if (!project || !project.sections) return;
+
+    const updatedSectionList = project.sections.filter(
       (section) => section.id != sectionId
     );
 
-    setSections(updatedSectionList);
+    setProject({ ...project, sections: updatedSectionList });
   };
 
-  return { project, sections, addSection, removeSection, updateSection };
+  return { project, addSection, removeSection, updateSection };
 }
