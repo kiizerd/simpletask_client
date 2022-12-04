@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
 import { Box, Card, Loader } from "@mantine/core";
-import { Section, Task } from "../../types/models";
-import { getSectionTasks } from "../../api/tasks";
 import { deleteProjectSection } from "../../api/sections";
 import SectionCardHeader from "./SectionHeader";
-import SectionTask from "../TaskCard/TaskCard";
+import TaskCard from "../TaskCard/TaskCard";
 import TaskForm from "../../forms/TaskForm";
+import useSection from "../../hooks/useSection";
+import { Section } from "../../types/models";
 
 interface SectionCardProps {
   section: Section;
@@ -13,40 +12,39 @@ interface SectionCardProps {
   update(id: number, newName: string): Promise<void>;
 }
 
-const SectionCard = ({ section, remove, update }: SectionCardProps) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const { id, projectId } = section;
+const SectionCard = (props: SectionCardProps) => {
+  // Use section from project to keep state fresh
+  const { remove, update } = props;
+  const { projectId, id: sectionId } = props.section;
+  //  use tasks from sections for same reason
+  const { section, ...taskControls } = useSection(projectId, sectionId);
+  const { addTask, updateTask, removeTask } = taskControls;
 
-  useEffect(() => {
-    const setup = async () => {
-      setTasks(await getSectionTasks(projectId, id));
-    };
+  if (!section || !section?.tasks) return <Loader />;
 
-    setup();
-  }, []);
+  const { id, tasks } = section;
 
   const deleteSection = async () => {
     await deleteProjectSection(projectId, id);
     remove(id);
   };
 
-  const addTask = async (newTask: Task) => {
-    setTasks([...tasks, newTask]);
-  };
-
   return (
     <Card p="xs">
       <SectionCardHeader
-        section={section}
+        section={props.section}
         remove={deleteSection}
         update={update}
       />
       <Box my={3} py={2}>
-        {tasks ? (
-          tasks.map((task) => <SectionTask key={task.id} task={task} />)
-        ) : (
-          <Loader size="xs" />
-        )}
+        {tasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            update={updateTask}
+            remove={removeTask}
+          />
+        ))}
       </Box>
       <TaskForm sectionId={id} add={addTask} />
     </Card>

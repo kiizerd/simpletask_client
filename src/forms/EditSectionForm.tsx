@@ -8,7 +8,7 @@ import { SectionFormValues, sectionNameValidation } from "./SectionForm";
 
 interface SectionFormProps {
   section: Section;
-  update(newName: string): void;
+  update(sectionId: number, newName: string): void;
   setEditMode(value: boolean): void;
 }
 
@@ -28,7 +28,7 @@ const EditSectionForm = (props: SectionFormProps) => {
     const newSection: Section = { id, name, projectId };
     await updateProjectSection(projectId, newSection);
     form.setValues({ name: "" });
-    update(name);
+    update(id, name);
     setEditMode(false);
   };
 

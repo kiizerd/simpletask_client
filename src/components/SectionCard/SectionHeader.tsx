@@ -15,16 +15,13 @@ const SectionCardHeader = ({ section, remove, update }: SectionHeaderProps) => {
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>();
   const { classes } = sectionCardStyles();
-  const { id, name } = section;
 
   if (editMode)
     return (
       <EditSectionForm
+        section={section}
+        update={update}
         setEditMode={setEditMode}
-        update={function updateSection(newName: string) {
-          update(id, newName);
-        }}
-        {...{ section }}
       />
     );
 
@@ -37,7 +34,7 @@ const SectionCardHeader = ({ section, remove, update }: SectionHeaderProps) => {
         sx={{ cursor: "pointer" }}
         onClick={() => setEditMode(true)}
       >
-        {name}
+        {section.name}
       </Title>
 
       <Group spacing="sm" my={2}>
