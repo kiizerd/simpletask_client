@@ -2,6 +2,9 @@ interface Project {
   id: number;
   title: string;
   description: string;
+  // Associations
+  sections?: Section[];
+  tasks?: Task[];
 }
 
 interface Section {
@@ -9,6 +12,8 @@ interface Section {
   name: string;
   projectId: number;
   project_id?: number;
+  // Associations
+  tasks?: Task[];
 }
 
 interface Task {
@@ -17,6 +22,9 @@ interface Task {
   details: string;
   projectId: number;
   sectionId: number;
+  // Sent from backend
+  project_id?: number;
+  section_id?: number;
 }
 
 export { Project, Section, Task };
