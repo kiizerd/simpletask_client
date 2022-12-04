@@ -1,7 +1,7 @@
 import { TextInput, Button, Group, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { createProject, updateProject } from "../api/api";
 import { Project } from "../types/models";
 
@@ -73,11 +73,20 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
 
       <Textarea
         label="Description"
+        autosize
         mt="md"
         {...form.getInputProps("description")}
       />
 
       <Group>
+        <Button
+          component={Link}
+          to={originPage == "root" ? "/" : `/projects/${project?.id}`}
+          mt="md"
+          variant="subtle"
+        >
+          Cancel
+        </Button>
         <Button mt="md" type="submit">
           {project ? "Update " : "Create "}project
         </Button>
