@@ -32,25 +32,28 @@ const useStyles = createStyles((theme) => ({
 
 interface EditTaskForm {
   task: Task;
-  setEditMode: (value: boolean) => void;
+  setEditMode(value: boolean): void;
+  update(taskId: number, newTask: Task): void;
 }
 
 const EditTaskForm = (props: EditTaskForm) => {
-  const { task, setEditMode } = props;
+  const { task, setEditMode, update } = props;
   const { classes } = useStyles();
   const clickRef = useClickOutside(() => setEditMode(false));
   const form = useForm({ initialValues: { name: task.name } });
+
+  const submit = async (formValues: Partial<Task>) => {
+    const newTask = { ...task, ...formValues };
+    updateProjectTask(task.projectId, newTask);
+    setEditMode(false);
+    update(newTask.id, newTask);
+  };
 
   return (
     <form
       className={classes.form}
       style={{ position: "absolute", top: 0, zIndex: 250 }}
-      onSubmit={form.onSubmit(async (formValues: Partial<Task>) => {
-        const newTask = { ...task, ...formValues };
-        updateProjectTask(task.projectId, newTask);
-        setEditMode(false);
-        console.log("task updated");
-      })}
+      onSubmit={form.onSubmit(submit)}
     >
       <Flex ref={clickRef} gap={3}>
         <Textarea

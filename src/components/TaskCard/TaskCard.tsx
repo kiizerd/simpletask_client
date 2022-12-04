@@ -8,11 +8,13 @@ import EditTaskForm from "../../forms/EditTaskForm";
 import TaskModal from "./TaskModal";
 import TaskMenu from "./TaskMenu";
 
-interface SectionTaskProps {
+interface TaskCardProps {
   task: Task;
+  update(taskId: number, newTask: Task): void;
+  remove(taskId: number): void;
 }
 
-const TaskCard = ({ task }: SectionTaskProps) => {
+const TaskCard = ({ task, update, remove }: TaskCardProps) => {
   const [modalOpened, setModalOpened] = useState<boolean>(false);
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>();
@@ -41,9 +43,8 @@ const TaskCard = ({ task }: SectionTaskProps) => {
           <Group
             className={classes.taskControls}
             spacing="xs"
-            sx={() => ({
-              opacity: hovered || menuOpened ? 100 : 0,
-            })}
+            // Hide buttons unless hovering card or menu is open
+            sx={{ opacity: hovered || menuOpened ? 100 : 0 }}
           >
             <ActionIcon color="green" size="sm">
               <IconCheck size={17} />
@@ -63,11 +64,14 @@ const TaskCard = ({ task }: SectionTaskProps) => {
               setOpened={setMenuOpened}
               setEditMode={setEditMode}
               setModalOpened={setModalOpened}
+              remove={remove}
             />
           </Group>
         </Group>
       </Card>
-      {editMode ? <EditTaskForm task={task} setEditMode={setEditMode} /> : null}
+      {editMode ? (
+        <EditTaskForm task={task} setEditMode={setEditMode} update={update} />
+      ) : null}
     </Box>
   );
 };

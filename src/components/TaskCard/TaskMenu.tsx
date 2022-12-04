@@ -1,9 +1,9 @@
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
-  IconArrowUpRight,
   IconCheck,
   IconDots,
   IconEdit,
+  IconInfoCircle,
   IconTrash,
   IconX,
 } from "@tabler/icons";
@@ -14,14 +14,22 @@ import { Task } from "../../types/models";
 interface TaskMenuProps {
   task: Task;
   opened: boolean;
-  setOpened: (value: boolean) => void;
-  setEditMode: (value: boolean) => void;
-  setModalOpened: (value: boolean) => void;
+  remove(taskId: number): void;
+  setOpened(value: boolean): void;
+  setEditMode(value: boolean): void;
+  setModalOpened(value: boolean): void;
 }
 
 const TaskMenu = (props: TaskMenuProps) => {
-  const { task, opened, setOpened, setEditMode, setModalOpened } = props;
+  const { task, opened, remove, ...setters } = props;
+  const { setOpened, setEditMode, setModalOpened } = setters;
   const [confirmDelete, setConfirmDelete] = useState<boolean>();
+
+  const deleteTask = async () => {
+    setOpened(false);
+    await deleteProjectTask(task.projectId, task.id);
+    remove(task.id);
+  };
 
   return (
     <Menu
@@ -41,9 +49,9 @@ const TaskMenu = (props: TaskMenuProps) => {
         <Menu.Label>Task options</Menu.Label>
         <Menu.Item
           onClick={() => setModalOpened(true)}
-          icon={<IconArrowUpRight size={16} />}
+          icon={<IconInfoCircle size={16} />}
         >
-          View
+          Info
         </Menu.Item>
         <Menu.Item
           onClick={() => setEditMode(true)}
@@ -54,17 +62,12 @@ const TaskMenu = (props: TaskMenuProps) => {
         </Menu.Item>
         <Menu.Divider />
         {confirmDelete ? (
-          <Group position="center">
+          <Group position="center" py={4}>
             <ActionIcon color="red" onClick={() => setOpened(false)}>
               <IconX size={16} />
             </ActionIcon>
-            <ActionIcon
-              color="green"
-              onClick={() => {
-                setOpened(false);
-                deleteProjectTask(task.projectId, task.id);
-              }}
-            >
+
+            <ActionIcon color="green" onClick={deleteTask}>
               <IconCheck size={16} />
             </ActionIcon>
           </Group>
