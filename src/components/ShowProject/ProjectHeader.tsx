@@ -43,7 +43,9 @@ const ProjectHeader = ({ projectData }: ProjectHeaderProps) => {
           </Button>
         </Group>
       </Group>
-      <Text>{description}</Text>
+      <Text style={{ whiteSpace: "pre-line", maxWidth: "60%" }}>
+        {description}
+      </Text>
     </Box>
   );
 };
