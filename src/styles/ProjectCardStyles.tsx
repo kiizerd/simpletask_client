@@ -26,6 +26,7 @@ const projectCardStyles = createStyles((theme) => ({
     color: theme.white,
     fontSize: 22,
     maxWidth: "75%",
+    overflowWrap: "break-word",
   },
 
   description: {

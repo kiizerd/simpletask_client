@@ -19,7 +19,7 @@ const taskCardStyles = createStyles((theme) => ({
     animation: `${reappear} 0.3s linear`,
     cursor: "pointer",
     transition: "text-shadow 0.3s linear",
-    wordBreak: "break-all",
+    overflowWrap: "break-word",
     "&:hover": { textShadow: "0 0 0 white" },
   },
   taskControls: {
