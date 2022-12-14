@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
+import useSWR, { Fetcher } from "swr";
 import { getProject } from "../api/projects";
 import { Project, Section } from "../types/models";
 
-export default function useProject(projectId: number) {
+export interface ProjectHookData {
+  project?: Project;
+  error?: Error;
+  isLoading: boolean;
+  addSection(newSection: Section): void;
+  updateSection(sectionId: number, newName: string): Promise<void>;
+  removeSection(sectionId: number): Promise<void>;
+}
+
+export default function useProject(projectId: number): ProjectHookData {
+  const fetcher: Fetcher<Project, string> = (id) => getProject(Number(id));
+  const { data, error, isLoading } = useSWR(`${projectId}`, fetcher);
   const [project, setProject] = useState<Project>();
 
   useEffect(() => {
-    const setup = async () => {
-      setProject(await getProject(projectId));
-    };
-
-    setup();
-  }, []);
+    if (data) setProject(data);
+  }, [data]);
 
   const addSection = async (newSection: Section) => {
     if (!project || !project.sections) return;
@@ -39,5 +47,12 @@ export default function useProject(projectId: number) {
     setProject({ ...project, sections: updatedSectionList });
   };
 
-  return { project, addSection, removeSection, updateSection };
+  return {
+    project,
+    error,
+    isLoading,
+    addSection,
+    removeSection,
+    updateSection,
+  };
 }
