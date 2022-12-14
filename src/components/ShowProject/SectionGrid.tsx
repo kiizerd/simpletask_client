@@ -1,24 +1,16 @@
 import { Box, SimpleGrid } from "@mantine/core";
-import { Project, Section } from "../../types/models";
 import SectionForm from "../../forms/SectionForm";
 import SectionCard from "../SectionCard/SectionCard";
+import { ProjectHookData } from "../../hooks/useProject";
 
 interface SectionGridProps {
   projectData: ProjectHookData;
 }
 
-interface ProjectHookData {
-  project?: Project;
-  sections?: Section[];
-  addSection(sectionData: Section): void;
-  removeSection(sectionId: number): Promise<void>;
-  updateSection(sectionId: number, newName: string): Promise<void>;
-}
-
 const SectionGrid = ({ projectData }: SectionGridProps) => {
   const { project, ...sectionControls } = projectData;
   const { addSection, removeSection, updateSection } = sectionControls;
-
+  
   if (!project || !project.sections) return <></>;
 
   const sectionCards = project.sections.map((section) => (
