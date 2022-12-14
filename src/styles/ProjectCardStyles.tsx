@@ -33,7 +33,9 @@ const projectCardStyles = createStyles((theme) => ({
     color: theme.white,
     opacity: 0.7,
     fontWeight: 600,
+    whiteSpace: "pre-line",
     textTransform: "uppercase",
+    overflowWrap: "break-word",
   },
 
   link: {
