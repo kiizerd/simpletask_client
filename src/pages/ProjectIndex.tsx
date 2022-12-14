@@ -1,43 +1,27 @@
-import { Button, Container, Group, Title } from "@mantine/core";
-import { useEffect, useState } from "react";
-import { getAllProjects } from "../api/api";
-import { Project } from "../types/models";
-import { IconPlus } from "@tabler/icons";
-import { Link } from "react-router-dom";
+import { Container, Group, Loader, Title } from "@mantine/core";
+import NewProjectBtn from "../components/ProjectIndex/NewProjectBtn";
 import ProjectGrid from "../components/ProjectIndex/ProjectGrid";
+import useIndex from "../hooks/useIndex";
 
 const ProjectIndexPage = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const { projects, error, isLoading } = useIndex();
 
-  useEffect(() => {
-    updateProjects();
-  }, []);
-
-  const updateProjects = async () => {
-    const projectList = await getAllProjects();
-
-    setProjects(projectList);
-  };
+  if (isLoading) return <Loader />;
+  if (error) throw error;
 
   return (
     <Container>
       <Group
-        mb={20}
-        py={2}
         sx={{
+          padding: "2 0",
+          marginBottom: 20,
           "@media (max-width: 755px)": {
             justifyContent: "space-between",
           },
         }}
       >
         <Title order={3}>Projects</Title>
-        <Button
-          component={Link}
-          to="/projects/new"
-          rightIcon={<IconPlus size={18} />}
-        >
-          New Project
-        </Button>
+        <NewProjectBtn />
       </Group>
       <ProjectGrid projects={projects} />
     </Container>
