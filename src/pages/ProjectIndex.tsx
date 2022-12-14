@@ -39,7 +39,7 @@ const ProjectIndexPage = () => {
           New Project
         </Button>
       </Group>
-      <ProjectGrid projects={projects} update={updateProjects} />
+      <ProjectGrid projects={projects} />
     </Container>
   );
 };

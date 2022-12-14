@@ -8,12 +8,11 @@ import useDeleteModal from "../../hooks/useDeleteModal";
 interface CardMenuProps {
   classNames: { link: string };
   project: Project;
-  update(): void;
 }
 
-const ProjectCardMenu = ({ classNames, project, update }: CardMenuProps) => {
+const ProjectCardMenu = ({ classNames, project }: CardMenuProps) => {
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
-  const { openModal } = useDeleteModal(project.id, update);
+  const { openModal } = useDeleteModal(project.id);
 
   return (
     <Menu position={"left-start"} opened={menuOpened} onChange={setMenuOpened}>

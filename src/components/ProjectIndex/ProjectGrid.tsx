@@ -5,10 +5,9 @@ import ProjectCard from "../ProjectCard/ProjectCard";
 
 interface ProjectGridProps {
   projects: Project[];
-  update(): void;
 }
 
-const ProjectGrid = ({ projects, update }: ProjectGridProps) => {
+const ProjectGrid = ({ projects }: ProjectGridProps) => {
   return (
     <SimpleGrid
       spacing="lg"
@@ -24,7 +23,6 @@ const ProjectGrid = ({ projects, update }: ProjectGridProps) => {
           key={index}
           project={project}
           image={getImage()}
-          updateIndex={update}
         />
       ))}
     </SimpleGrid>

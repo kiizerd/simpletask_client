@@ -5,12 +5,11 @@ import projectCardStyles from "../../styles/ProjectCardStyles";
 import ProjectCardMenu from "./ProjectCardMenu";
 
 interface ProjectCardProps {
-  image: URL;
+  image: string;
   project?: Project;
-  updateIndex(): void;
 }
 
-const ProjectCard = ({ image, project, updateIndex }: ProjectCardProps) => {
+const ProjectCard = ({ image, project }: ProjectCardProps) => {
   const { classes } = projectCardStyles();
 
   if (!project) return <></>;
@@ -27,17 +26,16 @@ const ProjectCard = ({ image, project, updateIndex }: ProjectCardProps) => {
     >
       <div>
         <Group position="apart" className={classes.titleRow}>
-          <Title order={3} className={classes.title}>
+          <Title lineClamp={4} order={3} className={classes.title}>
             {project.title}
           </Title>
           <ProjectCardMenu
             classNames={{ link: classes.link }}
             project={project}
-            update={updateIndex}
           />
         </Group>
 
-        <Text className={classes.description} size="xs">
+        <Text lineClamp={6} size="xs" className={classes.description}>
           {project.description}
         </Text>
       </div>
