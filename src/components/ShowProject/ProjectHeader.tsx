@@ -1,51 +1,44 @@
-import { Box, Button, Group, Loader, Text, Title } from "@mantine/core";
-import { IconEdit, IconTrash } from "@tabler/icons";
-import { Link } from "react-router-dom";
-import useDeleteModal from "../../hooks/useDeleteModal";
+import { Box, Group, Text, Title } from "@mantine/core";
+import useShowProjectHeader from "../../hooks/useShowProjectHeader";
+import projectHeaderStyles from "../../styles/ProjectHeaderStyles";
+import DeleteProjectBtn from "./DeleteProjectBtn";
+import EditProjectBtn from "./EditProjectBtn";
+import ExpandButton from "./ExpandButton";
 import { Project } from "../../types/models";
 
-interface ProjectHeaderProps {
-  projectData: ProjectHookData;
+interface HeaderProps {
+  project: Project;
 }
 
-interface ProjectHookData {
-  project?: Project;
-}
-
-const ProjectHeader = ({ projectData }: ProjectHeaderProps) => {
-  // Keep calls to hooks above conditional render
-  //https://github.com/facebook/react/issues/24391#issuecomment-1131531946
-  const { openModal } = useDeleteModal(projectData.project?.id);
-  if (!projectData.project) return <Loader />;
-
-  const { project } = projectData;
+const ProjectHeader = ({ project }: HeaderProps) => {
   const { id, title, description } = project;
+  const { classes } = projectHeaderStyles();
+
+  const { hoveredRef, lineClamp, ...expand } = useShowProjectHeader(project);
+  const { showExpandBtn, isExpanded, setIsExpanded } = expand;
 
   return (
-    <Box
-      sx={(theme) => ({
-        marginBottom: theme.spacing.sm,
-        borderBottom: `1px solid ${theme.colors.dark[3]}`,
-      })}
-    >
+    <Box className={classes.container} ref={hoveredRef}>
       <Group position="apart">
-        <Title>{title}</Title>
+        <Title lineClamp={lineClamp} className={classes.title}>
+          {title}
+        </Title>
         <Group>
-          <Button
-            component={Link}
-            to={`/projects/${id}/edit`}
-            rightIcon={<IconEdit size={18} />}
-          >
-            Edit
-          </Button>
-          <Button onClick={openModal} rightIcon={<IconTrash size={18} />}>
-            Delete
-          </Button>
+          <EditProjectBtn projectId={id} />
+          <DeleteProjectBtn projectId={id} />
         </Group>
       </Group>
-      <Text style={{ whiteSpace: "pre-line", maxWidth: "60%" }}>
+      <Text lineClamp={lineClamp} className={classes.description}>
         {description}
       </Text>
+
+      {showExpandBtn && (
+        <ExpandButton
+          className={classes.expandBtn}
+          isExpanded={isExpanded}
+          setIsExpanded={setIsExpanded}
+        />
+      )}
     </Box>
   );
 };
