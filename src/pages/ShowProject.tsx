@@ -9,13 +9,13 @@ const ShowProjectPage = () => {
   const projectData = useProject(id);
   const { project, error, isLoading } = projectData;
 
-  if (isLoading) return <Loader />;
   if (error) throw error;
+  if (isLoading) return <Loader />;
 
   return (
     <Container size="lg" sx={{ position: "relative" }}>
       {project && <ProjectHeader project={project} />}
-      <SectionGrid projectData={projectData} />
+      {project && <SectionGrid project={project} />}
     </Container>
   );
 };
