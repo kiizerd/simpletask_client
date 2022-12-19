@@ -3,6 +3,7 @@ import { openConfirmModal } from "@mantine/modals";
 import { deleteProject } from "../api/projects";
 import { Text } from "@mantine/core";
 import { mutate } from "swr";
+import Project from "../types/Project";
 
 const modalOptions = {
   title: "Delete this project",
@@ -17,22 +18,24 @@ const modalOptions = {
   confirmProps: { color: "red" },
 };
 
-// Returned method opens a modal to confirm deletion of a project.
-// Deletes the project matching the id passed
-function useDeleteModal(projectId?: number) {
-  const location = useLocation();
+export default function useDeleteModal(projectId: number) {
   const navigate = useNavigate();
-  const onConfirm = async () => {
-    if (!projectId) return false;
+  const location = useLocation();
+  const atRoot = location.pathname == "/";
 
-    await deleteProject(projectId);
-    mutate("projectIndex");
-    if (location.pathname != "/") navigate("/");
+  const onConfirm = async () => {
+    await mutate("projects/", await deleteProject(projectId), {
+      populateCache: true,
+      revalidate: !atRoot,
+      rollbackOnError: false,
+      optimisticData: (projects: Project[]): Project[] => {
+        return projects.filter((project) => project.id != projectId);
+      },
+    });
+    if (!atRoot) navigate("/");
   };
 
   const openModal = () => openConfirmModal({ ...modalOptions, onConfirm });
 
   return { openModal };
 }
-
-export default useDeleteModal;
