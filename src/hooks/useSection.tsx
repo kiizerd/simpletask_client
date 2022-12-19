@@ -1,41 +1,24 @@
-import { useEffect, useState } from "react";
-import { getProjectSection } from "../api/sections";
-import { Section, Task } from "../types/models";
+import useSWR, { Key, Fetcher, KeyedMutator } from "swr";
+import { getProjectSection as getSection } from "../api/sections";
+import Section from "../types/Section";
 
-export default function useSection(projectId: number, sectionId: number) {
-  const [section, setSection] = useState<Section>();
+interface SectionHookData {
+  section: undefined | Section;
+  error: undefined | Error;
+  isLoading: boolean;
+  mutate: KeyedMutator<Section>;
+}
 
-  useEffect(() => {
-    const setup = async () => {
-      setSection(await getProjectSection(projectId, sectionId));
-    };
+export default function useSection(
+  projectId: number,
+  sectionId: number
+): SectionHookData {
+  const ids = [projectId, sectionId] as const;
+  const key: Key = `projects/${projectId}/sections/${sectionId}`;
+  // Converts array into `readonly` tuple`
+  const fetcher: Fetcher<Section, string> = () => getSection(...ids);
+  const response = useSWR(key, fetcher);
+  const { data: section, error, isLoading, mutate } = response;
 
-    setup();
-  }, [sectionId]);
-
-  const addTask = async (newTask: Task) => {
-    if (!section || !section.tasks) return;
-
-    setSection({ ...section, tasks: [...section.tasks, newTask] });
-  };
-
-  const updateTask = async (taskId: number, newTask: Task) => {
-    if (!section || !section.tasks) return;
-
-    const newTasks = section.tasks.map((task) => {
-      return task.id == taskId ? newTask : task;
-    });
-
-    setSection({ ...section, tasks: newTasks });
-  };
-
-  const removeTask = async (taskId: number) => {
-    if (!section || !section.tasks) return;
-
-    const newTasks = section.tasks.filter((task) => task.id !== taskId);
-
-    setSection({ ...section, tasks: newTasks });
-  };
-
-  return { section, addTask, updateTask, removeTask };
+  return { section, error, isLoading, mutate };
 }

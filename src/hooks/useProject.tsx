@@ -1,58 +1,19 @@
-import { useEffect, useState } from "react";
-import useSWR, { Fetcher } from "swr";
+import useSWR, { Fetcher, KeyedMutator } from "swr";
 import { getProject } from "../api/projects";
-import { Project, Section } from "../types/models";
+import Project from "../types/Project";
 
 export interface ProjectHookData {
-  project?: Project;
-  error?: Error;
+  project: Project | undefined;
+  error: Error;
   isLoading: boolean;
-  addSection(newSection: Section): void;
-  updateSection(sectionId: number, newName: string): Promise<void>;
-  removeSection(sectionId: number): Promise<void>;
+  mutate: KeyedMutator<Project>;
 }
 
 export default function useProject(projectId: number): ProjectHookData {
-  const fetcher: Fetcher<Project, string> = (id) => getProject(Number(id));
-  const { data, error, isLoading } = useSWR(`${projectId}`, fetcher);
-  const [project, setProject] = useState<Project>();
+  const getId = (key: string) => Number(key.split("/")[1]);
+  const fetcher: Fetcher<Project, string> = (key) => getProject(getId(key));
+  const response = useSWR(`projects/${projectId}`, fetcher);
+  const { data: project, error, isLoading, mutate } = response
 
-  useEffect(() => {
-    if (data) setProject(data);
-  }, [data]);
-
-  const addSection = async (newSection: Section) => {
-    if (!project || !project.sections) return;
-
-    setProject({ ...project, sections: [...project.sections, newSection] });
-  };
-
-  const updateSection = async (sectionId: number, newName: string) => {
-    if (!project || !project.sections) return;
-
-    const newSections = project.sections.map((section) => {
-      return section.id == sectionId ? { ...section, name: newName } : section;
-    });
-
-    setProject({ ...project, sections: newSections });
-  };
-
-  const removeSection = async (sectionId: number) => {
-    if (!project || !project.sections) return;
-
-    const updatedSectionList = project.sections.filter(
-      (section) => section.id != sectionId
-    );
-
-    setProject({ ...project, sections: updatedSectionList });
-  };
-
-  return {
-    project,
-    error,
-    isLoading,
-    addSection,
-    removeSection,
-    updateSection,
-  };
+  return { project, error, isLoading, mutate };
 }
