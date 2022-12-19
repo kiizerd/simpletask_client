@@ -1,10 +1,10 @@
 import { Container, Group, Loader, Title } from "@mantine/core";
 import NewProjectBtn from "../components/ProjectIndex/NewProjectBtn";
 import ProjectGrid from "../components/ProjectIndex/ProjectGrid";
-import useIndex from "../hooks/useIndex";
+import useProjectIndex from "../hooks/useProjectIndex";
 
 const ProjectIndexPage = () => {
-  const { projects, error, isLoading } = useIndex();
+  const { projects, error, isLoading } = useProjectIndex();
 
   if (isLoading) return <Loader />;
   if (error) throw error;
