@@ -1,7 +1,4 @@
-import { backToFrontSection } from "../helpers/apiHelpers";
-import { Project, Section } from "../types/models";
-
-// Clean these up and use SWR library to fetch and Zod to validate data
+import Project, { ProjectData } from "../types/Project";
 
 // const apiURL = import.meta.env.API_URL;
 const apiURL = "http://localhost:5100";
@@ -9,27 +6,16 @@ const projectsRoute = apiURL + "/projects";
 
 const getProject = async (id: number): Promise<Project> => {
   const response = await fetch(projectsRoute + `/${id}`);
-  const data = await response.json();
-  const project: Project = {
-    id: data.id,
-    title: data.title,
-    description: data.description,
-    sections: data.sections.map((section: Section) =>
-      backToFrontSection(section)
-    ),
-  };
+  const data = (await response.json()) as ProjectData;
+  const project = new Project(data.id, data);
 
   return project;
 };
 
 const getAllProjects = async (): Promise<Project[]> => {
   const response = await fetch(projectsRoute);
-  const data = await response.json();
-  const projects = data.map((dataItem: Project) => ({
-    id: dataItem.id,
-    title: dataItem.title,
-    description: dataItem.description,
-  }));
+  const data = (await response.json()) as ProjectData[];
+  const projects = data.map((project) => new Project(project.id, project));
 
   return projects;
 };
@@ -38,48 +24,43 @@ const createProject = async (
   projectData: Partial<Project>
 ): Promise<Project> => {
   const { description, title } = projectData;
-  const request = {
+  const request = new Request(projectsRoute, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ project: { title, description } }),
-  };
-  const response = await fetch(projectsRoute, request);
-  const data = await response.json();
-  const project: Project = {
-    id: data.id,
-    title: data.title,
-    description: data.description,
-  };
+  });
+  const response = await fetch(request);
+  const data = (await response.json()) as ProjectData;
+  const project = new Project(data.id, data);
 
   return project;
 };
 
-const updateProject = async (oldProject: Project): Promise<Project> => {
-  const { id, description, title } = oldProject;
+const updateProject = async (
+  projectData: Partial<Project>
+): Promise<Project> => {
+  const { id, description, title } = projectData;
   const projectRoute = projectsRoute + `/${id}`;
-  const request = {
+  const request = new Request(projectRoute, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ project: { title, description } }),
-  };
-  const response = await fetch(projectRoute, request);
-  const data = await response.json();
-  const project: Project = {
-    id: data.id,
-    title: data.title,
-    description: data.description,
-  };
+  });
+  const response = await fetch(request);
+  const data = (await response.json()) as ProjectData;
+  const project = new Project(data.id, data);
 
   return project;
 };
 
-const deleteProject = async (projectId: number): Promise<number> => {
-  const request = { method: "DELETE" };
+const deleteProject = async (projectId: number): Promise<Project[]> => {
   const projectRoute = projectsRoute + `/${projectId}`;
-  const response = await fetch(projectRoute, request);
-  // const data = await response.json();
+  const request = new Request(projectRoute, { method: "DELETE" });
+  const response = await fetch(request);
+  const data = (await response.json()) as ProjectData[];
+  const projects = data.map((dataItem) => new Project(dataItem.id, dataItem));
 
-  return response.status;
+  return projects;
 };
 
 export {

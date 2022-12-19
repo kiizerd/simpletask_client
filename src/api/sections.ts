@@ -1,6 +1,5 @@
-import { backToFrontTask } from "../helpers/apiHelpers";
-import { Section, Task } from "../types/models";
 import { projectsRoute } from "./projects";
+import Section, { SectionData } from "../types/Section";
 
 const sectionsRoute = (projectId: number): string =>
   projectsRoute + `/${projectId}/sections`;
@@ -10,25 +9,16 @@ const getProjectSection = async (
   sectionId: number
 ): Promise<Section> => {
   const response = await fetch(sectionsRoute(projectId) + `/${sectionId}`);
-  const data = await response.json();
-  const section: Section = {
-    id: data.id,
-    name: data.name,
-    projectId: data.project_id,
-    tasks: data.tasks.map((task: Task) => backToFrontTask(task)),
-  };
+  const data = (await response.json()) as SectionData;
+  const section = new Section(data.id, data);
 
   return section;
 };
 
 const getProjectSections = async (projectId: number): Promise<Section[]> => {
   const response = await fetch(sectionsRoute(projectId));
-  const data = await response.json();
-  const sections = data.map((dataItem: Section) => ({
-    id: dataItem.id,
-    name: dataItem.name,
-    projectId: dataItem.project_id,
-  }));
+  const data = (await response.json()) as SectionData[];
+  const sections = data.map((dataItem) => new Section(dataItem.id, dataItem));
 
   return sections;
 };
@@ -38,18 +28,14 @@ const createProjectSection = async (
   sectionData: Partial<Section>
 ): Promise<Section> => {
   const { name } = sectionData;
-  const request = {
+  const request = new Request(sectionsRoute(projectId), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ section: { name } }),
-  };
-  const response = await fetch(sectionsRoute(projectId), request);
-  const data = await response.json();
-  const section: Section = {
-    id: data.id,
-    name: data.name,
-    projectId: data.project_id,
-  };
+  });
+  const response = await fetch(request);
+  const data = (await response.json()) as SectionData;
+  const section = new Section(data.id, data);
 
   return section;
 };
@@ -60,18 +46,14 @@ const updateProjectSection = async (
 ): Promise<Section> => {
   const { id, name } = sectionData;
   const sectionRoute = sectionsRoute(projectId) + `/${id}`;
-  const request = {
+  const request = new Request(sectionRoute, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ section: { name } }),
-  };
-  const response = await fetch(sectionRoute, request);
-  const data = await response.json();
-  const section: Section = {
-    id: data.id,
-    name: data.name,
-    projectId: data.project_id,
-  };
+  });
+  const response = await fetch(request);
+  const data = (await response.json()) as SectionData;
+  const section = new Section(data.id, data);
 
   return section;
 };
@@ -79,13 +61,14 @@ const updateProjectSection = async (
 const deleteProjectSection = async (
   projectId: number,
   sectionId: number
-): Promise<number> => {
-  const request = { method: "DELETE" };
+): Promise<Section[]> => {
   const sectionRoute = sectionsRoute(projectId) + `/${sectionId}`;
-  const response = await fetch(sectionRoute, request);
-  // const data = await response.json();
+  const request = new Request(sectionRoute, { method: "DELETE" });
+  const response = await fetch(request);
+  const data = (await response.json()) as SectionData[];
+  const sections = data.map((dataItem) => new Section(dataItem.id, dataItem));
 
-  return response.status;
+  return sections;
 };
 
 export {
