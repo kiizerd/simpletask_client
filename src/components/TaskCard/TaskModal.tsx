@@ -1,5 +1,5 @@
 import { Box, Modal } from "@mantine/core";
-import { Task } from "../../types/models";
+import Task from "../../types/Task";
 
 interface TaskModalProps {
   task: Task;

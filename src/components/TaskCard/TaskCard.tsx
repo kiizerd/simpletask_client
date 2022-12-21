@@ -2,7 +2,7 @@ import { ActionIcon, Box, Card, Group, Text } from "@mantine/core";
 import { IconCheck, IconInfoCircle } from "@tabler/icons";
 import { useHover } from "@mantine/hooks";
 import { useState } from "react";
-import { Task } from "../../types/models";
+import Task from "../../types/Task";
 import taskCardStyles from "../../styles/TaskCardStyles";
 import EditTaskForm from "../../forms/EditTaskForm";
 import TaskModal from "./TaskModal";
@@ -10,11 +10,9 @@ import TaskMenu from "./TaskMenu";
 
 interface TaskCardProps {
   task: Task;
-  update(taskId: number, newTask: Task): void;
-  remove(taskId: number): void;
 }
 
-const TaskCard = ({ task, update, remove }: TaskCardProps) => {
+const TaskCard = ({ task }: TaskCardProps) => {
   const [modalOpened, setModalOpened] = useState<boolean>(false);
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>();
@@ -64,14 +62,11 @@ const TaskCard = ({ task, update, remove }: TaskCardProps) => {
               setOpened={setMenuOpened}
               setEditMode={setEditMode}
               setModalOpened={setModalOpened}
-              remove={remove}
             />
           </Group>
         </Group>
       </Card>
-      {editMode ? (
-        <EditTaskForm task={task} setEditMode={setEditMode} update={update} />
-      ) : null}
+      {editMode && <EditTaskForm task={task} setEditMode={setEditMode} />}
     </Box>
   );
 };
