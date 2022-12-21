@@ -1,28 +1,28 @@
 import { TextInput, Button, Group, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { createProject, updateProject } from "../api/api";
-import { Project } from "../types/models";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { mutate } from "swr";
+import { createProject } from "../api/api";
+import ProjectIndexContext from "../contexts/ProjectIndexContext";
+import Project from "../types/Project";
 
-interface ProjectFormProps {
-  project?: Project;
-}
-
-interface ProjectFormValues {
+export interface ProjectFormValues {
   title: string;
   description: string;
 }
 
-const titleValidation = (title: string) => {
+export const titleValidation = (title: string) => {
   if (!title) return "Title is required.";
   if (title.length < 3) return "Title too short.";
-  if (title.length > 32) return "Title too long.";
+
+  const tooLongMessage = `Title too long, max 62 chars.\nCurrently ${title.length}.`;
+  if (title.length > 62) return tooLongMessage;
 
   return null;
 };
 
-const descriptionValidation = (description?: string) => {
+export const descriptionValidation = (description?: string) => {
   if (!description) return null;
 
   const len = description.length;
@@ -31,34 +31,30 @@ const descriptionValidation = (description?: string) => {
   return null;
 };
 
-const ProjectForm = ({ project }: ProjectFormProps) => {
+const ProjectForm = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const originPage = String(Object.fromEntries([...searchParams]).from);
+  // Context not currently provided.
+  // Will be given a value when form
+  // is child of index page instead of its own route
+  const { projects = [] } = useContext(ProjectIndexContext);
 
   const form = useForm({
     initialValues: { title: "", description: "" },
     validate: { title: titleValidation, description: descriptionValidation },
   });
 
-  // If project exists (i.e. we are editing) set form values
-  useEffect(() => {
-    if (!project) return;
-
-    form.setValues({
-      title: project?.title,
-      description: project?.description,
-    });
-  }, [project]);
-
   const submit = async (formValues: ProjectFormValues) => {
-    const newProject = await (project
-      ? updateProject({ id: project.id, ...formValues })
-      : createProject(formValues));
+    if (!mutate) return console.error("No SWR mutate method found.");
 
-    if (originPage == "root") return navigate("/");
+    const newProject = await createProject(formValues);
+    await mutate("projects/", [...projects, newProject], {
+      optimisticData: (projects: Project[]) => [...projects, newProject],
+      rollbackOnError: true,
+      populateCache: true,
+      revalidate: false,
+    });
 
-    navigate(newProject ? `/projects/${newProject.id}` : "/projects");
+    navigate("/");
   };
 
   return (
@@ -79,16 +75,11 @@ const ProjectForm = ({ project }: ProjectFormProps) => {
       />
 
       <Group>
-        <Button
-          component={Link}
-          to={originPage == "root" ? "/" : `/projects/${project?.id}`}
-          mt="md"
-          variant="subtle"
-        >
+        <Button component={Link} to="/" mt="md" variant="subtle">
           Cancel
         </Button>
         <Button mt="md" type="submit">
-          {project ? "Update " : "Create "}project
+          Create project
         </Button>
       </Group>
     </form>

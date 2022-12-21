@@ -20,33 +20,36 @@ interface EditProjectFormProps {
 const EditProjectForm = ({ projectId }: EditProjectFormProps) => {
   const navigate = useNavigate();
   const { project, error, isLoading } = useProject(projectId);
+  // Context not currently provided.
+  // Will be given a value when form
+  // is child of index page instead of its own route
   const { projects = [] } = useContext(ProjectIndexContext);
 
   if (error) throw error;
   if (!project || isLoading) return <Loader />;
-  const { title, description } = project;
 
+  const { title, description } = project;
   const form = useForm({
     initialValues: { title, description },
     validate: { title: titleValidation, description: descriptionValidation },
   });
 
   const submit = async (formValues: ProjectFormValues) => {
-    const newProject = new Project(projectId, formValues);
     if (!mutate) return console.error("No SWR mutate method found.");
 
+    const newProject = new Project(projectId, formValues);
     const optimisticData = projects.map((project) =>
       project.id == projectId ? newProject : project
     );
 
-    const updateProjectIndex = async () => {
+    const applyProjectUpdate = async () => {
       const updated = await updateProject(newProject);
       return projects.map((project) =>
         project.id == projectId ? updated : project
       );
     };
 
-    await mutate(["projects/", `projects/${projectId}`], updateProjectIndex, {
+    await mutate(["projects/", `projects/${projectId}`], applyProjectUpdate, {
       optimisticData,
       rollbackOnError: true,
       populateCache: true,
@@ -78,7 +81,7 @@ const EditProjectForm = ({ projectId }: EditProjectFormProps) => {
           Cancel
         </Button>
         <Button mt="md" type="submit">
-          Create project
+          Update project
         </Button>
       </Group>
     </form>
