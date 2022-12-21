@@ -7,28 +7,36 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { deleteProjectTask } from "../../api/tasks";
-import { Task } from "../../types/models";
+import TaskIndexContext from "../../contexts/TaskIndexContext";
+import Task from "../../types/Task";
 
 interface TaskMenuProps {
   task: Task;
   opened: boolean;
-  remove(taskId: number): void;
   setOpened(value: boolean): void;
   setEditMode(value: boolean): void;
   setModalOpened(value: boolean): void;
 }
 
 const TaskMenu = (props: TaskMenuProps) => {
-  const { task, opened, remove, ...setters } = props;
+  const { task, opened, ...setters } = props;
+  const { id, projectId } = task;
   const { setOpened, setEditMode, setModalOpened } = setters;
   const [confirmDelete, setConfirmDelete] = useState<boolean>();
+  const { tasks = [], mutate } = useContext(TaskIndexContext);
 
   const deleteTask = async () => {
+    if (!mutate) return console.error("No SWR mutate method found");
+
     setOpened(false);
-    await deleteProjectTask(task.projectId, task.id);
-    remove(task.id);
+    await mutate(deleteProjectTask(projectId, id), {
+      optimisticData: tasks.filter((task) => id != task.id),
+      rollbackOnError: true,
+      populateCache: true,
+      revalidate: false,
+    });
   };
 
   return (
