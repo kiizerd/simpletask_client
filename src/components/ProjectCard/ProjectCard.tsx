@@ -6,13 +6,11 @@ import ProjectCardMenu from "./ProjectCardMenu";
 
 interface ProjectCardProps {
   image: string;
-  project?: Project;
+  project: Project;
 }
 
 const ProjectCard = ({ image, project }: ProjectCardProps) => {
   const { classes } = projectCardStyles();
-
-  if (!project) return <></>;
 
   return (
     <Paper
