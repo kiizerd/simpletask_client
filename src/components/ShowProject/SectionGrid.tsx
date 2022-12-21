@@ -1,25 +1,23 @@
-import { Box, SimpleGrid } from "@mantine/core";
+import { Box, Loader, SimpleGrid } from "@mantine/core";
 import SectionForm from "../../forms/SectionForm";
 import SectionCard from "../SectionCard/SectionCard";
-import { ProjectHookData } from "../../hooks/useProject";
+import useSectionIndex from "../../hooks/useSectionIndex";
+import SectionIndexContext from "../../contexts/SectionIndexContext";
+import Project from "../../types/Project";
 
 interface SectionGridProps {
-  projectData: ProjectHookData;
+  project: Project;
 }
 
-const SectionGrid = ({ projectData }: SectionGridProps) => {
-  const { project, ...sectionControls } = projectData;
-  const { addSection, removeSection, updateSection } = sectionControls;
-  
-  if (!project || !project.sections) return <></>;
+const SectionGrid = ({ project }: SectionGridProps) => {
+  const { sections, error, isLoading, mutate } = useSectionIndex(project.id);
 
-  const sectionCards = project.sections.map((section) => (
+  if (error) throw error;
+  if (isLoading) return <Loader />;
+
+  const sectionCards = sections?.map((section) => (
     <Box key={section.id}>
-      <SectionCard
-        section={section}
-        remove={removeSection}
-        update={updateSection}
-      />
+      <SectionCard section={section} />
     </Box>
   ));
 
@@ -33,8 +31,10 @@ const SectionGrid = ({ projectData }: SectionGridProps) => {
         { maxWidth: 600, cols: 1, spacing: "sm" },
       ]}
     >
-      {sectionCards}
-      <SectionForm projectId={project.id} add={addSection} />
+      <SectionIndexContext.Provider value={{ sections, mutate }}>
+        {sectionCards}
+        <SectionForm projectId={project.id} />
+      </SectionIndexContext.Provider>
     </SimpleGrid>
   );
 };
