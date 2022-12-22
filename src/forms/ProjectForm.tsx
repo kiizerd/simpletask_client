@@ -12,23 +12,32 @@ export interface ProjectFormValues {
   description: string;
 }
 
-export const titleValidation = (title: string) => {
+const titleValidation = (title: string) => {
   if (!title) return "Title is required.";
-  if (title.length < 3) return "Title too short.";
 
-  const tooLongMessage = `Title too long, max 62 chars.\nCurrently ${title.length}.`;
-  if (title.length > 62) return tooLongMessage;
+  const len = title.length;
+  const tooShortMsg = `Title too short.\n Min 3 characters, currently ${len}.`;
+  if (len < 3) return tooShortMsg;
+
+  const tooLongMsg = `Title too long.\n Max 62 characters, currently ${len}.`;
+  if (len > 62) return tooLongMsg;
 
   return null;
 };
 
-export const descriptionValidation = (description?: string) => {
+const descriptionValidation = (description?: string) => {
   if (!description) return null;
 
   const len = description.length;
-  if (len > 0 && len > 240) return "Description exceeds limit. (200)";
+  const tooLongMsg = `Description too long.\n Max 200 characters, currently ${len}`;
+  if (len > 0 && len > 240) return tooLongMsg;
 
   return null;
+};
+
+export const validate = {
+  title: titleValidation,
+  description: descriptionValidation,
 };
 
 const ProjectForm = () => {
@@ -40,7 +49,7 @@ const ProjectForm = () => {
 
   const form = useForm({
     initialValues: { title: "", description: "" },
-    validate: { title: titleValidation, description: descriptionValidation },
+    validate,
   });
 
   const submit = async (formValues: ProjectFormValues) => {

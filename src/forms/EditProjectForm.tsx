@@ -7,11 +7,7 @@ import { updateProject } from "../api/projects";
 import ProjectIndexContext from "../contexts/ProjectIndexContext";
 import useProject from "../hooks/useProject";
 import Project from "../types/Project";
-import {
-  descriptionValidation,
-  ProjectFormValues,
-  titleValidation,
-} from "./ProjectForm";
+import { validate, ProjectFormValues } from "./ProjectForm";
 
 interface EditProjectFormProps {
   projectId: number;
@@ -31,7 +27,7 @@ const EditProjectForm = ({ projectId }: EditProjectFormProps) => {
   const { title, description } = project;
   const form = useForm({
     initialValues: { title, description },
-    validate: { title: titleValidation, description: descriptionValidation },
+    validate,
   });
 
   const submit = async (formValues: ProjectFormValues) => {

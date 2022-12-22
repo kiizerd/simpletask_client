@@ -16,14 +16,18 @@ const MantineApp = ({ children }: React.PropsWithChildren) => (
           defaultProps: ButtonDefaultProps,
           styles: { label: { overflow: "visible" } },
         },
+        TextInput: {
+          styles: { error: { whiteSpace: "pre-line" } },
+        },
+        Textarea: {
+          styles: { error: { whiteSpace: "pre-line" } },
+        },
       },
     }}
     withGlobalStyles
     withNormalizeCSS
   >
-    <ModalsProvider>
-      {children}
-    </ModalsProvider>
+    <ModalsProvider>{children}</ModalsProvider>
   </MantineProvider>
 );
 
