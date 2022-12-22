@@ -1,48 +1,65 @@
 import { Box, Button, Flex, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useClickOutside } from "@mantine/hooks";
+import { useContext } from "react";
 import { updateProjectSection } from "../api/sections";
+import SectionContext from "../contexts/SectionContext";
+import SectionIndexContext from "../contexts/SectionIndexContext";
+import { errorTimeout } from "../helpers/formHelpers";
 import sectionFormStyles from "../styles/SectionFormStyles";
-import { Section } from "../types/models";
-import { SectionFormValues, sectionNameValidation } from "./SectionForm";
+import Section from "../types/Section";
+import { validate } from "./SectionForm";
 
 interface SectionFormProps {
-  section: Section;
-  update(sectionId: number, newName: string): void;
   setEditMode(value: boolean): void;
 }
 
-const EditSectionForm = (props: SectionFormProps) => {
-  const { section, setEditMode, update } = props;
+const EditSectionForm = ({ setEditMode }: SectionFormProps) => {
+  const section = useContext(SectionContext);
   const { id, name, projectId } = section;
+  const { sections = [], mutate } = useContext(SectionIndexContext);
   const { classes } = sectionFormStyles();
-  const ref = useClickOutside(() => setEditMode(false));
+
+  const clickRef = useClickOutside(() => setEditMode(false));
   const form = useForm({
     initialValues: { name },
-    validate: { name: sectionNameValidation },
+    validate,
   });
 
-  const submit = async (formValues: SectionFormValues) => {
-    // Replace name variable in local scope
-    const { name } = formValues;
-    const newSection: Section = { id, name, projectId };
-    await updateProjectSection(projectId, newSection);
-    form.setValues({ name: "" });
-    update(id, name);
+  const submit = async (formValues: Partial<Section>) => {
+    if (!mutate) return console.error("No SWR mutate method found.");
+
+    const newSection = new Section(id, { ...formValues });
+    const optimisticData = sections.map((section) =>
+      section.id == id ? newSection : section
+    );
+
+    const applySectionUpdate = async () => {
+      const updated = await updateProjectSection(projectId, newSection);
+      return sections.map((section) => (section.id == id ? updated : section));
+    };
+
+    await mutate(applySectionUpdate, {
+      optimisticData,
+      rollbackOnError: true,
+      populateCache: true,
+      revalidate: false,
+    });
+
     setEditMode(false);
   };
 
-  const errorTimeout = () => setTimeout(() => form.clearErrors(), 3000);
   return (
     <form onSubmit={form.onSubmit(submit)}>
-      <Flex ref={ref} gap="sm" className={classes.container}>
+      <Flex ref={clickRef} gap="sm" className={classes.container}>
         <TextInput
+          autoFocus
           size="xs"
           classNames={{ wrapper: classes.wrapper, input: classes.input }}
           {...form.getInputProps("name")}
         />
         <Box pt={2}>
-          <Button type="submit" compact onClick={errorTimeout}>
+          <Button type="submit" compact onClick={() => errorTimeout(form)}>
             Update
           </Button>
         </Box>
