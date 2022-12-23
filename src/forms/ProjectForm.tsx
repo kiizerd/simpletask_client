@@ -57,7 +57,10 @@ const ProjectForm = () => {
 
     const newProject = await createProject(formValues);
     await mutate("projects/", [...projects, newProject], {
-      optimisticData: (projects: Project[]) => [...projects, newProject],
+      optimisticData: (projects: Project[]) => [
+        ...projects,
+        new Project(0, formValues),
+      ],
       rollbackOnError: true,
       populateCache: true,
       revalidate: false,
