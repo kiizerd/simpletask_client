@@ -1,75 +1,73 @@
-import {
-  Box,
-  Button,
-  createStyles,
-  Flex,
-  keyframes,
-  Textarea,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { Box, Button, Stack } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
+import { useContext } from "react";
 import { updateProjectTask } from "../api/tasks";
-import { Task } from "../types/models";
-
-const appear = keyframes({
-  "from, 0%, to": { opacity: 0, transform: "translateX(-8px)" },
-  "80%": { transform: "translateX(2px)" },
-  "100%": { opacity: 100, transform: "translateX(0)" },
-});
-
-const useStyles = createStyles((theme) => ({
-  form: {
-    animation: `${appear} 0.3s linear`,
-    paddingTop: 3,
-  },
-  textarea: {
-    borderRadius: theme.radius.sm,
-    paddingLeft: theme.spacing.xs,
-    backgroundColor: theme.colors.dark[5],
-    boxShadow: `0 0 35px ${theme.colors.dark[8]}`,
-  },
-}));
+import TaskIndexContext from "../contexts/TaskIndexContext";
+import TaskInput from "../components/TaskList/TaskInput";
+import Task from "../types/Task";
+import { validate } from "./TaskForm";
+import taskFormStyles from "../styles/TaskFormStyles";
+import { errorTimeout } from "../helpers/formHelpers";
 
 interface EditTaskForm {
   task: Task;
   setEditMode(value: boolean): void;
-  update(taskId: number, newTask: Task): void;
 }
 
-const EditTaskForm = (props: EditTaskForm) => {
-  const { task, setEditMode, update } = props;
-  const { classes } = useStyles();
+const EditTaskForm = ({ task, setEditMode }: EditTaskForm) => {
+  const { id, name, projectId } = task;
+  const { tasks = [], mutate } = useContext(TaskIndexContext);
+  const { classes } = taskFormStyles();
+
   const clickRef = useClickOutside(() => setEditMode(false));
-  const form = useForm({ initialValues: { name: task.name } });
+  const form = useForm({ initialValues: { name }, validate });
 
   const submit = async (formValues: Partial<Task>) => {
-    const newTask = { ...task, ...formValues };
-    updateProjectTask(task.projectId, newTask);
+    if (!mutate) return console.error("No SWR mutate method found.");
+
+    const newTask = new Task(id, { ...task, ...formValues });
+    const optimisticData = tasks.map((task) =>
+      task.id === id ? newTask : task
+    );
+
+    const applyTaskUpdate = async () => {
+      const updated = await updateProjectTask(projectId, newTask);
+      return tasks.map((task) => (task.id == id ? updated : task));
+    };
+
+    await mutate(applyTaskUpdate, {
+      optimisticData,
+      rollbackOnError: true,
+      populateCache: true,
+    });
+
     setEditMode(false);
-    update(newTask.id, newTask);
   };
 
   return (
     <form
-      className={classes.form}
-      style={{ position: "absolute", top: 0, zIndex: 250 }}
+      style={{ top: 0, zIndex: 250, width: "100%", position: "absolute" }}
       onSubmit={form.onSubmit(submit)}
     >
-      <Flex ref={clickRef} gap={3}>
-        <Textarea
-          // autosize
-          variant="unstyled"
-          size="md"
-          className={classes.textarea}
-          maxRows={4}
+      <Stack ref={clickRef} spacing={3}>
+        <TaskInput
+          focused
+          setFocused={() => null}
           {...form.getInputProps("name")}
         />
-        <Box py={3} px={4}>
-          <Button type="submit" compact>
+        <Box pt={4} px="md">
+          <Button
+            className={classes.button}
+            type="submit"
+            w="100%"
+            compact
+            onClick={() => errorTimeout(form)}
+          >
             Update
           </Button>
         </Box>
-      </Flex>
+      </Stack>
     </form>
   );
 };

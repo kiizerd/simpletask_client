@@ -1,13 +1,18 @@
-import { ActionIcon, Box, Flex, TextInput } from "@mantine/core";
+import { ActionIcon, Box, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useClickOutside } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons";
+import { useContext, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { createProjectTask } from "../api/tasks";
-import { Task } from "../types/models";
+import TaskInput from "../components/TaskList/TaskInput";
+import TaskIndexContext from "../contexts/TaskIndexContext";
+import { errorTimeout } from "../helpers/formHelpers";
+import taskFormStyles from "../styles/TaskFormStyles";
+import Task from "../types/Task";
 
 interface TaskFormProps {
   sectionId: number;
-  add(newTask: Task): void;
 }
 
 interface TaskFormValues {
@@ -15,46 +20,64 @@ interface TaskFormValues {
 }
 
 const nameValidation = (name: string) => {
-  if (name && name !== "" && name.length > 3) return null;
-  // if (name && name !== "" && name.length > 3 && name.length < 24) return null;
+  const len = name.length;
+  if (len == 0) return "Name is required.";
 
-  if (!name || name === "") return "Name is required.";
-  if (name.length < 3) return "Name must be at 3 chars.";
-  // if (name.length > 24) return "Name cannot exceed 24 chars.";
+  const tooShortMsg = `Name too short.\n Min 3 chars, currently ${len}.`;
+  if (len <= 2) return tooShortMsg;
+
+  const tooLongMsg = `Name too long.\n Max 60 chars, currently ${len}.`;
+  if (len > 60) return tooLongMsg;
+
+  return null;
 };
 
-const TaskForm = ({ sectionId, add }: TaskFormProps) => {
+export const validate = { name: nameValidation };
+
+const TaskForm = ({ sectionId }: TaskFormProps) => {
   const projectId = Number(useLoaderData());
-  const form = useForm({
-    initialValues: { name: "" },
-    validate: { name: nameValidation },
+  const [focused, setFocused] = useState<boolean>(false);
+  const { tasks = [], mutate } = useContext(TaskIndexContext);
+  const { classes } = taskFormStyles();
+
+  const form = useForm({ initialValues: { name: "" }, validate });
+  const clickRef = useClickOutside(() => {
+    setFocused(false);
+    form.clearErrors();
   });
 
   const submit = async (formValues: TaskFormValues) => {
-    const taskData = { sectionId, ...formValues };
-    const newTask = await createProjectTask(projectId, taskData);
+    if (!mutate) return console.error("No SWR mutate method found.");
 
-    if (!newTask) return;
+    const taskData = { sectionId, projectId, ...formValues };
+    const newTask = await createProjectTask(projectId, taskData);
+    await mutate([...tasks, newTask], {
+      optimisticData: [...tasks, new Task(0, taskData)],
+      rollbackOnError: true,
+      populateCache: true,
+      revalidate: false,
+    });
 
     form.setValues({ name: "" });
-    add(newTask);
   };
 
-  const errorTimeout = () => setTimeout(() => form.clearErrors(), 3000);
   return (
-    <form onSubmit={form.onSubmit(submit)}>
-      <Flex gap="sm">
-        <TextInput
-          w="100%"
-          placeholder="New task"
+    <form
+      onSubmit={form.onSubmit(submit)}
+      style={{ width: "100%", position: "relative" }}
+    >
+      <Flex gap="sm" ref={clickRef}>
+        <TaskInput
+          focused={focused}
+          setFocused={setFocused}
           {...form.getInputProps("name")}
         />
-        <Box pt={4}>
+        <Box display={focused ? "" : "none"} className={classes.button} pt={4}>
           <ActionIcon
             variant="filled"
             color="violet"
             type="submit"
-            onClick={errorTimeout}
+            onClick={() => errorTimeout(form)}
           >
             <IconPlus />
           </ActionIcon>
