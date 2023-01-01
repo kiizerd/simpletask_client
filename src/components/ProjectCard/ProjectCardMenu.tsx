@@ -1,8 +1,13 @@
 import { ActionIcon, Menu } from "@mantine/core";
-import { IconDotsVertical } from "@tabler/icons";
+import {
+  IconDotsVertical,
+  IconEdit,
+  IconShare,
+  IconTrash,
+} from "@tabler/icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Project } from "../../types/models";
+import Project from "../../types/Project";
 import useDeleteModal from "../../hooks/useDeleteModal";
 
 interface CardMenuProps {
@@ -13,6 +18,7 @@ interface CardMenuProps {
 const ProjectCardMenu = ({ classNames, project }: CardMenuProps) => {
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const { openModal } = useDeleteModal(project.id);
+  const { link } = classNames;
 
   return (
     <Menu position={"left-start"} opened={menuOpened} onChange={setMenuOpened}>
@@ -23,29 +29,28 @@ const ProjectCardMenu = ({ classNames, project }: CardMenuProps) => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item
-          component={Link}
-          className={classNames.link}
-          // Assign from search parameter to allow returning
-          // to index page on edit completion or cancellation
-          to={`projects/${project.id}/edit?from=root`}
-        >
-          Edit
+        <Menu.Label>Project options</Menu.Label>
+        <Menu.Item color="blue" icon={<IconEdit size={16} />}>
+          <Link className={link} to={`projects/${project.id}/edit?from=root`}>
+            Edit
+          </Link>
         </Menu.Item>
         <Menu.Item
           closeMenuOnClick={false}
-          className={classNames.link}
           onClick={openModal}
+          color="red"
+          icon={<IconTrash size={16} />}
         >
           Delete
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item
-          component={Link}
-          className={classNames.link}
-          to={`projects/${project.id}/share`}
+          className={link}
+          icon={<IconShare size={16} color="green" />}
         >
-          Share
+          <Link className={link} to={`projects/${project.id}/share`}>
+            Share
+          </Link>
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>
