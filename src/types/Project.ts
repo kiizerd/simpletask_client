@@ -40,4 +40,8 @@ export default class Project extends Base {
   convertTasks(taskList: Task[] | TaskData[]) {
     return taskList.map((task) => new Task(task.id, task));
   }
+
+  get route() {
+    return `projects/${this.id}`;
+  }
 }

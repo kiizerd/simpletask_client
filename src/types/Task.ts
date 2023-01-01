@@ -28,4 +28,16 @@ export default class Task extends Base {
     this.projectId = projectId;
     this.sectionId = sectionId;
   }
+
+  get route() {
+    return `projects/${this.projectId}/tasks/${this.id}`;
+  }
+
+  get sectionRoute() {
+    return `projects/${this.projectId}/sections/${this.sectionId}`;
+  }
+
+  get projectRoute() {
+    return `projects/${this.projectId}`;
+  }
 }

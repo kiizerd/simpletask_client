@@ -26,4 +26,25 @@ export default class Section extends Base {
   convertTasks(taskList: Task[] | TaskData[]) {
     return taskList.map((task) => new Task(task.id, task));
   }
+
+  get progress() {
+    return this.taskProgress();
+  }
+
+  taskProgress(taskList: Task[] = this.tasks) {
+    if (taskList.length === 0) return -1;
+
+    const total = taskList.length;
+    const complete = taskList.filter((task) => task.isComplete()).length;
+    const progress = Math.floor((complete * 100) / total);
+    return progress;
+  }
+
+  get route() {
+    return `projects/${this.projectId}/sections/${this.id}`;
+  }
+
+  get projectRoute() {
+    return `projects/${this.projectId}`;
+  }
 }
