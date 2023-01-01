@@ -39,22 +39,8 @@ const projectCardStyles = createStyles((theme) => ({
   },
 
   link: {
-    display: "block",
-    lineHeight: 1,
-    borderRadius: theme.radius.sm,
+    color: "unset",
     textDecoration: "none",
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[0]
-        : theme.colors.gray[7],
-    fontSize: theme.fontSizes.sm,
-    fontWeight: 500,
-
-    "&:hover": {},
-
-    [theme.fn.smallerThan("sm")]: {
-      borderRadius: 0,
-    },
   },
 }));
 
