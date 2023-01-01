@@ -18,16 +18,17 @@ const taskFormStyles = createStyles((theme) => ({
     animation: `${appear} 0.3s linear`,
     borderRadius: theme.radius.sm,
     paddingLeft: theme.spacing.xs,
+    paddingRight: theme.spacing.xs,
     backgroundColor: theme.colors.dark[5],
-    boxShadow: `0 0 36px 8px ${theme.colors.dark[8]}`,
+    boxShadow: `0 0     36px 8px ${theme.colors.dark[8]},
+                0 3rem  3rem 0 ${theme.colors.dark[8]}`,
   },
-  button: {
-    animation: `${btnAppear} 0.3s linear`,
-  },
+  button: { animation: `${btnAppear} 0.3s linear` },
   error: {
     fontSize: "0.8rem",
     padding: "0 6px 6px 0",
   },
+  editForm: { width: "100%" },
 }));
 
 export default taskFormStyles;

@@ -7,27 +7,32 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { deleteProjectTask } from "../../api/tasks";
 import TaskIndexContext from "../../contexts/TaskIndexContext";
 import useMatchMutate from "../../hooks/useMatchMutate";
 import Task from "../../types/Task";
+import TaskModal from "./TaskModal";
 
 interface TaskMenuProps {
   task: Task;
   opened: boolean;
   setOpened(value: boolean): void;
   setEditMode(value: boolean): void;
-  setModalOpened(value: boolean): void;
 }
 
 const TaskMenu = (props: TaskMenuProps) => {
   const { task, opened, ...setters } = props;
   const { id, projectId } = task;
-  const { setOpened, setEditMode, setModalOpened } = setters;
+  const { setOpened, setEditMode } = setters;
   const [confirmDelete, setConfirmDelete] = useState<boolean>();
+  const [modalOpened, setModalOpened] = useState<boolean>(false);
   const { tasks = [], mutate } = useContext(TaskIndexContext);
   const matchMutate = useMatchMutate();
+
+  useEffect(() => {
+    setConfirmDelete(false);
+  }, [opened, modalOpened]);
 
   const deleteTask = async () => {
     if (!mutate) return console.error("No SWR mutate method found");
@@ -44,16 +49,11 @@ const TaskMenu = (props: TaskMenuProps) => {
   };
 
   return (
-    <Menu
-      position="left"
-      opened={opened}
-      onChange={setOpened}
-      onClose={() => setConfirmDelete(false)}
-      onOpen={() => setConfirmDelete(false)}
-    >
+    <Menu withinPortal position="left" opened={opened} onChange={setOpened}>
+      <TaskModal task={task} opened={modalOpened} setOpened={setModalOpened} />
       <Menu.Target>
-        <ActionIcon size="sm" variant="filled">
-          <IconDots size={17} />
+        <ActionIcon variant="filled">
+          <IconDots />
         </ActionIcon>
       </Menu.Target>
 

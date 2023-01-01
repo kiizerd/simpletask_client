@@ -1,7 +1,7 @@
-import { Box, Button, Stack } from "@mantine/core";
+import { Box, Button, Portal, Stack } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { updateProjectTask } from "../api/tasks";
 import TaskIndexContext from "../contexts/TaskIndexContext";
 import TaskInput from "../components/TaskList/TaskInput";
@@ -15,13 +15,32 @@ interface EditTaskForm {
   setEditMode(value: boolean): void;
 }
 
+const portalContainer = document.createElement("div");
+portalContainer.style.top = "0";
+portalContainer.style.zIndex = "300";
+portalContainer.style.position = "absolute";
+document.body.appendChild(portalContainer);
+
 const EditTaskForm = ({ task, setEditMode }: EditTaskForm) => {
   const { id, name, projectId } = task;
-  const { tasks = [], mutate } = useContext(TaskIndexContext);
+  const { tasks = [], mutate, ref } = useContext(TaskIndexContext);
   const { classes } = taskFormStyles();
 
   const clickRef = useClickOutside(() => setEditMode(false));
   const form = useForm({ initialValues: { name }, validate });
+
+  useEffect(() => {
+    if (ref.current) {
+      Array.from(ref.current.children).forEach((child) => {
+        if (child.getAttribute("data-task-id") == `${id}`) {
+          const taskCardRect = child.getBoundingClientRect();
+          portalContainer.style.top = `${taskCardRect.top}px`;
+          portalContainer.style.left = `${taskCardRect.left}px`;
+          portalContainer.style.width = `${taskCardRect.width}px`;
+        }
+      });
+    }
+  }, [ref.current]);
 
   const submit = async (formValues: Partial<Task>) => {
     if (!mutate) return console.error("No SWR mutate method found.");
@@ -46,29 +65,28 @@ const EditTaskForm = ({ task, setEditMode }: EditTaskForm) => {
   };
 
   return (
-    <form
-      style={{ top: 0, zIndex: 250, width: "100%", position: "absolute" }}
-      onSubmit={form.onSubmit(submit)}
-    >
-      <Stack ref={clickRef} spacing={3}>
-        <TaskInput
-          focused
-          setFocused={() => null}
-          {...form.getInputProps("name")}
-        />
-        <Box pt={4} px="md">
-          <Button
-            className={classes.button}
-            type="submit"
-            w="100%"
-            compact
-            onClick={() => errorTimeout(form)}
-          >
-            Update
-          </Button>
-        </Box>
-      </Stack>
-    </form>
+    <Portal target={portalContainer}>
+      <form className={classes.editForm} onSubmit={form.onSubmit(submit)}>
+        <Stack ref={clickRef} spacing={3}>
+          <TaskInput
+            focused
+            setFocused={() => null}
+            {...form.getInputProps("name")}
+          />
+          <Box pt={4} px="md">
+            <Button
+              className={classes.button}
+              type="submit"
+              w="100%"
+              compact
+              onClick={() => errorTimeout(form)}
+            >
+              Update
+            </Button>
+          </Box>
+        </Stack>
+      </form>
+    </Portal>
   );
 };
 

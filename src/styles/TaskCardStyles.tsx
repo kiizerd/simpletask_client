@@ -2,7 +2,7 @@ import { keyframes } from "@emotion/react";
 import { createStyles } from "@mantine/core";
 
 const reappear = keyframes({
-  "from, 0%, to": { opacity: 0, transform: "translateX(8px)" },
+  "from, 0%, to": { opacity: 0, transform: "translateX(10px)" },
   "80%": { transform: "translateX(-2px)" },
   "100%": { opacity: 100, transform: "translateX(0)" },
 });
@@ -42,6 +42,9 @@ const taskCardStyles = createStyles((theme) => ({
     ["&[data-complete='true']"]: {
       backgroundColor: theme.colors.dark[5],
     },
+    "& > .mantine-ActionIcon-root": {
+      backgroundColor: theme.colors.violet[5],
+    }
   },
 }));
 
