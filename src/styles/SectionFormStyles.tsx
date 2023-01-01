@@ -10,14 +10,11 @@ const slide = keyframes({
   "100%": { opacity: 100, transform: "translate3D(0, 0, 0)" },
 });
 
-const sectionFormStyles = createStyles((theme) => ({
+const sectionFormStyles = createStyles(() => ({
   button: { animation: `${slide} 0.2s linear` },
   wrapper: { animation: `${slide} 0.2s linear` },
   input: { fontSize: 16, fontWeight: 700 },
-  container: {
-    paddingBottom: 7,
-    borderBottom: `1px solid ${theme.colors.dark[3]}`,
-  },
+  container: { paddingBottom: 7 },
 }));
 
 export default sectionFormStyles;

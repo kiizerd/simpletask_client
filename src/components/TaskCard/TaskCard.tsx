@@ -28,13 +28,14 @@ const TaskCard = ({ task }: TaskCardProps) => {
           align="flex-start"
           style={{ opacity: editMode ? 0 : 100 }}
         >
+      <Card
+        ref={hoverRef}
+        className={classes.card}
+        data-complete={task.isComplete()}
+      >
+        <Group position="apart" align="flex-start">
           <Box>
-            <Text
-              // Prevent animation on first render
-              className={editMode === undefined ? "" : classes.text}
-              // Make text outside form invisible when editing
-              style={editMode ? { opacity: 0 } : undefined}
-            >
+            <Text className={classes.text} data-edit-mode={editMode}>
               {task.name}
             </Text>
           </Box>

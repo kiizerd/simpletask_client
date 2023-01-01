@@ -8,6 +8,7 @@ import { createProjectTask } from "../api/tasks";
 import TaskInput from "../components/TaskList/TaskInput";
 import TaskIndexContext from "../contexts/TaskIndexContext";
 import { errorTimeout } from "../helpers/formHelpers";
+import useMatchMutate from "../hooks/useMatchMutate";
 import taskFormStyles from "../styles/TaskFormStyles";
 import Task from "../types/Task";
 
@@ -38,6 +39,7 @@ const TaskForm = ({ sectionId }: TaskFormProps) => {
   const projectId = Number(useLoaderData());
   const [focused, setFocused] = useState<boolean>(false);
   const { tasks = [], mutate } = useContext(TaskIndexContext);
+  const matchMutate = useMatchMutate();
   const { classes } = taskFormStyles();
 
   const form = useForm({ initialValues: { name: "" }, validate });
@@ -57,6 +59,8 @@ const TaskForm = ({ sectionId }: TaskFormProps) => {
       populateCache: true,
       revalidate: false,
     });
+
+    await matchMutate(newTask.sectionRoute);
 
     form.setValues({ name: "" });
   };

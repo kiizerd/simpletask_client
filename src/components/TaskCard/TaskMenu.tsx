@@ -10,6 +10,7 @@ import {
 import { useContext, useState } from "react";
 import { deleteProjectTask } from "../../api/tasks";
 import TaskIndexContext from "../../contexts/TaskIndexContext";
+import useMatchMutate from "../../hooks/useMatchMutate";
 import Task from "../../types/Task";
 
 interface TaskMenuProps {
@@ -26,6 +27,7 @@ const TaskMenu = (props: TaskMenuProps) => {
   const { setOpened, setEditMode, setModalOpened } = setters;
   const [confirmDelete, setConfirmDelete] = useState<boolean>();
   const { tasks = [], mutate } = useContext(TaskIndexContext);
+  const matchMutate = useMatchMutate();
 
   const deleteTask = async () => {
     if (!mutate) return console.error("No SWR mutate method found");
@@ -37,6 +39,8 @@ const TaskMenu = (props: TaskMenuProps) => {
       populateCache: true,
       revalidate: false,
     });
+
+    await matchMutate(task.sectionRoute);
   };
 
   return (
