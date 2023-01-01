@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import SectionContext from "../../contexts/SectionContext";
 import TaskIndexContext from "../../contexts/TaskIndexContext";
 import useTaskIndex from "../../hooks/useTaskIndex";
@@ -9,10 +9,16 @@ import TaskForm from "../../forms/TaskForm";
 const TaskList = () => {
   const section = useContext(SectionContext);
   const { tasks = [], mutate } = useTaskIndex(section.projectId, section.id);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   return (
-    <TaskIndexContext.Provider value={{ tasks, mutate }}>
-      <Box my={3} py={2}>
+    <TaskIndexContext.Provider value={{ tasks, mutate, ref }}>
+      <Box
+        ref={ref}
+        my={3}
+        py={3}
+        style={{ maxHeight: "60vh", overflow: "scroll" }}
+      >
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
