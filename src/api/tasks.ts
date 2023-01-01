@@ -44,7 +44,7 @@ const createProjectTask = async (
   const request = new Request(tasksRoute(projectId), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ task: { name, details, section_id: sectionId } }),
+    body: JSON.stringify({ task: { name, details, sectionId } }),
   });
   const response = await fetch(request);
   const data = (await response.json()) as TaskData;
@@ -57,12 +57,12 @@ const updateProjectTask = async (
   projectId: number,
   taskData: Task
 ): Promise<Task> => {
-  const { id, name, details } = taskData;
+  const { id, name, details, status } = taskData;
   const taskRoute = tasksRoute(projectId) + `/${id}`;
   const request = new Request(taskRoute, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ task: { name, details } }),
+    body: JSON.stringify({ task: { name, details, status } }),
   });
   const response = await fetch(request);
   const data = (await response.json()) as TaskData;
