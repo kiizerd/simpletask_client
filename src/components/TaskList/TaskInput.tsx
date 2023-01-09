@@ -1,6 +1,10 @@
 import { Box, Textarea, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
-import React, { KeyboardEvent } from "react";
+import React from "react";
+import {
+  flushTextAreaCursor,
+  preventTextAreaSubmitOnEnter,
+} from "../../helpers/formHelpers";
 import taskFormStyles from "../../styles/TaskFormStyles";
 
 interface TaskInputProps {
@@ -24,19 +28,9 @@ const TaskInput = ({ focused, setFocused, ...props }: TaskInputProps) => {
       ) : (
         <Textarea
           autoFocus
-          placeholder="New task title"
-          onFocusCapture={(e) => {
-            const len = e.currentTarget.value.length;
-            e.currentTarget.setSelectionRange(len, len);
-          }}
-          onKeyDownCapture={(e: KeyboardEvent) => {
-            if (e.key == "Enter" && !e.shiftKey) {
-              const target = e.target as HTMLTextAreaElement;
-              const form = target.form;
-              e.preventDefault();
-              form?.requestSubmit();
-            }
-          }}
+          placeholder="New task name"
+          onFocusCapture={flushTextAreaCursor}
+          onKeyDownCapture={preventTextAreaSubmitOnEnter}
           variant="unstyled"
           size="md"
           classNames={classes}
