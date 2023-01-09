@@ -15,7 +15,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@api/*": ["./modules/api/*" ],
+      "@common/*": ["./modules/common/*" ],
+      "@contexts/*": ["./modules/contexts/*"],
+      "@forms/*": ["./modules/forms/*"],
+      "@helpers/*": ["./modules/helpers/*"],
+      "@hooks/*": ["./modules/hooks/*" ],
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
