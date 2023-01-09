@@ -29,7 +29,10 @@ const taskFormStyles = createStyles((theme) => ({
     boxShadow: `0 0     36px 8px ${theme.colors.dark[8]},
                 0 3rem  3rem 0 ${theme.colors.dark[8]}`,
   },
-  button: { animation: `${btnAppear} 0.3s linear` },
+  button: {
+    marginTop: theme.spacing.xs,
+    animation: `${btnAppear} 0.3s linear`,
+  },
   error: {
     fontSize: "0.8rem",
     padding: "0 6px 6px 0",

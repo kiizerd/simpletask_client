@@ -13,12 +13,7 @@ const TaskList = () => {
 
   return (
     <TaskIndexContext.Provider value={{ tasks, mutate, ref }}>
-      <Box
-        ref={ref}
-        my={3}
-        py={3}
-        style={{ maxHeight: "60vh", overflow: "scroll" }}
-      >
+      <Box ref={ref} style={{ maxHeight: "60vh", overflow: "scroll" }}>
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
