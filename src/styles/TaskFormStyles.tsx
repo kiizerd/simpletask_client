@@ -12,11 +12,17 @@ const btnAppear = keyframes({
   "100%": { opacity: 100, transform: "translateX(0)" },
 });
 
+const inactiveAppear = keyframes({
+  "from, 0%, to": { opacity: 0, transform: "translateY(3px)" },
+  "100%": { opacity: 100, transform: "translateY(0)" },
+});
+
 const taskFormStyles = createStyles((theme) => ({
   textarea: {
     position: "relative",
     animation: `${appear} 0.3s linear`,
     borderRadius: theme.radius.sm,
+    marginTop: theme.spacing.xs,
     paddingLeft: theme.spacing.xs,
     paddingRight: theme.spacing.xs,
     backgroundColor: theme.colors.dark[5],
@@ -29,6 +35,18 @@ const taskFormStyles = createStyles((theme) => ({
     padding: "0 6px 6px 0",
   },
   editForm: { width: "100%" },
+  inactive: {
+    marginTop: "10px",
+    animation: "unset",
+    ["&[data-is-focused='true']"]: {
+      opacity: 0,
+      display: "none",
+      animation: "none",
+    },
+    ["&[data-is-focused='false']"]: {
+      animation: `${inactiveAppear} 0.2s linear`,
+    },
+  },
 }));
 
 export default taskFormStyles;

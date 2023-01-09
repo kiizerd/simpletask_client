@@ -37,14 +37,14 @@ export const validate = { name: nameValidation };
 
 const TaskForm = ({ sectionId }: TaskFormProps) => {
   const projectId = Number(useLoaderData());
-  const [focused, setFocused] = useState<boolean>(false);
+  const [focused, setFocused] = useState<boolean | undefined>();
   const { tasks = [], mutate } = useContext(TaskIndexContext);
   const matchMutate = useMatchMutate();
   const { classes } = taskFormStyles();
 
   const form = useForm({ initialValues: { name: "" }, validate });
   const clickRef = useClickOutside(() => {
-    setFocused(false);
+    if (focused != undefined) setFocused(false);
     form.clearErrors();
   });
 

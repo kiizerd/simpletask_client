@@ -1,4 +1,4 @@
-import { Box, Textarea, TextInput } from "@mantine/core";
+import { Box, Button, Textarea } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 import React from "react";
 import {
@@ -8,7 +8,7 @@ import {
 import taskFormStyles from "../../styles/TaskFormStyles";
 
 interface TaskInputProps {
-  focused: boolean;
+  focused: boolean | undefined;
   setFocused(value: boolean): void;
   props: React.ComponentPropsWithoutRef<"input" | "textarea">;
 }
@@ -18,14 +18,16 @@ const TaskInput = ({ focused, setFocused, ...props }: TaskInputProps) => {
 
   return (
     <Box style={{ width: "100%" }}>
-      {!focused ? (
-        <TextInput
-          icon={<IconPlus />}
-          onFocusCapture={() => setFocused(true)}
-          placeholder="Add new task"
-          {...props}
-        />
-      ) : (
+      <Button
+        onClick={() => setFocused(true)}
+        leftIcon={<IconPlus />}
+        variant="subtle"
+        data-is-focused={focused}
+        className={classes.inactive}
+      >
+        Add new task
+      </Button>
+      {focused ? (
         <Textarea
           autoFocus
           placeholder="New task name"
@@ -38,7 +40,7 @@ const TaskInput = ({ focused, setFocused, ...props }: TaskInputProps) => {
           maxRows={4}
           {...props}
         />
-      )}
+      ) : null}
     </Box>
   );
 };
