@@ -1,7 +1,7 @@
 import { Outlet, useMatch } from "react-router-dom";
-import Header from "../components/Header";
-import MantineApp from "../styles/Mantine";
-import ProjectIndexPage from "../pages/ProjectIndex";
+import Header from "@common/components/Header";
+import MantineApp from "./Mantine";
+import ProjectIndexPage from "./project_index";
 
 const Root = () => {
   const headerLinks = [
