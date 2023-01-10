@@ -1,5 +1,5 @@
 import { Box, Title } from "@mantine/core";
-import ProjectForm from "../forms/ProjectForm";
+import ProjectForm from "@forms/Project";
 
 const NewProjectPage = () => {
   return (

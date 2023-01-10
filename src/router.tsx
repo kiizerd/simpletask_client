@@ -1,14 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
-import Root from "./routes/Root";
-import ErrorPage from "./pages/ErrorPage";
-import AuthForm from "./forms/AuthForm";
+import AuthForm from "@forms/AuthForm";
+import Root from "./Root";
+import ProjectIndexPage from "./project_index";
+import ShowProjectPage from "./show_project";
 import NewProjectPage from "./pages/NewProject";
-import ProjectIndexPage from "./pages/ProjectIndex";
 import EditProjectPage from "./pages/EditProject";
-import ShowProjectPage from "./pages/ShowProject";
+import ErrorPage from "./pages/ErrorPage";
 
 interface LoaderParams {
-  params: { projectId?: number; };
+  params: { projectId?: number };
 }
 
 const getIdLoader = ({ params }: LoaderParams): number =>

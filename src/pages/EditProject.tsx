@@ -1,6 +1,6 @@
-import { Box, Title } from "@mantine/core";
 import { useLoaderData } from "react-router-dom";
-import EditProjectForm from "../forms/EditProjectForm";
+import { Box, Title } from "@mantine/core";
+import { EditProjectForm } from "@forms/Project";
 
 const EditProjectPage = () => {
   const projectId = Number(useLoaderData());
