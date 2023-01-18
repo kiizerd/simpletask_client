@@ -12,11 +12,13 @@ import { useDisclosure } from "@mantine/hooks";
 import { Link, useLocation } from "react-router-dom";
 import headerStyles, { HEADER_HEIGHT } from "./HeaderStyles";
 
-interface HeaderResponsiveProps {
-  links: { link: string; label: string }[];
-}
+const headerLinks = [
+  { link: "/", label: "Home" },
+  { link: "/login", label: "Login" },
+  { link: "/signup", label: "Sign up" },
+];
 
-const HeaderResponsive = ({ links }: HeaderResponsiveProps) => {
+const HeaderResponsive = () => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState("");
   const { classes, cx } = headerStyles();
@@ -26,7 +28,7 @@ const HeaderResponsive = ({ links }: HeaderResponsiveProps) => {
     setActive(pathname);
   }, [pathname]);
 
-  const items = links.map((link) => (
+  const items = headerLinks.map((link) => (
     <Link
       key={link.label}
       to={link.link}
@@ -45,9 +47,14 @@ const HeaderResponsive = ({ links }: HeaderResponsiveProps) => {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
-        <Link to="/" style={{ all: "unset", cursor: "pointer" }}>
-          <Title order={3}>SimpleTask</Title>
-        </Link>
+        <Group>
+          <Link to="/" style={{ all: "unset", cursor: "pointer" }}>
+            <Title order={3}>SimpleTask</Title>
+          </Link>
+          {/* <Link className={classes.link} to="/timer">
+            Timer
+          </Link> */}
+        </Group>
 
         <Group spacing={5} className={classes.links}>
           {items}
