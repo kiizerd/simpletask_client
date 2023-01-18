@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import AuthForm from "@forms/AuthForm";
-import Root from "./Root";
+import App from "app/AppShell";
 import ProjectIndexPage from "./project_index";
 import ShowProjectPage from "./show_project";
 import NewProjectPage from "./pages/NewProject";
@@ -17,9 +17,10 @@ const getIdLoader = ({ params }: LoaderParams): number =>
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <App />,
     errorElement: <ErrorPage />,
     children: [
+      { element: <ProjectIndexPage />, index: true },
       {
         element: <AuthForm />,
         children: [{ path: "/signup" }, { path: "/login" }],
