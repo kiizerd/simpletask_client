@@ -23,6 +23,7 @@
       "@forms/*": ["./modules/forms/*"],
       "@helpers/*": ["./modules/helpers/*"],
       "@hooks/*": ["./modules/hooks/*" ],
+      "@state/*": ["./modules/state/*" ],
     }
   },
   "include": ["src"],
