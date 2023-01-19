@@ -12,9 +12,11 @@ const MantineApp = ({ children }: React.PropsWithChildren) => (
     theme={{
       colorScheme: "dark",
       components: {
+        Group: { classNames: { root: "group" } },
         Button: {
           defaultProps: ButtonDefaultProps,
           styles: { label: { overflow: "visible" } },
+          classNames: { root: "button-root" },
         },
         TextInput: {
           styles: { error: { whiteSpace: "pre-line" } },
