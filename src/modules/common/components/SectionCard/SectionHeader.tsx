@@ -3,8 +3,8 @@ import { ActionIcon, Box, Group, Progress, Title } from "@mantine/core";
 import { IconEdit } from "@tabler/icons";
 import SectionContext from "@contexts/SectionContext";
 import { EditSectionForm } from "@forms/Section";
-import sectionCardStyles from "./SectionCardStyles";
 import SectionHeaderMenu from "./SectionHeaderMenu";
+import sectionCardStyles from "./SectionCardStyles";
 
 const SectionCardHeader = () => {
   const [editMode, setEditMode] = useState<boolean>();
@@ -12,7 +12,7 @@ const SectionCardHeader = () => {
   const { classes } = sectionCardStyles();
 
   return (
-    <Box>
+    <Box className="section-header">
       {editMode ? (
         <EditSectionForm setEditMode={setEditMode} />
       ) : (
@@ -27,7 +27,7 @@ const SectionCardHeader = () => {
             {name}
           </Title>
 
-          <Group spacing="sm" my={2}>
+          <Group spacing="sm" my={2} className="section-button-group">
             <ActionIcon color="blue" onClick={() => setEditMode(true)}>
               <IconEdit size={16} />
             </ActionIcon>

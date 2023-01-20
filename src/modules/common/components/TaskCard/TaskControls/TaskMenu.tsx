@@ -1,3 +1,4 @@
+import { useContext, useEffect, useState } from "react";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
   IconCheck,
@@ -7,12 +8,12 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons";
-import { useContext, useEffect, useState } from "react";
 import { deleteProjectTask } from "@api/tasks";
+import { getProjectSection } from "@api/sections";
 import TaskIndexContext from "@contexts/TaskIndexContext";
 import useMatchMutate from "@hooks/useMatchMutate";
-import Task from "types/Task";
 import TaskModal from "./TaskModal";
+import Task from "types/Task";
 
 interface TaskMenuProps {
   task: Task;
@@ -45,7 +46,11 @@ const TaskMenu = (props: TaskMenuProps) => {
       revalidate: false,
     });
 
-    await matchMutate(task.sectionRoute);
+    await matchMutate(
+      task.sectionRoute,
+      () => getProjectSection(projectId, task.sectionId),
+      { revalidate: false }
+    );
   };
 
   return (

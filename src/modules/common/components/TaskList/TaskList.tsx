@@ -4,7 +4,7 @@ import TaskForm from "@forms/Task";
 import SectionContext from "@contexts/SectionContext";
 import TaskIndexContext from "@contexts/TaskIndexContext";
 import useTaskIndex from "@hooks/useTaskIndex";
-import TaskCard from "../TaskCard/TaskCard";
+import TaskCard from "../TaskCard";
 
 const TaskList = () => {
   const section = useContext(SectionContext);
@@ -13,12 +13,16 @@ const TaskList = () => {
 
   return (
     <TaskIndexContext.Provider value={{ tasks, mutate, ref }}>
-      <Box ref={ref} style={{ maxHeight: "60vh", overflow: "scroll" }}>
+      <Box
+        ref={ref}
+        style={{ maxHeight: "60vh", overflow: "scroll" }}
+        className="task-list"
+      >
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
       </Box>
-      <TaskForm sectionId={section.id} />
+      <TaskForm ids={[section.projectId, section.id]} />
     </TaskIndexContext.Provider>
   );
 };

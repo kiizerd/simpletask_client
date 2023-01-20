@@ -14,7 +14,7 @@ const SectionCard = (props: SectionCardProps) => {
   const { section = props.section } = useSection(projectId, id);
 
   return (
-    <Card p="xs">
+    <Card p="xs" className='section-card'>
       <SectionContext.Provider value={section}>
         <Header />
         <TaskList />
