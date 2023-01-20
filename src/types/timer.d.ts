@@ -19,7 +19,7 @@ export interface TimerState {
 
 export interface Action {
   type: string;
-  payload?: number;
+  payload?: TimerLength;
 }
 
 export interface TimerController {

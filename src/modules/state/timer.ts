@@ -32,7 +32,7 @@ function reset(dispatch: Dispatch<Action>) {
   dispatch({ type: "RESET" });
 }
 
-function set(dispatch: Dispatch<Action>, payload: number) {
+function set(dispatch: Dispatch<Action>, payload: TimerLength) {
   dispatch({ type: "SET", payload });
 }
 
@@ -45,7 +45,6 @@ function angle(dispatch: Dispatch<Action>) {
 }
 
 function complete(dispatch: Dispatch<Action>, payload: TimerLength) {
-  console.log(payload, "timer complete");
   dispatch({ type: "COMPLETE", payload });
 }
 
@@ -73,16 +72,18 @@ function reducer(state: TimerState, action: Action): TimerState {
     case "RESET":
       return {
         ...initialState,
-        timerLength: state.timerLength,
         time: state.timerLength * 60,
+        timerLength: state.timerLength,
+        completions: state.completions,
       };
     case "SET":
       if (!action.payload) return { ...state };
 
       return {
         ...initialState,
-        timerLength: action.payload as TimerLength,
         time: action.payload * 60,
+        timerLength: action.payload as TimerLength,
+        completions: state.completions,
       };
     case "TICK":
       return { ...state, time: Math.max(state.time - 1, 0) };
