@@ -12,6 +12,7 @@ const MantineApp = ({ children }: React.PropsWithChildren) => (
     theme={{
       colorScheme: "dark",
       components: {
+        Drawer: { classNames: { title: "drawer-title", closeButton: 'drawer-close' } },
         Group: { classNames: { root: "group" } },
         Button: {
           defaultProps: ButtonDefaultProps,
