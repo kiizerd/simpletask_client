@@ -51,9 +51,9 @@ const HeaderResponsive = () => {
           <Link to="/" style={{ all: "unset", cursor: "pointer" }}>
             <Title order={3}>SimpleTask</Title>
           </Link>
-          {/* <Link className={classes.link} to="/timer">
+          <Link className={classes.link} to="/timer">
             Timer
-          </Link> */}
+          </Link>
         </Group>
 
         <Group spacing={5} className={classes.links}>
