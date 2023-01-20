@@ -8,7 +8,7 @@ const App = () => {
     <MantineApp>
       <AppShell
         header={<Header />}
-        styles={{ main: { padding: 0, margin: 0 } }}
+        styles={{ main: { padding: 0, margin: 0, minHeight: "unset" } }}
       >
         <Outlet />
       </AppShell>
