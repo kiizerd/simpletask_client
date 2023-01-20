@@ -2,7 +2,7 @@ import { Box, Loader, SimpleGrid } from "@mantine/core";
 import SectionIndexContext from "@contexts/SectionIndexContext";
 import SectionForm from "@forms/Section";
 import useSectionIndex from "@hooks/useSectionIndex";
-import SectionCard from "./SectionCard";
+import SectionCard from "@common/components/SectionCard";
 import Project from "types/Project";
 
 interface SectionGridProps {

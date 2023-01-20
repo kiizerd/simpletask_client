@@ -1,9 +1,9 @@
 import { Box, Group, Text, Title } from "@mantine/core";
 import useShowProjectHeader from "@hooks/useShowProjectHeader";
 import projectHeaderStyles from "./ProjectHeaderStyles";
-import DeleteProjectBtn from "../DeleteProjectBtn";
-import EditProjectBtn from "../EditProjectBtn";
-import ExpandButton from "../ExpandButton";
+import DeleteProjectBtn from "./DeleteProjectBtn";
+import EditProjectBtn from "./EditProjectBtn";
+import ExpandButton from "./ExpandButton";
 import Project from "types/Project";
 
 interface HeaderProps {
