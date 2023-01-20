@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { useLoaderData } from "react-router-dom";
 import { ActionIcon, Box, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useClickOutside } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons";
 import { createProjectTask } from "@api/tasks";
+import { getProjectSection } from "@api/sections";
 import TaskIndexContext from "@contexts/TaskIndexContext";
 import { errorTimeout } from "@helpers/formHelpers";
 import useMatchMutate from "@hooks/useMatchMutate";
@@ -13,7 +13,7 @@ import TaskInput from "./TaskInput";
 import Task from "types/Task";
 
 interface TaskFormProps {
-  sectionId: number;
+  ids: number[];
 }
 
 interface TaskFormValues {
@@ -35,8 +35,8 @@ const nameValidation = (name: string) => {
 
 export const validate = { name: nameValidation };
 
-const TaskForm = ({ sectionId }: TaskFormProps) => {
-  const projectId = Number(useLoaderData());
+const TaskForm = ({ ids }: TaskFormProps) => {
+  const [projectId, sectionId] = ids;
   const [focused, setFocused] = useState<boolean | undefined>();
   const { tasks = [], mutate } = useContext(TaskIndexContext);
   const matchMutate = useMatchMutate();
@@ -53,6 +53,9 @@ const TaskForm = ({ sectionId }: TaskFormProps) => {
 
     const taskData = { sectionId, projectId, ...formValues };
     const newTask = await createProjectTask(projectId, taskData);
+
+    form.setValues({ name: "" });
+
     await mutate([...tasks, newTask], {
       optimisticData: [...tasks, new Task(0, taskData)],
       rollbackOnError: true,
@@ -60,9 +63,11 @@ const TaskForm = ({ sectionId }: TaskFormProps) => {
       revalidate: false,
     });
 
-    await matchMutate(newTask.sectionRoute);
-
-    form.setValues({ name: "" });
+    await matchMutate(
+      newTask.sectionRoute,
+      () => getProjectSection(projectId, sectionId),
+      { revalidate: false }
+    );
   };
 
   return (
