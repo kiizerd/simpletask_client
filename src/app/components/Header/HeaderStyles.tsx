@@ -1,15 +1,14 @@
 import { createStyles } from "@mantine/core";
 
-export const HEADER_HEIGHT = 60;
+export const HEADER_HEIGHT = 40;
 
 const headerStyles = createStyles((theme) => ({
   root: {
     position: "relative",
     zIndex: 100,
-    marginBottom: "1rem",
-    [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
-      marginBottom: "2rem",
-    },
+    marginBottom: theme.spacing.xs,
+    // Ensure dropdown appears in front of Affix components
+    [theme.fn.smallerThan('sm')]: { zIndex: 500 }
   },
 
   dropdown: {
@@ -17,7 +16,6 @@ const headerStyles = createStyles((theme) => ({
     top: HEADER_HEIGHT,
     left: 0,
     right: 0,
-    zIndex: 0,
     borderTopRightRadius: 0,
     borderTopLeftRadius: 0,
     borderTopWidth: 0,
@@ -42,6 +40,7 @@ const headerStyles = createStyles((theme) => ({
   },
 
   burger: {
+    marginLeft: "auto",
     [theme.fn.largerThan("sm")]: {
       display: "none",
     },

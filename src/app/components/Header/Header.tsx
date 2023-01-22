@@ -6,7 +6,6 @@ import {
   Burger,
   Paper,
   Transition,
-  Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link, useLocation } from "react-router-dom";
@@ -14,6 +13,8 @@ import headerStyles, { HEADER_HEIGHT } from "./HeaderStyles";
 
 const headerLinks = [
   { link: "/", label: "Home" },
+  { link: "/projects", label: "Projects" },
+  { link: "/timer", label: "Timer" },
   { link: "/login", label: "Login" },
   { link: "/signup", label: "Sign up" },
 ];
@@ -47,18 +48,9 @@ const HeaderResponsive = () => {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
-        <Group>
-          <Link to="/" style={{ all: "unset", cursor: "pointer" }}>
-            <Title order={3}>SimpleTask</Title>
-          </Link>
-          <Link className={classes.link} to="/timer">
-            Timer
-          </Link>
-        </Group>
+        <Group className={classes.links}>{items.slice(0, 3)}</Group>
 
-        <Group spacing={5} className={classes.links}>
-          {items}
-        </Group>
+        <Group className={classes.links}>{items.slice(-2)}</Group>
 
         <Burger
           opened={opened}
