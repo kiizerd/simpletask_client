@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Accordion, ActionIcon, Affix, Divider, Drawer } from "@mantine/core";
+import { ActionIcon, Affix, Divider, Drawer } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons";
-import useProjectIndex from "@hooks/useProjectIndex";
-import DrawerProject from "./DrawerProject";
+import DrawerList from "./DrawerProjectList";
 
 const ProjectDrawer = () => {
   const [drawerOpened, setDrawerOpened] = useState(false);
-  const { projects } = useProjectIndex();
 
   return (
     <>
@@ -30,11 +28,7 @@ const ProjectDrawer = () => {
         }}
       >
         <Divider />
-        <Accordion sx={{borderRight: '2px solid grey'}}>
-          {projects.map((project) => (
-            <DrawerProject key={project.id} projectId={project.id} />
-          ))}
-        </Accordion>
+        <DrawerList />
       </Drawer>
     </>
   );
