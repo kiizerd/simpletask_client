@@ -9,7 +9,7 @@ const reappear = keyframes({
 
 const taskCardStyles = createStyles((theme) => ({
   card: {
-    margin: `${theme.spacing.xs}px 0`,
+    margin: `${theme.spacing.xs}px 0 0`,
     backgroundColor: theme.colors.dark[4],
     transition: "transform 0.3s linear, background-color 0.3s linear",
     maxWidth: "100%",
