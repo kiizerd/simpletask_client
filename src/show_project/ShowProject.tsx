@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { Container, Loader } from "@mantine/core";
+import { Box, Loader } from "@mantine/core";
 import useProject from "@hooks/useProject";
 import ProjectHeader from "./components/ProjectHeader";
 import SectionGrid from "./components/SectionGrid";
@@ -11,12 +11,13 @@ const ShowProjectPage = () => {
 
   if (error) throw error;
   if (isLoading) return <Loader />;
+  // TODO: Replace misplaced loader with a Mantine Skeleton
 
   return (
-    <Container size="lg" sx={{ position: "relative" }}>
+    <Box>
       {project && <ProjectHeader project={project} />}
       {project && <SectionGrid project={project} />}
-    </Container>
+    </Box>
   );
 };
 
