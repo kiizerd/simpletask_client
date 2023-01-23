@@ -7,7 +7,7 @@ import {
   Container,
   Group,
 } from "@mantine/core";
-import MantineApp from "app/Mantine";
+import { MantineApp } from "app";
 
 const useStyles = createStyles((theme) => ({
   root: {
