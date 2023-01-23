@@ -9,7 +9,7 @@ interface DeleteButtonProps {
 const DeleteProjectBtn = ({ projectId }: DeleteButtonProps) => {
   const { openModal } = useDeleteModal(projectId);
   return (
-    <Button onClick={openModal} rightIcon={<IconTrash size={18} />}>
+    <Button size="xs" onClick={openModal} rightIcon={<IconTrash size={16} />}>
       Delete
     </Button>
   );

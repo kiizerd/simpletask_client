@@ -9,9 +9,10 @@ interface EditButtonProps {
 const EditProjectBtn = ({ projectId }: EditButtonProps) => {
   return (
     <Button
+      size="xs"
       component={Link}
       to={`/projects/${projectId}/edit`}
-      rightIcon={<IconEdit size={18} />}
+      rightIcon={<IconEdit size={16} />}
     >
       Edit
     </Button>
