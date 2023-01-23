@@ -13,8 +13,8 @@ const btnAppear = keyframes({
 });
 
 const inactiveAppear = keyframes({
-  "from, 0%, to": { opacity: 0, transform: "translateY(3px)" },
-  "100%": { opacity: 100, transform: "translateY(0)" },
+  "from, 0%, to": { opacity: 0, transform: "translateX(8px)" },
+  "100%": { opacity: 100, transform: "translateX(0)" },
 });
 
 const taskFormStyles = createStyles((theme) => ({
