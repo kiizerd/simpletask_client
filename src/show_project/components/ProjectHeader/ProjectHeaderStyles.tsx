@@ -3,35 +3,31 @@ import { createStyles } from "@mantine/core";
 const projectHeaderStyles = createStyles((theme) => ({
   container: {
     position: "relative",
-    marginBottom: theme.spacing.sm,
+    padding: `0 ${theme.spacing.xs}px`,
+    marginBottom: theme.spacing.xs,
     borderBottom: `1px solid ${theme.colors.dark[3]}`,
+  },
+  group: {
+    justifyContent: "flex-start",
+    [theme.fn.smallerThan("md")]: { justifyContent: "space-between" },
+    [theme.fn.smallerThan("sm")]: { wrap: "no-wrap", gap: "4px" },
   },
   title: {
     overflowWrap: "break-word",
-    maxWidth: "48vw",
-    "@media (min-width: 768px)": {
-      maxWidth: "60vw",
+    maxWidth: "50%",
+    [theme.fn.smallerThan("sm")]: {
+      maxWidth: "55%",
     },
-    "@media (min-width: 1280px)": {
-      maxWidth: "48vw",
-    },
-    "@media (min-width: 1680px)": {
-      maxWidth: '40vw'
-    }
   },
+  control: { position: "absolute", top: -30, left: "50%", right: "50%" },
   description: {
-    margin: `${theme.spacing.sm}`,
-    marginTop: 0,
-    maxWidth: "60%",
+    marginTop: 2,
+    marginLeft: theme.spacing.xs,
+    paddingLeft: theme.spacing.xs,
+    borderLeft: `2px solid ${theme.colors.dark[4]}`,
     whiteSpace: "pre-line",
-  },
-  expandBtn: {
-    position: "absolute",
-    margin: "0 auto",
-    padding: 'auto',
-    width: "50%",
-    bottom: 5,
-    right: '1rem'
+    maxHeight: "8rem",
+    overflowY: "scroll",
   },
 }));
 
