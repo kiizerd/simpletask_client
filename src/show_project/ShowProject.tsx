@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import { Box, Loader } from "@mantine/core";
 import useProject from "@hooks/useProject";
 import ProjectHeader from "./components/ProjectHeader";
-import SectionGrid from "./components/SectionGrid";
+import SectionList from "./components/SectionList";
 
 const ShowProjectPage = () => {
   const id = Number(useLoaderData());
@@ -16,7 +16,7 @@ const ShowProjectPage = () => {
   return (
     <Box>
       {project && <ProjectHeader project={project} />}
-      {project && <SectionGrid project={project} />}
+      {project && <SectionList projectId={project.id} />}
     </Box>
   );
 };
