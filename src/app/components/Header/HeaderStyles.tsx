@@ -4,7 +4,8 @@ export const HEADER_HEIGHT = 40;
 
 const headerStyles = createStyles((theme) => ({
   root: {
-    position: "relative",
+    // Removed for better appearance with Mantine AppShell
+    // position: "relative",
     zIndex: 100,
     marginBottom: theme.spacing.xs,
     // Ensure dropdown appears in front of Affix components
