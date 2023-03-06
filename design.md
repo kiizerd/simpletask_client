@@ -11,6 +11,7 @@
 
 ### Exports
  #### Components
+  - Use index.ts file in root directory of component to handle clean module import/export
   - Declare and define component with arrow function.
   - Export named component as default at bottom of file.
  #### Hooks
