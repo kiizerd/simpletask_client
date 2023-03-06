@@ -1,6 +1,4 @@
-import sectionFormStyles from "./SectionFormStyles";
-import EditSectionForm from "./EditSectionForm";
-import SectionForm from "./SectionForm";
+export { default } from "./components/New";
 
-export default SectionForm;
-export { sectionFormStyles, SectionForm, EditSectionForm };
+import EditSectionForm from "./components/Edit";
+export { EditSectionForm };

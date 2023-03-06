@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { Box, Button, Flex, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { mutate } from "swr";
 import { useClickOutside } from "@mantine/hooks";
 import { updateProjectSection } from "@api/sections";
 import SectionContext from "@contexts/SectionContext";
-import SectionIndexContext from "@contexts/SectionIndexContext";
 import { errorTimeout } from "@helpers/formHelpers";
-import sectionFormStyles from "./SectionFormStyles";
-import { validate } from "./SectionForm";
+import sectionFormStyles from "./EditSectionFormStyles";
+import { validate } from "../New/SectionForm";
 import Section from "types/Section";
 
 interface SectionFormProps {
@@ -16,8 +16,7 @@ interface SectionFormProps {
 
 const EditSectionForm = ({ setEditMode }: SectionFormProps) => {
   const section = useContext(SectionContext);
-  const { id, name, projectId } = section;
-  const { sections = [], mutate } = useContext(SectionIndexContext);
+  const { id, name, projectId, route } = section;
   const { classes } = sectionFormStyles();
 
   const clickRef = useClickOutside(() => setEditMode(false));
@@ -27,25 +26,8 @@ const EditSectionForm = ({ setEditMode }: SectionFormProps) => {
   });
 
   const submit = async (formValues: Partial<Section>) => {
-    if (!mutate) return console.error("No SWR mutate method found.");
-
-    const newSection = new Section(id, { ...formValues });
-    const optimisticData = sections.map((section) =>
-      section.id == id ? newSection : section
-    );
-
-    const applySectionUpdate = async () => {
-      const updated = await updateProjectSection(projectId, newSection);
-      return sections.map((section) => (section.id == id ? updated : section));
-    };
-
-    await mutate(applySectionUpdate, {
-      optimisticData,
-      rollbackOnError: true,
-      populateCache: true,
-      revalidate: false,
-    });
-
+    const newSection = new Section(id, { ...section, ...formValues });
+    await mutate(route, updateProjectSection(projectId, newSection));
     setEditMode(false);
   };
 
