@@ -10,6 +10,7 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { Link, useLocation } from "react-router-dom";
 import headerStyles, { HEADER_HEIGHT } from "./HeaderStyles";
+import ThemeToggle from "./ThemeToggle";
 
 const headerLinks = [
   { link: "/", label: "Home" },
@@ -48,7 +49,9 @@ const HeaderResponsive = () => {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
-        <Group className={classes.links}>{items.slice(0, 3)}</Group>
+        <Group className={classes.links}>
+          {[...items.slice(0, 3), <ThemeToggle />]}
+        </Group>
 
         <Group className={classes.links}>{items.slice(-2)}</Group>
 
