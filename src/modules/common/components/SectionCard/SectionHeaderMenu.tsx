@@ -31,7 +31,7 @@ const SectionHeaderMenu = () => {
       onChange={setMenuOpened}
     >
       <Menu.Target>
-        <ActionIcon color="red">
+        <ActionIcon variant='outline' color="red">
           <IconTrash size={16} />
         </ActionIcon>
       </Menu.Target>

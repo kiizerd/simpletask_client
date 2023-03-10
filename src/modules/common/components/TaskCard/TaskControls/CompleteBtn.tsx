@@ -27,7 +27,8 @@ const CompleteBtn = ({ task }: CompleteBtnProps) => {
 
   return (
     <ActionIcon
-      color="green"
+      // color="green"
+      variant="filled"
       onClick={() => toggleCompletion(task, mutate, setIsComplete)}
     >
       {isComplete ? <IconRefresh size={18} /> : <IconCheck size={18} />}

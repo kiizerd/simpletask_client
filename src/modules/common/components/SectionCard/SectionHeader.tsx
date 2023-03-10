@@ -28,7 +28,7 @@ const SectionCardHeader = () => {
           </Title>
 
           <Group spacing="sm" my={2} className="section-button-group">
-            <ActionIcon color="blue" onClick={() => setEditMode(true)}>
+            <ActionIcon variant='outline' color="blue" onClick={() => setEditMode(true)}>
               <IconEdit size={16} />
             </ActionIcon>
 
