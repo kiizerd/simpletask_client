@@ -3,7 +3,7 @@ import { createStyles } from "@mantine/core";
 const projectHeaderStyles = createStyles((theme) => ({
   container: {
     position: "relative",
-    padding: `0 ${theme.spacing.xs}px`,
+    padding: `0 ${theme.spacing.xs}`,
     marginBottom: theme.spacing.xs,
     borderBottom: `1px solid ${theme.colors.dark[3]}`,
   },

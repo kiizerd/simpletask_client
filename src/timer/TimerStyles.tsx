@@ -14,7 +14,7 @@ const timerStyles = createStyles(
         ".button-root": { width: "120px" },
       },
     },
-    box: { margin: `${theme.spacing.xl}px auto` },
+    box: { margin: `${theme.spacing.xl} auto` },
     timer: {
       padding: "13rem",
       fontSize: "2rem",
