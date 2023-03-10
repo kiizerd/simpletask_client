@@ -15,21 +15,21 @@ const sectionListStyles = createStyles((theme) => {
   return {
     list: {
       overflow: "scroll",
-      // ".section-card": {
-      //   display: "list-item",
-      //   width: "280px",
-      //   backgroundColor: listBg,
-      //   [theme.fn.smallerThan("xs")]: {
-      //     width: "unset",
-      //     padding: theme.spacing.md,
-      //     marginBottom: theme.spacing.xs,
-      //   },
-      //   ".task-list": {
-      //     overflow: "scroll",
-      //     maxHeight: "65vh",
-      //     [theme.fn.smallerThan("xs")]: { maxHeight: "25vh" },
-      //   },
-      // },
+      ".section-card": {
+        display: "list-item",
+        width: "280px",
+        backgroundColor: listBg,
+        [theme.fn.smallerThan("xs")]: {
+          width: "unset",
+          padding: theme.spacing.md,
+          marginBottom: theme.spacing.xs,
+        },
+        ".task-list": {
+          overflow: "scroll",
+          maxHeight: "65vh",
+          [theme.fn.smallerThan("xs")]: { maxHeight: "25vh" },
+        },
+      },
       backgroundImage: `
         /* Shadows */
         linear-gradient(to right, ${bgColor}, ${bgColor}),
