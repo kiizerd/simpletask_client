@@ -21,9 +21,9 @@ const ThemeToggle = () => {
         })}
       >
         {colorScheme === "dark" ? (
-          <IconSun size="1.2rem" />
+          <IconSun size={18} />
         ) : (
-          <IconMoonStars size="1.2rem" />
+          <IconMoonStars size={18} />
         )}
       </ActionIcon>
     </Group>
