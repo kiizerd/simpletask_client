@@ -25,6 +25,8 @@ const MantineApp = ({ children }: React.PropsWithChildren) => {
         theme={{
           colorScheme,
           primaryColor,
+          fontFamily: "Verdana, sans-serif",
+          fontFamilyMonospace: 'Monaco, Courier, monospace',
           components: {
             Button: {
               defaultProps: ButtonDefaultProps,
