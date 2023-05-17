@@ -17,16 +17,8 @@ const ProjectDescription = ({
       classNames={{ control: classNames.control }}
       maxHeight={2}
       pb={2}
-      showLabel={
-        <ActionIcon>
-          <IconChevronDown />
-        </ActionIcon>
-      }
-      hideLabel={
-        <ActionIcon>
-          <IconChevronUp />
-        </ActionIcon>
-      }
+      showLabel={<IconChevronDown />}
+      hideLabel={<IconChevronUp />}
     >
       <Text className={classNames.description}>{description}</Text>
     </Spoiler>

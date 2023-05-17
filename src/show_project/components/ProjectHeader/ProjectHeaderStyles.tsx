@@ -19,7 +19,25 @@ const projectHeaderStyles = createStyles((theme) => ({
       maxWidth: "55%",
     },
   },
-  control: { position: "absolute", top: -30, left: "50%", right: "50%" },
+  control: {
+    position: "absolute",
+    top: -30,
+    left: "50%",
+    right: "50%",
+    "&::after": {
+      position: "absolute",
+      top: -3,
+      left: -3,
+      content: '""',
+      padding: "14px 14px",
+      border: `1px solid ${theme.colors.violet[9]}`,
+      borderRadius: "4px",
+      transition: "border-color 0.3s linear",
+    },
+    "&:hover::after": {
+      borderColor: `${theme.colors.violet[4]}`,
+    },
+  },
   description: {
     marginTop: 2,
     marginLeft: theme.spacing.xs,
