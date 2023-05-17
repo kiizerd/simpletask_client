@@ -50,7 +50,7 @@ const HeaderResponsive = () => {
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
         <Group className={classes.links}>
-          {[...items.slice(0, 3), <ThemeToggle />]}
+          {[...items.slice(0, 3), <ThemeToggle key="ThemeToggle" />]}
         </Group>
 
         <Group className={classes.links}>{items.slice(-2)}</Group>
