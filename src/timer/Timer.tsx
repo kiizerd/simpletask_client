@@ -1,18 +1,18 @@
 import { Box, Group, Stack } from "@mantine/core";
 import TimerContext from "@contexts/TimerContext";
-import useTimer from "@hooks/useTimer";
 import TimerDrawer from "@common/components/ProjectDrawer";
 import TimerSelector from "./components/TimerSelector";
 import PrimaryButton from "./components/PrimaryButton";
 import SecondaryButton from "./components/SecondaryButton";
 import PinnedSection from "./components/PinnedSection";
+import { useContext } from "react";
 
 const Timer = () => {
-  const timerData = useTimer();
-  const { classes } = timerData;
+  const timerData = useContext(TimerContext);
+  const { classes } = timerData
 
   return (
-    <TimerContext.Provider value={timerData}>
+    <>
       <TimerDrawer />
       <PinnedSection />
       <Stack className={classes.wrapper}>
@@ -27,7 +27,7 @@ const Timer = () => {
           <SecondaryButton />
         </Group>
       </Stack>
-    </TimerContext.Provider>
+    </>
   );
 };
 
