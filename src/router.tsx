@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import AuthForm from "@forms/AuthForm";
 import App from "app/AppShell";
 import ProjectIndexPage from "./project_index";
 import ShowProjectPage from "./show_project";
@@ -7,6 +6,7 @@ import NewProjectPage from "./pages/NewProject";
 import EditProjectPage from "./pages/EditProject";
 import ErrorPage from "./pages/ErrorPage";
 import Timer from "./timer";
+import { LoginForm, SignupForm } from "@forms/Auth";
 
 interface LoaderParams {
   params: { projectId?: number };
@@ -23,8 +23,10 @@ const router = createBrowserRouter([
     children: [
       { element: <ProjectIndexPage />, index: true },
       {
-        element: <AuthForm />,
-        children: [{ path: "/signup" }, { path: "/login" }],
+        children: [
+          { path: "/signup", element: <SignupForm /> },
+          { path: "/login", element: <LoginForm /> },
+        ],
       },
       { path: "/projects", element: <ProjectIndexPage /> },
       { path: "/projects/new", element: <NewProjectPage /> },
