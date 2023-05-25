@@ -6,66 +6,63 @@ import {
   Burger,
   Paper,
   Transition,
+  Divider,
+  Box,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import headerStyles, { HEADER_HEIGHT } from "./HeaderStyles";
 import ThemeToggle from "./ThemeToggle";
-
-const headerLinks = [
-  { link: "/", label: "Home" },
-  { link: "/projects", label: "Projects" },
-  { link: "/timer", label: "Timer" },
-  { link: "/login", label: "Login" },
-  { link: "/signup", label: "Sign up" },
-];
+import useAuth from "@hooks/useAuth";
+import NavButtons from "./NavButtons";
+import AuthButtons from "./AuthButtons";
+import UserProfile from "./UserProfile";
 
 const HeaderResponsive = () => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState("");
   const { classes, cx } = headerStyles();
   const { pathname } = useLocation();
+  const { currentUser } = useAuth();
+
+  const navOnClick = (newActive: string) => setActive(newActive);
 
   useEffect(() => {
     setActive(pathname);
   }, [pathname]);
 
-  const items = headerLinks.map((link) => (
-    <Link
-      key={link.label}
-      to={link.link}
-      className={cx(classes.link, {
-        [classes.linkActive]: active === link.link,
-      })}
-      onClick={() => {
-        setActive(link.link);
-        close();
-      }}
-    >
-      {link.label}
-    </Link>
-  ));
-
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header}>
         <Group className={classes.links}>
-          {[...items.slice(0, 3), <ThemeToggle key="ThemeToggle" />]}
+          <NavButtons activeLink={active} onClick={navOnClick} />
+          <ThemeToggle key="ThemeToggle" />
         </Group>
-
-        <Group className={classes.links}>{items.slice(-2)}</Group>
-
+        <Group className={classes.links}>
+          <UserProfile user={currentUser} />
+          <AuthButtons user={currentUser} activeLink={active} />
+        </Group>
         <Burger
           opened={opened}
           onClick={toggle}
           className={classes.burger}
           size="sm"
         />
-
         <Transition transition="pop-top-right" duration={200} mounted={opened}>
           {(styles) => (
             <Paper className={classes.dropdown} withBorder style={styles}>
-              {items}
+              <NavButtons
+                activeLink={active}
+                onClick={(newActive: string) => {
+                  navOnClick(newActive);
+                  close();
+                }}
+              />
+              <Divider />
+              <Box className={classes.link}>
+                <UserProfile user={currentUser} compact={false} />
+              </Box>
+              <AuthButtons user={currentUser} activeLink={active} />
             </Paper>
           )}
         </Transition>
