@@ -9,7 +9,9 @@ const getProjectTask = async (
   projectId: number,
   taskId: number
 ): Promise<Task> => {
-  const response = await fetch(tasksRoute(projectId) + `/${taskId}`);
+  const response = await fetch(tasksRoute(projectId) + `/${taskId}`, {
+    credentials: "include",
+  });
   const data = (await response.json()) as TaskData;
   const task = new Task(data.id, data);
 
@@ -21,7 +23,7 @@ const getSectionTasks = async (
   sectionId: number
 ): Promise<Task[]> => {
   const sectionTasksRoute = `${sectionsRoute(projectId)}/${sectionId}/tasks`;
-  const response = await fetch(sectionTasksRoute);
+  const response = await fetch(sectionTasksRoute, { credentials: "include" });
   const data = (await response.json()) as TaskData[];
   const tasks = data.map((dataItem) => new Task(dataItem.id, dataItem));
 
@@ -29,7 +31,9 @@ const getSectionTasks = async (
 };
 
 const getProjectTasks = async (projectId: number): Promise<Task[]> => {
-  const response = await fetch(tasksRoute(projectId));
+  const response = await fetch(tasksRoute(projectId), {
+    credentials: "include",
+  });
   const data = (await response.json()) as TaskData[];
   const tasks = data.map((dataItem) => new Task(dataItem.id, dataItem));
 
@@ -44,6 +48,7 @@ const createProjectTask = async (
   const request = new Request(tasksRoute(projectId), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ task: { name, details, sectionId } }),
   });
   const response = await fetch(request);
@@ -62,6 +67,7 @@ const updateProjectTask = async (
   const request = new Request(taskRoute, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ task: { name, details, status } }),
   });
   const response = await fetch(request);
@@ -76,7 +82,10 @@ const deleteProjectTask = async (
   taskId: number
 ): Promise<Task[]> => {
   const taskRoute = tasksRoute(projectId) + `/${taskId}`;
-  const request = new Request(taskRoute, { method: "DELETE" });
+  const request = new Request(taskRoute, {
+    method: "DELETE",
+    credentials: "include",
+  });
   const response = await fetch(taskRoute, request);
   const data = (await response.json()) as TaskData[];
   const tasks = data.map((dataItem) => new Task(dataItem.id, dataItem));

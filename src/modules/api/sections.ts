@@ -8,7 +8,9 @@ const getProjectSection = async (
   projectId: number,
   sectionId: number
 ): Promise<Section> => {
-  const response = await fetch(sectionsRoute(projectId) + `/${sectionId}`);
+  const response = await fetch(sectionsRoute(projectId) + `/${sectionId}`, {
+    credentials: "include",
+  });
   const data = (await response.json()) as SectionData;
   const section = new Section(data.id, data);
 
@@ -16,7 +18,9 @@ const getProjectSection = async (
 };
 
 const getProjectSections = async (projectId: number): Promise<Section[]> => {
-  const response = await fetch(sectionsRoute(projectId));
+  const response = await fetch(sectionsRoute(projectId), {
+    credentials: "include",
+  });
   const data = (await response.json()) as SectionData[];
   const sections = data.map((dataItem) => new Section(dataItem.id, dataItem));
 
@@ -31,6 +35,7 @@ const createProjectSection = async (
   const request = new Request(sectionsRoute(projectId), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ section: { name } }),
   });
   const response = await fetch(request);
@@ -49,6 +54,7 @@ const updateProjectSection = async (
   const request = new Request(sectionRoute, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({ section: { name } }),
   });
   const response = await fetch(request);
@@ -63,7 +69,10 @@ const deleteProjectSection = async (
   sectionId: number
 ): Promise<Section[]> => {
   const sectionRoute = sectionsRoute(projectId) + `/${sectionId}`;
-  const request = new Request(sectionRoute, { method: "DELETE" });
+  const request = new Request(sectionRoute, {
+    method: "DELETE",
+    credentials: "include",
+  });
   const response = await fetch(request);
   const data = (await response.json()) as SectionData[];
   const sections = data.map((dataItem) => new Section(dataItem.id, dataItem));
