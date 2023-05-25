@@ -27,4 +27,9 @@ interface Task {
   section_id?: number;
 }
 
-export { Project, Section, Task };
+interface User {
+  id: number,
+  email: string
+}
+
+export { Project, Section, Task, User };
