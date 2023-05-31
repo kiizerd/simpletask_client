@@ -7,6 +7,8 @@ import EditProjectPage from "./pages/EditProject";
 import ErrorPage from "./pages/ErrorPage";
 import Timer from "./timer";
 import { LoginForm, SignupForm } from "@forms/Auth";
+import LandingPage from "pages/LandingPage";
+import RootPage from "pages/Root";
 
 interface LoaderParams {
   params: { projectId?: number };
@@ -21,26 +23,31 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
-      { element: <ProjectIndexPage />, index: true },
       {
+        index: true,
+        element: <RootPage />,
+      },
+      {
+        path: "/projects",
         children: [
-          { path: "/signup", element: <SignupForm /> },
-          { path: "/login", element: <LoginForm /> },
+          { element: <ProjectIndexPage />, index: true },
+          { path: "/projects/new", element: <NewProjectPage /> },
+          {
+            path: "/projects/:projectId",
+            element: <ShowProjectPage />,
+            loader: getIdLoader,
+          },
+          {
+            path: "/projects/:projectId/edit",
+            element: <EditProjectPage />,
+            loader: getIdLoader,
+          },
         ],
       },
-      { path: "/projects", element: <ProjectIndexPage /> },
-      { path: "/projects/new", element: <NewProjectPage /> },
-      {
-        path: "/projects/:projectId",
-        element: <ShowProjectPage />,
-        loader: getIdLoader,
-      },
-      {
-        path: "/projects/:projectId/edit",
-        element: <EditProjectPage />,
-        loader: getIdLoader,
-      },
+      { path: "/login", element: <LoginForm /> },
+      { path: "/signup", element: <SignupForm /> },
       { path: "/timer", element: <Timer /> },
+      { path: "/welcome", element: <LandingPage /> },
     ],
   },
 ]);
