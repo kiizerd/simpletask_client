@@ -13,19 +13,19 @@ import { useDisclosure } from "@mantine/hooks";
 import { useLocation } from "react-router-dom";
 import headerStyles, { HEADER_HEIGHT } from "./HeaderStyles";
 import ThemeToggle from "./ThemeToggle";
-import useAuth from "@hooks/useAuth";
 import NavButtons from "./NavButtons";
 import AuthButtons from "./AuthButtons";
 import UserProfile from "./UserProfile";
 
-const HeaderResponsive = () => {
+const HeaderResponsive = (): JSX.Element => {
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState("");
-  const { classes, cx } = headerStyles();
+  const { classes } = headerStyles();
   const { pathname } = useLocation();
-  const { currentUser } = useAuth();
 
-  const navOnClick = (newActive: string) => setActive(newActive);
+  const navOnClick = (newActive: string): void => {
+    setActive(newActive);
+  };
 
   useEffect(() => {
     setActive(pathname);
@@ -39,8 +39,8 @@ const HeaderResponsive = () => {
           <ThemeToggle key="ThemeToggle" />
         </Group>
         <Group className={classes.links}>
-          <UserProfile user={currentUser} />
-          <AuthButtons user={currentUser} activeLink={active} />
+          <UserProfile />
+          <AuthButtons activeLink={active} />
         </Group>
         <Burger
           opened={opened}
@@ -60,9 +60,9 @@ const HeaderResponsive = () => {
               />
               <Divider />
               <Box className={classes.link}>
-                <UserProfile user={currentUser} compact={false} />
+                <UserProfile compact={false} />
               </Box>
-              <AuthButtons user={currentUser} activeLink={active} />
+              <AuthButtons activeLink={active} />
             </Paper>
           )}
         </Transition>

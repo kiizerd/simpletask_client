@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { User } from "types/models";
+import UserContext from "@contexts/UserContext";
 import headerStyles from "./HeaderStyles";
-import useAuth from "@hooks/useAuth";
 
 const authLinks = [
   { link: "/login", label: "Log in" },
@@ -9,12 +10,11 @@ const authLinks = [
 ];
 
 interface AuthButtonsProps {
-  user: User | null;
   activeLink: string;
 }
 
-const AuthButtons = ({ user, activeLink }: AuthButtonsProps) => {
-  const { logout } = useAuth();
+const AuthButtons = ({ activeLink }: AuthButtonsProps): JSX.Element => {
+  const { currentUser: user, logout } = useContext(UserContext);
   const { classes, cx } = headerStyles();
   const AuthItems = authLinks.map((link) => (
     <Link

@@ -1,16 +1,20 @@
+import UserContext from "@contexts/UserContext";
 import { Avatar, Flex, Text, Tooltip } from "@mantine/core";
+import { useContext } from "react";
 import { Md5 } from "ts-md5";
-import { User } from "types/models";
 
 interface UserProfileProps {
-  user: User | null;
   compact?: boolean;
 }
 
-const UserProfile = ({ user, compact = true }: UserProfileProps) => {
+const UserProfile = ({ compact = true }: UserProfileProps): JSX.Element => {
+  const { currentUser: user } = useContext(UserContext);
   const avatarSrc = `https://www.gravatar.com/avatar/${Md5.hashStr(
-    user ? user.email : "foo"
+    user?.email ?? "foo"
   )}`;
+
+  if (!user) return <></>;
+
   if (compact)
     return (
       <Tooltip label={user?.email} withArrow radius="lg" color="violet">
