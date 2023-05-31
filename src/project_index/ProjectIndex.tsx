@@ -2,9 +2,14 @@ import { Container, Group, Loader, Title } from "@mantine/core";
 import useProjectIndex from "@hooks/useProjectIndex";
 import NewProjectBtn from "./components/NewProjectBtn";
 import ProjectGrid from "./components/ProjectGrid";
+import { useContext } from "react";
+import UserContext from "@contexts/UserContext";
 
-const ProjectIndexPage = () => {
+const ProjectIndexPage = (): JSX.Element => {
+  const { currentUser } = useContext(UserContext)
   const { projects, error, isLoading } = useProjectIndex();
+
+  if (!currentUser) return <>{[]}</>
 
   if (isLoading) return <Loader />;
   if (error) throw error;
