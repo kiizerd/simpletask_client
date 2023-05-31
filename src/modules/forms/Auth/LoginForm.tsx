@@ -11,11 +11,17 @@ import {
 import { useForm } from "@mantine/form";
 import { Link } from "react-router-dom";
 import authFormStyles from "./AuthFormStyles";
-import useAuth from "@hooks/useAuth";
+import { useContext } from "react";
+import UserContext from "@contexts/UserContext";
 
-const LoginForm = () => {
+interface UserFormValues {
+  email: string;
+  password: string;
+}
+
+const LoginForm = (): JSX.Element => {
   const { classes } = authFormStyles();
-  const { login } = useAuth();
+  const { login } = useContext(UserContext);
   const form = useForm({
     initialValues: {
       email: "",
@@ -28,13 +34,13 @@ const LoginForm = () => {
     },
   });
 
+  const submit = (values: UserFormValues): void => {
+    void login(values.email, values.password);
+  };
+
   return (
     <div className={classes.wrapper}>
-      <form
-        onSubmit={form.onSubmit((values) => {
-          login(values.email, values.password);
-        })}
-      >
+      <form onSubmit={form.onSubmit(submit)}>
         <Paper className={classes.form} radius={0} p={30}>
           <Title
             order={2}
@@ -71,7 +77,7 @@ const LoginForm = () => {
             Login
           </Button>
           <Text align="center" mt="md">
-            Don't have an account?
+            Don&apos;t have an account?
             <Anchor component={Link} to="/signup" weight={700}>
               Register
             </Anchor>
