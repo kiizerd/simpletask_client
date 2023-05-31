@@ -6,8 +6,11 @@ import {
   Button,
   Container,
   Group,
+  Stack,
+  AppShell,
 } from "@mantine/core";
 import { MantineApp } from "app";
+import Header from "app/components/Header";
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -32,7 +35,6 @@ const useStyles = createStyles((theme) => ({
   },
 
   title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     textAlign: "center",
     fontWeight: 900,
     fontSize: 38,
@@ -56,7 +58,7 @@ interface RouteErrorI {
   message: string;
 }
 
-const ErrorPage = () => {
+const ErrorPage = (): JSX.Element => {
   const { classes } = useStyles();
   const routeError = useRouteError();
   const error = routeError as RouteErrorI;
@@ -64,25 +66,44 @@ const ErrorPage = () => {
 
   return (
     <MantineApp>
-      <Container className={classes.root} id="error-page">
-        <div className={classes.label}>{error.status}</div>
-        <Title className={classes.title}>{error.statusText}</Title>
-        <Text
-          color="dimmed"
-          size="lg"
-          align="center"
-          className={classes.description}
-        >
-          {error.message}
-        </Text>
-        <Group position="center">
-          <Link to="/">
-            <Button variant="subtle" size="md">
-              Take me back to home page
-            </Button>
-          </Link>
-        </Group>
-      </Container>
+      <AppShell header={<Header />}>
+        <Container className={classes.root} id="error-page">
+          <div className={classes.label}>{error.status}</div>
+          <Title className={classes.title}>{error.statusText}</Title>
+          <Text
+            color="dimmed"
+            size="lg"
+            align="center"
+            className={classes.description}
+          >
+            {error.message}
+          </Text>
+          <Group position="center">
+            <Stack align="center">
+              <Button
+                variant="subtle"
+                size="md"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Refresh
+              </Button>
+              <Link to="/login">
+                <Button variant="subtle" size="mid">
+                  Sign in
+                </Button>
+              </Link>
+
+              <Link to="/">
+                <Button variant="subtle" size="md">
+                  Take me back to home page
+                </Button>
+              </Link>
+            </Stack>
+          </Group>
+        </Container>
+      </AppShell>
     </MantineApp>
   );
 };
