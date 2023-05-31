@@ -1,10 +1,10 @@
-import { User } from "types/models";
+import type { User } from "types/models";
 
 // const apiURL = import.meta.env.API_URL;
 const apiURL = "http://localhost:5100";
 
-const authFetch = (url: string, body: object): Promise<Response> => {
-  return fetch(url, {
+const authFetch = async (url: string, body: object): Promise<Response> => {
+  return await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -18,13 +18,7 @@ export const signIn = async (
 ): Promise<User | undefined> => {
   const signInUrl = `${apiURL}/users/sign_in`;
   try {
-    const response = await authFetch(signInUrl, {
-      user: {
-        email: email,
-        password: password,
-      },
-    });
-
+    const response = await authFetch(signInUrl, { user: { email, password } });
     const data = await response.json();
     const user: User = data.user;
     return user;
@@ -39,12 +33,7 @@ export const signUp = async (
 ): Promise<User | undefined> => {
   const signUpUrl = `${apiURL}/users/`;
   try {
-    const response = await authFetch(signUpUrl, {
-      user: {
-        email: email,
-        password: password,
-      },
-    });
+    const response = await authFetch(signUpUrl, { user: { email, password } });
     const data = await response.json();
     const user: User = data.user;
     return user;
@@ -53,11 +42,15 @@ export const signUp = async (
   }
 };
 
-export const signOut = async () => {
+export const signOut = async (): Promise<void> => {
   const signOutUrl = `${apiURL}/users/sign_out`;
-  const response = await fetch(signOutUrl, {
-    method: "DELETE",
-    credentials: "include",
-  });
-  return await response.json();
+  try {
+    const response = await fetch(signOutUrl, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error signing out.\n", error);
+  }
 };
