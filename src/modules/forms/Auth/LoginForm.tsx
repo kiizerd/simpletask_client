@@ -14,7 +14,7 @@ import authFormStyles from "./AuthFormStyles";
 import { useContext } from "react";
 import UserContext from "@contexts/UserContext";
 
-interface UserFormValues {
+export interface UserFormValues {
   email: string;
   password: string;
 }
@@ -40,8 +40,8 @@ const LoginForm = (): JSX.Element => {
 
   return (
     <div className={classes.wrapper}>
-      <form onSubmit={form.onSubmit(submit)}>
-        <Paper className={classes.form} radius={0} p={30}>
+      <Paper className={classes.form}>
+        <form onSubmit={form.onSubmit(submit)}>
           <Title
             order={2}
             className={classes.title}
@@ -77,13 +77,13 @@ const LoginForm = (): JSX.Element => {
             Login
           </Button>
           <Text align="center" mt="md">
-            Don&apos;t have an account?
+            Don&apos;t have an account?{" "}
             <Anchor component={Link} to="/signup" weight={700}>
               Register
             </Anchor>
           </Text>
-        </Paper>
-      </form>
+        </form>
+      </Paper>
     </div>
   );
 };

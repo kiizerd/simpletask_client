@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   Anchor,
   Button,
@@ -9,12 +11,13 @@ import {
   Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Link } from "react-router-dom";
-import { signUp } from "@api/auth";
+import UserContext from "@contexts/UserContext";
 import authFormStyles from "./AuthFormStyles";
+import { type UserFormValues } from "./LoginForm";
 
-const SignupForm = () => {
+const SignupForm = (): JSX.Element => {
   const { classes } = authFormStyles();
+  const { register } = useContext(UserContext);
   const form = useForm({
     initialValues: {
       email: "",
@@ -27,15 +30,14 @@ const SignupForm = () => {
     },
   });
 
+  const submit = (values: UserFormValues): void => {
+    void register(values.email, values.password);
+  };
+
   return (
     <div className={classes.wrapper}>
-      <form
-        onSubmit={form.onSubmit((values) => {
-          signUp(values.email, values.password);
-          // form.reset();
-        })}
-      >
-        <Paper className={classes.form} radius={0} p={30}>
+      <Paper className={classes.form}>
+        <form onSubmit={form.onSubmit(submit)}>
           <Title
             order={2}
             className={classes.title}
@@ -72,13 +74,13 @@ const SignupForm = () => {
             Sign up
           </Button>
           <Text align="center" mt="md">
-            Already have an account?
+            Already have an account?{" "}
             <Anchor component={Link} to="/login" weight={700}>
               Log in
             </Anchor>
           </Text>
-        </Paper>
-      </form>
+        </form>
+      </Paper>
     </div>
   );
 };
