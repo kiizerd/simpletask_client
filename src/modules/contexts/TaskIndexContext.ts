@@ -5,7 +5,6 @@ import Task from "types/Task";
 interface TaskIndexContextValue {
   tasks: Task[] | undefined;
   mutate: KeyedMutator<Task[]> | undefined;
-  ref: MutableRefObject<HTMLDivElement | null>
 }
 
 const TaskIndexContext = createContext({} as TaskIndexContextValue);
