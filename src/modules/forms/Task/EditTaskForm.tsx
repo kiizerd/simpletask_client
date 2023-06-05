@@ -11,9 +11,9 @@ import TaskInput from "./TaskInput";
 import { validate } from "./TaskForm";
 import Task from "types/Task";
 
-interface EditTaskForm {
+interface EditTaskFormProps {
   task: Task;
-  setEditMode(value: boolean): void;
+  setEditMode: (value: boolean) => void;
 }
 
 const portalContainer = document.createElement("div");
@@ -22,61 +22,76 @@ portalContainer.style.zIndex = "300";
 portalContainer.style.position = "absolute";
 document.body.appendChild(portalContainer);
 
-const EditTaskForm = ({ task, setEditMode }: EditTaskForm) => {
+const EditTaskForm = ({
+  task,
+  setEditMode,
+}: EditTaskFormProps): JSX.Element => {
   const { id, name, projectId } = task;
-  const { tasks = [], mutate, ref } = useContext(TaskIndexContext);
+  const { tasks = [], mutate } = useContext(TaskIndexContext);
   const { classes } = taskFormStyles();
   const matchMutate = useMatchMutate();
 
-  const clickRef = useClickOutside(() => setEditMode(false));
+  const clickRef = useClickOutside(() => {
+    setEditMode(false);
+  });
   const form = useForm({ initialValues: { name }, validate });
 
   useEffect(() => {
-    if (ref.current) {
-      Array.from(ref.current.children).forEach((child) => {
-        if (child.getAttribute("data-task-id") == `${id}`) {
-          const taskCardRect = child.getBoundingClientRect();
-          portalContainer.style.top = `${taskCardRect.top}px`;
-          portalContainer.style.left = `${taskCardRect.left}px`;
-          portalContainer.style.width = `${taskCardRect.width}px`;
-        }
-      });
-    }
-  }, [ref.current]);
+    Array.from(document.querySelectorAll(".task-card")).forEach((child) => {
+      if (child.getAttribute("data-task-id") === `${id}`) {
+        const taskCardRect = child.getBoundingClientRect();
+        portalContainer.style.top = `${taskCardRect.top}px`;
+        portalContainer.style.left = `${taskCardRect.left}px`;
+        portalContainer.style.width = `${taskCardRect.width}px`;
+      }
+    });
+  }, []);
 
-  const submit = async (formValues: Partial<Task>) => {
-    if (!mutate) return console.error("No SWR mutate method found.");
+  const submit = async (formValues: Partial<Task>): Promise<void> => {
+    if (!mutate) {
+      console.error("No SWR mutate method found.");
+      return;
+    }
 
     const newTask = new Task(id, { ...task, ...formValues });
-    const optimisticData = tasks.map((task) =>
-      task.id === id ? newTask : task
+    const updateResponse = await updateProjectTask(projectId, newTask);
+
+    // Revalidate if response is not a Task object, indicating failure from server
+    if (!(updateResponse instanceof Task)) {
+      // Set errors from server if client validation succeeds
+      form.setErrors({ name: updateResponse.messages?.name?.join("\n") });
+      console.debug(updateResponse);
+
+      return;
+    }
+
+
+    // Mutate taskIndex
+    const mutateOpts = { revalidate: true, populateCache: true };
+    await mutate(
+      tasks?.map((task) => (task.id === id ? newTask : task)),
+      mutateOpts
     );
 
-    const applyTaskUpdate = async () => {
-      const updated = await updateProjectTask(projectId, newTask);
-      return tasks.map((task) => (task.id == id ? updated : task));
-    };
-
-    await mutate(applyTaskUpdate, {
-      optimisticData,
-      rollbackOnError: true,
-      populateCache: true,
-      revalidate: false,
-    });
-
-    await matchMutate(task.route);
+    // Mutate actual task
+    await matchMutate(task.route, () => newTask, mutateOpts);
 
     setEditMode(false);
   };
 
   return (
     <Portal target={portalContainer}>
-      <form className={classes.editForm} onSubmit={form.onSubmit(submit)}>
+      <form
+        className={classes.editForm}
+        onSubmit={form.onSubmit((formValues) => {
+          void submit(formValues);
+        })}
+      >
         <Stack ref={clickRef} spacing={3}>
           <TaskInput
             focused
             setFocused={() => null}
-            {...form.getInputProps("name")}
+            formProps={form.getInputProps("name")}
           />
           <Box pt={4} px="md">
             <Button
@@ -84,7 +99,9 @@ const EditTaskForm = ({ task, setEditMode }: EditTaskForm) => {
               type="submit"
               w="100%"
               compact
-              onClick={() => errorTimeout(form)}
+              onClick={() => {
+                errorTimeout(form);
+              }}
             >
               Update
             </Button>
