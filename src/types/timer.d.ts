@@ -23,15 +23,15 @@ export interface Action {
 }
 
 export interface TimerController {
-  start(d: Dispatch<Action>): void;
-  pause(d: Dispatch<Action>): void;
-  resume(d: Dispatch<Action>): void;
-  reset(d: Dispatch<Action>): void;
-  set(d: Dispatch<Action>, v: number): void;
-  tick(d: Dispatch<Action>): void;
-  angle(d: Dispatch<Action>): void;
-  complete(d: Dispatch<Action>, v: number): void;
-  reducer(s: TimerState, a: Action): TimerState;
+  start: (d: Dispatch<Action>) => void;
+  pause: (d: Dispatch<Action>) => void;
+  resume: (d: Dispatch<Action>) => void;
+  reset: (d: Dispatch<Action>) => void;
+  set: (d: Dispatch<Action>, v: number) => void;
+  tick: (d: Dispatch<Action>) => void;
+  angle: (d: Dispatch<Action>) => void;
+  complete: (d: Dispatch<Action>, v: number) => void;
+  reducer: (s: TimerState, a: Action) => TimerState;
   initialState: TimerState;
 }
 

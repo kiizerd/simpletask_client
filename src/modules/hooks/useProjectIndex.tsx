@@ -1,9 +1,17 @@
-import useSWR, { Fetcher } from "swr";
+import useSWR, { type KeyedMutator, type Fetcher } from "swr";
 import { getAllProjects } from "@api/projects";
-import Project from "types/Project";
+import type Project from "types/Project";
 
-export default function useProjectIndex() {
-  const fetcher: Fetcher<Project[], string> = () => getAllProjects();
+interface ProjectIndexData {
+  projects: Project[];
+  error: Error;
+  isLoading: boolean;
+  mutate: KeyedMutator<Project[]>;
+}
+
+export default function useProjectIndex(): ProjectIndexData {
+  const fetcher: Fetcher<Project[], string> = async (): Promise<Project[]> =>
+    await getAllProjects();
   const index = useSWR("projects/", fetcher);
 
   const { data: projects = [], error, isLoading, mutate } = index;

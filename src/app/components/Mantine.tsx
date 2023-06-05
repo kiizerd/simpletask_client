@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import {
   MantineProvider,
   ColorSchemeProvider,
-  ColorScheme,
-  ButtonProps,
-  ProgressProps,
+  type ColorScheme,
+  type ButtonProps,
 } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 
-const MantineApp = ({ children }: React.PropsWithChildren) => {
+const MantineApp = ({ children }: React.PropsWithChildren): JSX.Element => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
   const primaryColor = colorScheme === "dark" ? "violet" : "indigo";
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  const toggleColorScheme = (value?: ColorScheme): void => {
+    setColorScheme(value ?? (colorScheme === "dark" ? "light" : "dark"));
+  };
 
   const ButtonDefaultProps: Partial<ButtonProps> = { p: "xs" };
 
@@ -26,7 +27,7 @@ const MantineApp = ({ children }: React.PropsWithChildren) => {
           colorScheme,
           primaryColor,
           fontFamily: "Verdana, sans-serif",
-          fontFamilyMonospace: 'Monaco, Courier, monospace',
+          fontFamilyMonospace: "Monaco, Courier, monospace",
           components: {
             Button: {
               defaultProps: ButtonDefaultProps,
