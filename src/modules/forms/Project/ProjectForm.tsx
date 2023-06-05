@@ -66,7 +66,7 @@ const ProjectForm = () => {
       revalidate: false,
     });
 
-    navigate("/");
+    navigate(`/projects/${newProject.id}`);
   };
 
   return (
@@ -87,7 +87,13 @@ const ProjectForm = () => {
       />
 
       <Group>
-        <Button component={Link} to="/" mt="md" variant="subtle">
+        <Button
+          onClick={() => {
+            navigate(-1);
+          }}
+          mt="md"
+          variant="subtle"
+        >
           Cancel
         </Button>
         <Button mt="md" type="submit">

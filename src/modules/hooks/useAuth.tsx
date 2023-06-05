@@ -50,6 +50,7 @@ export default function useAuth(): AuthData {
   ): Promise<User | undefined> => {
     const user = await signUp(email, password);
     setCurrentUser(user);
+    navigate("/projects")
     return user;
   };
 
