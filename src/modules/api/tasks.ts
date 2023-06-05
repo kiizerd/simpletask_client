@@ -90,7 +90,22 @@ const deleteProjectTask = async (
   const data = (await response.json()) as TaskData[];
   const tasks = data.map((dataItem) => new Task(dataItem.id, dataItem));
 
-  return tasks;
+const moveSectionTask = async (index: number, task: Task): Promise<void> => {
+  const { id, sectionId, projectId } = task;
+  const route = `${sectionsRoute(projectId)}/${sectionId}/move_task`;
+  try {
+    const response = await fetch(route, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task: { id, index } }),
+    });
+    if (!response.ok) {
+      throw new Error("Couldn't move task.");
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export {
@@ -100,4 +115,5 @@ export {
   createProjectTask,
   updateProjectTask,
   deleteProjectTask,
+  moveSectionTask,
 };
