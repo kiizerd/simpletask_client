@@ -39,14 +39,14 @@ const taskFormStyles = createStyles((theme) => ({
   },
   editForm: { width: "100%" },
   inactive: {
-    marginTop: "10px",
+    marginTop: theme.spacing.xs,
     animation: "unset",
-    ["&[data-is-focused='true']"]: {
+    "&[data-is-focused='true']": {
       opacity: 0,
       display: "none",
       animation: "none",
     },
-    ["&[data-is-focused='false']"]: {
+    "&[data-is-focused='false']": {
       animation: `${inactiveAppear} 0.2s linear`,
     },
   },

@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Button, Textarea } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 import {
@@ -9,17 +8,29 @@ import taskFormStyles from "./TaskFormStyles";
 
 interface TaskInputProps {
   focused: boolean | undefined;
-  setFocused(value: boolean): void;
-  props: React.ComponentPropsWithoutRef<"input" | "textarea">;
+  setFocused: (value: boolean) => void;
+  formProps: {
+    value: any;
+    onChange: any;
+    onFocus?: any;
+    onBlur?: any;
+    error?: any;
+  };
 }
 
-const TaskInput = ({ focused, setFocused, ...props }: TaskInputProps) => {
+const TaskInput = ({
+  focused,
+  setFocused,
+  formProps
+}: TaskInputProps): JSX.Element => {
   const { classes } = taskFormStyles();
 
   return (
     <Box style={{ width: "100%" }}>
       <Button
-        onClick={() => setFocused(true)}
+        onClick={() => {
+          setFocused(true);
+        }}
         leftIcon={<IconPlus />}
         variant="subtle"
         data-is-focused={focused}
@@ -38,7 +49,7 @@ const TaskInput = ({ focused, setFocused, ...props }: TaskInputProps) => {
           classNames={classes}
           className={classes.textarea}
           maxRows={4}
-          {...props}
+          {...formProps}
         />
       ) : null}
     </Box>
