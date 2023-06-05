@@ -1,19 +1,18 @@
-import { Box, Flex, Loader } from "@mantine/core";
-import { useScrollContainer } from "react-indiana-drag-scroll";
+import { Box, Loader } from "@mantine/core";
 import SectionForm from "@forms/Section";
 import SectionCard from "@common/components/SectionCard";
 import SectionIndexContext from "@contexts/SectionIndexContext";
 import useSectionIndex from "@hooks/useSectionIndex";
 import sectionListStyles from "./SectionListStyles";
+import DragScroll from "./DragScrollList";
 
 interface SectionListProps {
   projectId: number;
 }
 
-const SectionList = ({ projectId }: SectionListProps) => {
+const SectionList = ({ projectId }: SectionListProps): JSX.Element => {
   const { classes } = sectionListStyles();
   const { sections, error, isLoading, mutate } = useSectionIndex(projectId);
-  const scrollContainer = useScrollContainer();
 
   if (error) throw error;
   if (isLoading) return <Loader />;
@@ -26,17 +25,10 @@ const SectionList = ({ projectId }: SectionListProps) => {
 
   return (
     <SectionIndexContext.Provider value={{ sections, mutate }}>
-      <Flex
-        ref={scrollContainer.ref}
-        className={classes.list}
-        gap={{ base: "xs", md: "lg" }}
-        px={{ base: "md", xs: "xs", md: "xl" }}
-        pb="lg"
-        direction={{ base: "column", xs: "row" }}
-      >
-        {sectionCards}
-        <SectionForm projectId={projectId} />
-      </Flex>
+      <DragScroll ignoredElements={[".section-card"]} className={classes.list}>
+          {sectionCards}
+          <SectionForm projectId={projectId} />
+      </DragScroll>
     </SectionIndexContext.Provider>
   );
 };

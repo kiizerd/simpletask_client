@@ -25,6 +25,7 @@ const sectionListStyles = createStyles((theme) => {
           marginBottom: theme.spacing.xs,
         },
         ".task-list": {
+          paddingTop: `${theme.spacing.xs}`,
           overflow: "scroll",
           maxHeight: "65vh",
           [theme.fn.smallerThan("xs")]: { maxHeight: "25vh" },
