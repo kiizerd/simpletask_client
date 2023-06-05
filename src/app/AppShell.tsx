@@ -6,6 +6,8 @@ import TimerContext from "@contexts/TimerContext";
 import useTimer from "@hooks/useTimer";
 import UserContext from "@contexts/UserContext";
 import useAuth from "@hooks/useAuth";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const App = (): JSX.Element => {
   // Track timer data in top level component to ensure
@@ -20,9 +22,11 @@ const App = (): JSX.Element => {
           header={<Header />}
           styles={{ main: { paddingLeft: 0, paddingRight: 0 } }}
         >
-          <TimerContext.Provider value={timerData}>
-            <Outlet />
-          </TimerContext.Provider>
+            <TimerContext.Provider value={timerData}>
+              <DndProvider backend={HTML5Backend}>
+                <Outlet />
+              </DndProvider>
+            </TimerContext.Provider>
         </AppShell>
       </UserContext.Provider>
     </MantineApp>
