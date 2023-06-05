@@ -18,12 +18,27 @@ const taskCardStyles = createStyles((theme) => {
     : theme.colors.gray[2];
 
   return {
-    card: {
-      margin: `${theme.spacing.xs} 0 0`,
+    draggableCard: {
+      border: '1px solid transparent',
       backgroundColor: bgColor,
       transition: "transform 0.3s linear, background-color 0.3s linear",
       maxWidth: "100%",
-      ["&[data-complete='true']"]: {
+      "&[data-complete='true']": {
+        backgroundColor: taskCompleteColor,
+        textDecoration: "line-through",
+      },
+      "&": { padding: theme.spacing.xs },
+    },
+    draggable: {
+      marginBottom: theme.spacing.xs,
+    },
+    card: {
+      border: '1px solid transparent',
+      marginBottom: theme.spacing.xs,
+      backgroundColor: bgColor,
+      transition: "transform 0.3s linear, background-color 0.3s linear",
+      maxWidth: "100%",
+      "&[data-complete='true']": {
         backgroundColor: taskCompleteColor,
         textDecoration: "line-through",
       },
@@ -36,11 +51,11 @@ const taskCardStyles = createStyles((theme) => {
       overflowWrap: "break-word",
       animation: "unset",
       "&:hover": { textShadow: "0 0 0 white" },
-      ["&[data-edit-mode='true']"]: {
+      "&[data-edit-mode='true']": {
         opacity: 0,
         animation: "none",
       },
-      ["&[data-edit-mode='false']"]: {
+      "&[data-edit-mode='false']": {
         animation: `${reappear} 0.3s linear`,
       },
     },
@@ -49,7 +64,7 @@ const taskCardStyles = createStyles((theme) => {
       right: theme.spacing.xs,
       transition: "opacity 0.2s linear",
       backgroundColor: bgColor,
-      ["&[data-complete='true']"]: {
+      "&[data-complete='true']": {
         backgroundColor: taskCompleteColor,
       },
       "& > .mantine-ActionIcon-root": {
