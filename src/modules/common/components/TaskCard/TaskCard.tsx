@@ -20,6 +20,7 @@ const TaskCard = (props: TaskCardProps) => {
 
   return (
     <Box
+      className="task-card"
       data-task-id={id}
       style={{ position: "relative", overflow: "visible" }}
     >
