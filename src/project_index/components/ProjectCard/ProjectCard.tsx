@@ -1,25 +1,22 @@
 import { Link } from "react-router-dom";
 import { Text, Button, Group, Paper, Title } from "@mantine/core";
+import getImage from "@helpers/imageHelpers";
 import projectCardStyles from "./ProjectCardStyles";
 import ProjectCardMenu from "./ProjectCardMenu";
-import Project from "types/Project";
+import type Project from "types/Project";
 
 interface ProjectCardProps {
-  image: string;
   project: Project;
 }
 
-const ProjectCard = ({ image, project }: ProjectCardProps) => {
-  const { classes } = projectCardStyles();
+const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
+  const { classes } = projectCardStyles(getImage(project.id));
 
   return (
     <Paper
       shadow="md"
       p="md"
       radius="md"
-      sx={{
-        backgroundImage: `linear-gradient(160deg, #333130 0%, rgba(44, 40, 40, 0.3) 55%), url(${image})`,
-      }}
       className={classes.card}
     >
       <div>

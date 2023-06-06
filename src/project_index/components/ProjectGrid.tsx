@@ -1,13 +1,12 @@
 import { SimpleGrid } from "@mantine/core";
-import getImage from "@helpers/imageHelpers";
 import ProjectCard from "./ProjectCard";
-import Project from "types/Project";
+import type Project from "types/Project";
 
 interface ProjectGridProps {
   projects: Project[];
 }
 
-const ProjectGrid = ({ projects }: ProjectGridProps) => {
+const ProjectGrid = ({ projects }: ProjectGridProps): JSX.Element => {
   return (
     <SimpleGrid
       spacing="lg"
@@ -19,7 +18,7 @@ const ProjectGrid = ({ projects }: ProjectGridProps) => {
       ]}
     >
       {projects.map((project, index) => (
-        <ProjectCard key={index} project={project} image={getImage()} />
+        <ProjectCard key={index} project={project} />
       ))}
     </SimpleGrid>
   );

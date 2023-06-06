@@ -1,14 +1,16 @@
 import { createStyles } from "@mantine/core";
 
-const projectCardStyles = createStyles((theme) => ({
+const projectCardStyles = createStyles((theme, image: string) => ({
   card: {
+    borderBottomRightRadius: 0,
     height: "21rem",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "flex-start",
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundPosition: "bottom right",
+    backgroundImage: `linear-gradient(160deg, #333130 0%, rgba(44, 40, 40, 0.3) 55%), url(${image})`,
     zIndex: 95,
 
     "& > div": {
@@ -21,7 +23,7 @@ const projectCardStyles = createStyles((theme) => ({
   },
 
   title: {
-    fontFamily: `Greycliff CF ${theme.fontFamily}`,
+    fontFamily: 'Greycliff CF, sans-serif',
     fontWeight: 900,
     color: theme.white,
     fontSize: 22,
