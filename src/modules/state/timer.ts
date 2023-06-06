@@ -1,5 +1,5 @@
 import type { Dispatch } from "react";
-import {
+import type {
   Action,
   TimerCompletions,
   TimerController,
@@ -16,35 +16,35 @@ const initialState: TimerState = {
   completions: { work: 0, long: 0, short: 0 },
 };
 
-function start(dispatch: Dispatch<Action>) {
+function start(dispatch: Dispatch<Action>): void {
   dispatch({ type: "START" });
 }
 
-function pause(dispatch: Dispatch<Action>) {
+function pause(dispatch: Dispatch<Action>): void {
   dispatch({ type: "PAUSE" });
 }
 
-function resume(dispatch: Dispatch<Action>) {
+function resume(dispatch: Dispatch<Action>): void {
   dispatch({ type: "RESUME" });
 }
 
-function reset(dispatch: Dispatch<Action>) {
+function reset(dispatch: Dispatch<Action>): void {
   dispatch({ type: "RESET" });
 }
 
-function set(dispatch: Dispatch<Action>, payload: TimerLength) {
+function set(dispatch: Dispatch<Action>, payload: TimerLength): void {
   dispatch({ type: "SET", payload });
 }
 
-function tick(dispatch: Dispatch<Action>) {
+function tick(dispatch: Dispatch<Action>): void {
   dispatch({ type: "TICK" });
 }
 
-function angle(dispatch: Dispatch<Action>) {
+function angle(dispatch: Dispatch<Action>): void {
   dispatch({ type: "ANGLE" });
 }
 
-function complete(dispatch: Dispatch<Action>, payload: TimerLength) {
+function complete(dispatch: Dispatch<Action>, payload: TimerLength): void {
   dispatch({ type: "COMPLETE", payload });
 }
 
@@ -82,7 +82,7 @@ function reducer(state: TimerState, action: Action): TimerState {
       return {
         ...initialState,
         time: action.payload * 60,
-        timerLength: action.payload as TimerLength,
+        timerLength: action.payload,
         completions: state.completions,
       };
     case "TICK":
@@ -100,7 +100,7 @@ function reducer(state: TimerState, action: Action): TimerState {
         ...state,
         completions: incrementCompletions(
           state.completions,
-          action.payload as TimerLength
+          action.payload
         ),
       };
     default:

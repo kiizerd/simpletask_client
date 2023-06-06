@@ -1,16 +1,17 @@
 import { useContext } from "react";
 import { Button, Group, Indicator } from "@mantine/core";
 import TimerContext from "@contexts/TimerContext";
+import { type TimerLength } from "types/timer";
 
 type TimerCompletionKey = "work" | "short" | "long";
 
-const TimerSelector = () => {
+const TimerSelector = (): JSX.Element => {
   const timerData = useContext(TimerContext);
   const { state, dispatch, controller } = timerData;
   const { set: setTimerLength } = controller;
 
   const keys: TimerCompletionKey[] = ["work", "short", "long"];
-  const lengths = [25, 5, 15];
+  const lengths: TimerLength[] = [25, 5, 15];
 
   return (
     <Group spacing="xl">
@@ -27,7 +28,11 @@ const TimerSelector = () => {
             color={["orange", "yellow", "green"][(count % 3) - 1]}
             sx={{ textShadow: "0 0 3px black" }}
           >
-            <Button onClick={() => setTimerLength(dispatch, timerLength)}>
+            <Button
+              onClick={() => {
+                setTimerLength(dispatch, timerLength);
+              }}
+            >
               {key[0].toUpperCase() + key.slice(1)}
             </Button>
           </Indicator>

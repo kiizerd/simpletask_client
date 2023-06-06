@@ -27,10 +27,10 @@ export interface TimerController {
   pause: (d: Dispatch<Action>) => void;
   resume: (d: Dispatch<Action>) => void;
   reset: (d: Dispatch<Action>) => void;
-  set: (d: Dispatch<Action>, v: number) => void;
+  set: (d: Dispatch<Action>, v: TimerLength) => void;
   tick: (d: Dispatch<Action>) => void;
   angle: (d: Dispatch<Action>) => void;
-  complete: (d: Dispatch<Action>, v: number) => void;
+  complete: (d: Dispatch<Action>, v: TimerLength) => void;
   reducer: (s: TimerState, a: Action) => TimerState;
   initialState: TimerState;
 }
