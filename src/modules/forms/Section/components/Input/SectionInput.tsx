@@ -1,23 +1,34 @@
-import React from "react";
 import { Button, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 import sectionFormStyles from "./SectionInputStyles";
 
-interface TaskInputProps {
+interface SectionInputProps {
   focused: boolean | undefined;
-  setFocused(value: boolean): void;
-  props: React.ComponentPropsWithoutRef<"input" | "textarea">;
+  setFocused: (value: boolean) => void;
+  formProps: {
+    value: any;
+    onChange: any;
+    onFocus?: any;
+    onBlur?: any;
+    error?: any;
+  };
 }
 
-const SectionInput = ({ focused, setFocused, ...props }: TaskInputProps) => {
+const SectionInput = ({
+  focused,
+  setFocused,
+  formProps,
+}: SectionInputProps): JSX.Element => {
   const { classes } = sectionFormStyles();
 
   return (
     <>
       <Button
-        onClick={() => setFocused(true)}
+        onClick={() => {
+          setFocused(true);
+        }}
         leftIcon={<IconPlus />}
-        variant='default'
+        variant="default"
         data-is-focused={focused}
         className={classes.inactive}
       >
@@ -29,7 +40,7 @@ const SectionInput = ({ focused, setFocused, ...props }: TaskInputProps) => {
           size="md"
           placeholder="New section"
           className={classes.newInput}
-          {...props}
+          {...formProps}
         />
       ) : null}
     </>

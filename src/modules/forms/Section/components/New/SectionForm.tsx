@@ -57,7 +57,7 @@ const SectionForm = ({ projectId }: SectionFormProps) => {
         <SectionInput
           focused={focused}
           setFocused={setFocused}
-          {...form.getInputProps("name")}
+          formProps={form.getInputProps("name")}
         />
         <Box display={focused ? "" : "none"} className={classes.button}>
           <ActionIcon

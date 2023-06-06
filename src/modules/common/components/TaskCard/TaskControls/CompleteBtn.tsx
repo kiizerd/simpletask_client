@@ -16,7 +16,13 @@ const toggleCompletion = async (
   setter: (value: boolean) => void
 ) => {
   setter(task.toggleCompletion() === "complete");
-  const newTask = await updateProjectTask(task.projectId, task);
+  const newTask = new Task(task.id, { ...task, status: 'complete' });
+  const completeResponse = await updateProjectTask(task.projectId, task);
+  if (!(completeResponse instanceof Task)) {
+    console.error(completeResponse);
+    return;
+  }
+
   await mutate(newTask);
   await globalMutate(`projects/${task.projectId}/sections/${task.sectionId}`);
 };
