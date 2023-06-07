@@ -1,37 +1,21 @@
-import { useEffect, useState } from "react";
+import { useLocalStorage } from "@mantine/hooks";
 
-const getStoredPin = () => window.localStorage.getItem("pinnedSection");
+type UseTimerPinType<T> = [T | null, () => void];
 
-export default function useTimerPin(projectId?: number, sectionId?: number) {
-  const key = `${projectId}-${sectionId}`;
-  const [currentPin, setCurrentPin] = useState(() => {
-    return getStoredPin();
-  });
+export default function useTimerPin(projectId?: number, sectionId?: number): UseTimerPinType<string> {
+  const key = `${projectId ?? 0}-${sectionId ?? 0}`;
+  const [currentPin, setCurrentPin, removeCurrentPin] = useLocalStorage<string>({
+    key: 'current-pin',
+    defaultValue: '0-0'
+  })
 
-  const storedPinListener = () => {
-    const storedValue = getStoredPin();
-    setCurrentPin(storedValue || currentPin);
-  };
-
-  useEffect(() => {
-    window.addEventListener("storage", storedPinListener);
-
-    return () => {
-      window.removeEventListener("storage", storedPinListener);
-    };
-  }, []);
-
-  const setPin = () => {
+  const setPin = (): void => {
     if (currentPin === key) {
-      setCurrentPin('0');
-      window.localStorage.setItem("pinnedSection", '0');
-      window.dispatchEvent(new Event("storage"));
+      removeCurrentPin()
     } else {
       setCurrentPin(key);
-      window.localStorage.setItem("pinnedSection", key);
-      window.dispatchEvent(new Event("storage"));
     }
   };
 
-  return [currentPin, setPin] as const;
+  return [currentPin, setPin]
 }
