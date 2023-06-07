@@ -1,14 +1,14 @@
 import { Group } from "@mantine/core";
 import { useState } from "react";
-import Task from "types/Task";
-import CompleteBtn from "./CompleteBtn";
+import type Task from "types/Task";
 import TaskMenu from "./TaskMenu";
+import StatusToggleBtn from "./StatusToggleBtn";
 
 interface TaskControlsProps {
   task: Task;
   hovered: boolean;
   className: string;
-  setEditMode(value: boolean): void;
+  setEditMode: (value: boolean) => void;
 }
 
 const TaskControls = ({
@@ -16,7 +16,7 @@ const TaskControls = ({
   hovered,
   className,
   setEditMode,
-}: TaskControlsProps) => {
+}: TaskControlsProps): JSX.Element => {
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
 
   return (
@@ -27,7 +27,7 @@ const TaskControls = ({
       // Hide buttons unless hovering card or menu is open
       sx={{ opacity: hovered || menuOpened ? 100 : 0 }}
     >
-      <CompleteBtn task={task} />
+      <StatusToggleBtn task={task} />
       {/* Vertical Dots Icon */}
       <TaskMenu
         task={task}
