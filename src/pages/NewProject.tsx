@@ -1,7 +1,7 @@
 import { Box, Title } from "@mantine/core";
 import ProjectForm from "@forms/Project";
 
-const NewProjectPage = () => {
+const NewProjectPage = (): JSX.Element => {
   return (
     <Box sx={{ maxWidth: 450 }} mx="auto" px={13}>
       <Title order={2} mb={7}>

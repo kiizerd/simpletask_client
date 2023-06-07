@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 
-const NewProjectBtn = () => {
+const NewProjectBtn = (): JSX.Element => {
   return (
     <Button
       component={Link}

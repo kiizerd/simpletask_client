@@ -11,23 +11,31 @@ import { validate } from "../New/SectionForm";
 import Section from "types/Section";
 
 interface SectionFormProps {
-  setEditMode(value: boolean): void;
+  setEditMode: (value: boolean) => void;
 }
 
-const EditSectionForm = ({ setEditMode }: SectionFormProps) => {
+const EditSectionForm = ({ setEditMode }: SectionFormProps): JSX.Element => {
   const section = useContext(SectionContext);
   const { id, name, projectId, route } = section;
   const { classes } = sectionFormStyles();
 
-  const clickRef = useClickOutside(() => setEditMode(false));
+  const clickRef = useClickOutside(() => {
+    setEditMode(false);
+  });
   const form = useForm({
     initialValues: { name },
     validate,
   });
 
-  const submit = async (formValues: Partial<Section>) => {
+  const submit = (formValues: Partial<Section>): void => {
     const newSection = new Section(id, { ...section, ...formValues });
-    await mutate(route, updateProjectSection(projectId, newSection));
+    void mutate(
+      route,
+      async () => await updateProjectSection(projectId, newSection),
+      {
+        optimisticData: newSection,
+      }
+    );
     setEditMode(false);
   };
 
@@ -41,7 +49,13 @@ const EditSectionForm = ({ setEditMode }: SectionFormProps) => {
           {...form.getInputProps("name")}
         />
         <Box pt={2}>
-          <Button type="submit" compact onClick={() => errorTimeout(form)}>
+          <Button
+            type="submit"
+            compact
+            onClick={() => {
+              errorTimeout(form);
+            }}
+          >
             Update
           </Button>
         </Box>

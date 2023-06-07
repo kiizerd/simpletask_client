@@ -1,14 +1,23 @@
-import { MutatorCallback, useSWRConfig } from "swr";
+import { type MutatorCallback, useSWRConfig } from "swr";
 
 // Regexs
 //
-//`^projects/${projectId}/(sections/${sectionId}|tasks/${id}/)$`
+// `^projects/${projectId}/(sections/${sectionId}|tasks/${id}/)$`
 
-export default function useMatchMutate() {
+type MatchMutator = (
+  matcher: RegExp | string,
+  data?: MutatorCallback,
+  opts?: any
+) => Promise<void>;
+
+export default function useMatchMutate(): MatchMutator {
   const { cache, mutate } = useSWRConfig();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (matcher: RegExp | string, data?: MutatorCallback, opts?: any) => {
+  return async (
+    matcher: RegExp | string,
+    data?: MutatorCallback,
+    opts?: any
+  ) => {
     if (!(cache instanceof Map)) {
       throw new Error(
         "matchMutate requires the cache provider to be a Map instance"
@@ -30,7 +39,6 @@ export default function useMatchMutate() {
       }
     }
 
-    const mutations = keys.map((key) => mutate(key, data, opts));
-    return Promise.all(mutations);
+    keys.map(async (key) => await mutate(key, data, opts));
   };
 }

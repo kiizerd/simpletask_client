@@ -10,7 +10,7 @@ interface DrawerProjectProps {
   projectId: number;
 }
 
-const DrawerProject = ({ projectId }: DrawerProjectProps) => {
+const DrawerProject = ({ projectId }: DrawerProjectProps): JSX.Element => {
   const { project, error, isLoading } = useProject(projectId);
   const { classes } = drawerStyles();
 

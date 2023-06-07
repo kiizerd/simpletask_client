@@ -1,5 +1,13 @@
 import { createContext } from "react";
-import { Timer } from "types/timer";
+import controller from "@state/timer";
+import type { Timer } from "types/timer";
 
-const TimerContext = createContext({} as Timer);
+const emptyTimer: Timer = {
+  state: controller.initialState,
+  dispatch: () => {},
+  controller,
+  classes: { wrapper: "", box: "", timer: "" },
+};
+
+const TimerContext = createContext(emptyTimer);
 export default TimerContext;

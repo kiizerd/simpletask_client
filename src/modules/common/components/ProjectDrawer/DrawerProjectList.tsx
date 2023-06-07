@@ -2,7 +2,7 @@ import { Accordion, Loader } from "@mantine/core";
 import useProjectIndex from "@hooks/useProjectIndex";
 import DrawerProject from "./DrawerProject";
 
-const DrawerProjectList = () => {
+const DrawerProjectList = (): JSX.Element => {
   const { projects, error, isLoading } = useProjectIndex();
 
   if (error) throw error;

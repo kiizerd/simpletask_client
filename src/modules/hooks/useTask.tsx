@@ -1,11 +1,22 @@
-import useSWR, { Fetcher, Key } from "swr";
+import useSWR from "swr";
 import { getProjectTask as getTask } from "@api/tasks";
-import Task from "types/Task";
+import type { KeyedMutator, Fetcher, Key } from "swr";
+import type Task from "types/Task";
 
-export default function useTask(projectId: number, taskId: number) {
+interface TaskHookData {
+  task: Task | undefined;
+  error: Error | undefined;
+  isLoading: boolean;
+  mutate: KeyedMutator<Task>;
+}
+
+export default function useTask(
+  projectId: number,
+  taskId: number
+): TaskHookData {
   const ids = [projectId, taskId] as const;
   const key: Key = `projects/${projectId}/tasks/${taskId}`;
-  const fetcher: Fetcher<Task, string> = () => getTask(...ids);
+  const fetcher: Fetcher<Task, string> = async () => await getTask(...ids);
   const response = useSWR(key, fetcher);
   const { data: task, error, isLoading, mutate } = response;
 

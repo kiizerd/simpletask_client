@@ -1,4 +1,4 @@
-import Project, { ProjectData } from "types/Project";
+import Project, { type ProjectData } from "types/Project";
 
 // const apiURL = import.meta.env.API_URL;
 const apiURL = "http://localhost:5100";
@@ -43,7 +43,7 @@ const updateProject = async (
   projectData: Partial<Project>
 ): Promise<Project> => {
   const { id, description, title } = projectData;
-  const projectRoute = projectsRoute + `/${id}`;
+  const projectRoute = projectsRoute + `/${id ?? 0}`;
   const request = new Request(projectRoute, {
     method: "PATCH",
     headers: { "Content-Type": "application/json", },

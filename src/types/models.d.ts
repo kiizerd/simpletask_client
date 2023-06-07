@@ -32,4 +32,4 @@ interface User {
   email: string
 }
 
-export { Project, Section, Task, User };
+export type { Project, Section, Task, User };

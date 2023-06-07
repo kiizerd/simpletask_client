@@ -12,11 +12,11 @@ interface NavButtonsProps {
   onClick: (newActive: string) => void
 }
 
-const NavButtons = ({ activeLink, onClick }: NavButtonsProps) => {
+const NavButtons = ({ activeLink, onClick }: NavButtonsProps): JSX.Element => {
   const { classes, cx } = headerStyles();
   const items = navLinks.map((item) => (
     <Link
-      onClick={() => onClick(item.link) }
+      onClick={() => { onClick(item.link); } }
       key={item.label}
       to={item.link}
       className={cx(classes.link, {

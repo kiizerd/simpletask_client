@@ -5,7 +5,7 @@ import { useClickOutside } from "@mantine/hooks";
 import { updateProjectTask } from "@api/tasks";
 import TaskIndexContext from "@contexts/TaskIndexContext";
 import { errorTimeout } from "@helpers/formHelpers";
-import useMatchMutate from "@hooks/useMatchMutate";
+import { mutate as globalMutate } from "swr";
 import taskFormStyles from "./TaskFormStyles";
 import TaskInput from "./TaskInput";
 import { validate } from "./TaskForm";
@@ -29,7 +29,6 @@ const EditTaskForm = ({
   const { id, name, projectId } = task;
   const { tasks = [], mutate } = useContext(TaskIndexContext);
   const { classes } = taskFormStyles();
-  const matchMutate = useMatchMutate();
 
   const clickRef = useClickOutside(() => {
     setEditMode(false);
@@ -64,17 +63,12 @@ const EditTaskForm = ({
 
       return;
     }
-
-
-    // Mutate taskIndex
-    const mutateOpts = { revalidate: true, populateCache: true };
-    await mutate(
-      tasks?.map((task) => (task.id === id ? newTask : task)),
-      mutateOpts
-    );
+    await mutate(tasks?.map((task) => (task.id === id ? newTask : task)));
 
     // Mutate actual task
-    await matchMutate(task.route, () => newTask, mutateOpts);
+    await globalMutate(task.route, newTask, {
+      optimisticData: newTask,
+    });
 
     setEditMode(false);
   };

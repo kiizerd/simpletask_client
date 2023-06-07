@@ -1,13 +1,13 @@
 import { useMantineColorScheme, ActionIcon, Group } from "@mantine/core";
 import { IconMoonStars, IconSun } from "@tabler/icons";
 
-const ThemeToggle = () => {
+const ThemeToggle = (): JSX.Element => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
     <Group position="center">
       <ActionIcon
-        onClick={() => toggleColorScheme()}
+        onClick={() => { toggleColorScheme(); }}
         size="md"
         sx={(theme) => ({
           backgroundColor:

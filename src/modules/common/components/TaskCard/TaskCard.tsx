@@ -5,13 +5,13 @@ import { EditTaskForm } from "@forms/Task";
 import useTask from "@hooks/useTask";
 import taskCardStyles from "./TaskCardStyles";
 import TaskControls from "./TaskControls";
-import Task from "types/Task";
+import type Task from "types/Task";
 
 interface TaskCardProps {
   task: Task;
 }
 
-const TaskCard = (props: TaskCardProps) => {
+const TaskCard = (props: TaskCardProps): JSX.Element => {
   const { id, projectId } = props.task;
   const [editMode, setEditMode] = useState<boolean>();
   const { task = props.task } = useTask(projectId, id);

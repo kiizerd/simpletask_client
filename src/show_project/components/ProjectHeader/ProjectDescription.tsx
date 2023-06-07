@@ -1,4 +1,4 @@
-import { ActionIcon, Space, Spoiler, Text } from "@mantine/core";
+import { Space, Spoiler, Text } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons";
 
 interface ProjectDescriptionProps {
@@ -9,7 +9,7 @@ interface ProjectDescriptionProps {
 const ProjectDescription = ({
   description,
   classNames,
-}: ProjectDescriptionProps) => {
+}: ProjectDescriptionProps): JSX.Element => {
   if (!description || description.length < 1) return <Space h={4} />;
 
   return (

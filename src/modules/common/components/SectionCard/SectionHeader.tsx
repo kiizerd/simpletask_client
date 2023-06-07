@@ -30,7 +30,7 @@ const SectionCardHeader = ({
             className={editMode === undefined ? "" : classes.title}
             order={5}
             style={{ cursor: "pointer" }}
-            onClick={() => setEditMode(true)}
+            onClick={() => { setEditMode(true); }}
           >
             {name}
           </Title>
@@ -46,7 +46,7 @@ const SectionCardHeader = ({
             <ActionIcon
               variant="outline"
               color="blue"
-              onClick={() => setEditMode(true)}
+              onClick={() => { setEditMode(true); }}
             >
               <IconEdit size={16} />
             </ActionIcon>

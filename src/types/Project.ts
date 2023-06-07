@@ -1,6 +1,6 @@
-import Base, { BaseData } from "./Base";
-import Task, { TaskData } from "./Task";
-import Section, { SectionData } from "./Section";
+import Base, { type BaseData } from "./Base";
+import Task, { type TaskData } from "./Task";
+import Section, { type SectionData } from "./Section";
 
 export interface ProjectData extends BaseData {
   title: string;
@@ -33,15 +33,15 @@ export default class Project extends Base {
     this.tasks = this.convertTasks(tasks);
   }
 
-  convertSections(sectionList: Section[] | SectionData[]) {
+  convertSections(sectionList: Section[] | SectionData[]): Section[] {
     return sectionList.map((section) => new Section(section.id, section));
   }
 
-  convertTasks(taskList: Task[] | TaskData[]) {
+  convertTasks(taskList: Task[] | TaskData[]): Task[] {
     return taskList.map((task) => new Task(task.id, task));
   }
 
-  get route() {
+  get route(): string {
     return `projects/${this.id}`;
   }
 }

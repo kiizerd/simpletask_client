@@ -1,5 +1,5 @@
 import { projectsRoute } from "./projects";
-import Section, { SectionData } from "types/Section";
+import Section, { type SectionData } from "types/Section";
 
 const sectionsRoute = (projectId: number): string =>
   projectsRoute + `/${projectId}/sections`;

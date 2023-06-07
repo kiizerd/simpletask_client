@@ -1,4 +1,4 @@
-import { Status } from "./types";
+import { type Status } from "./types";
 
 export interface BaseData {
   id: number;
@@ -25,19 +25,19 @@ export default class Base implements BaseData {
     this.updatedAt = updatedAt;
   }
 
-  isValid() {
-    return this.id != 0;
+  isValid(): boolean {
+    return this.id !== 0;
   }
 
-  isComplete() {
+  isComplete(): boolean {
     return this.status === "complete";
   }
 
-  isActive() {
+  isActive(): boolean {
     return this.status === "active";
   }
 
-  toggleCompletion() {
+  toggleCompletion(): Status {
     if (this.isComplete()) {
       this.status = "standby";
     } else {

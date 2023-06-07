@@ -3,12 +3,14 @@ import { Button } from "@mantine/core";
 import { IconPlayerStop, IconRefresh } from "@tabler/icons";
 import TimerContext from "@contexts/TimerContext";
 
-const SecondaryButton = () => {
+const SecondaryButton = (): JSX.Element => {
   const timerData = useContext(TimerContext);
   const { state: timer, dispatch, controller } = timerData;
-  const reset = () => controller.reset(dispatch);
+  const reset = (): void => {
+    controller.reset(dispatch);
+  };
 
-  const ResetBtn = () => (
+  const ResetBtn = (): JSX.Element => (
     <Button onClick={reset} leftIcon={<IconRefresh />}>
       Reset
     </Button>

@@ -6,7 +6,7 @@ interface EditButtonProps {
   projectId: number;
 }
 
-const EditProjectBtn = ({ projectId }: EditButtonProps) => {
+const EditProjectBtn = ({ projectId }: EditButtonProps): JSX.Element => {
   return (
     <Button
       size="xs"

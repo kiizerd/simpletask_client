@@ -1,25 +1,25 @@
-import { useContext } from "react";
+// import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Group, Loader, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { mutate } from "swr";
+// import { mutate as globalMutate } from "swr";
 import { updateProject } from "@api/projects";
-import ProjectIndexContext from "@contexts/ProjectIndexContext";
+// import ProjectIndexContext from "@contexts/ProjectIndexContext";
 import useProject from "@hooks/useProject";
-import { validate, ProjectFormValues } from "./ProjectForm";
+import { validate, type ProjectFormValues } from "./ProjectForm";
 import Project from "types/Project";
 
 interface EditProjectFormProps {
   projectId: number;
 }
 
-const EditProjectForm = ({ projectId }: EditProjectFormProps) => {
+const EditProjectForm = ({ projectId }: EditProjectFormProps): JSX.Element => {
   const navigate = useNavigate();
-  const { project, error, isLoading } = useProject(projectId);
+  const { project, error, isLoading, mutate } = useProject(projectId);
   // Context not currently provided.
   // Will be given a value when form
   // is child of index page instead of its own route
-  const { projects = [] } = useContext(ProjectIndexContext);
+  // const { projects = [] } = useContext(ProjectIndexContext);
 
   if (error) throw error;
   if (!project || isLoading) return <Loader />;
@@ -30,29 +30,30 @@ const EditProjectForm = ({ projectId }: EditProjectFormProps) => {
     validate,
   });
 
-  const submit = async (formValues: ProjectFormValues) => {
-    if (!mutate) return console.error("No SWR mutate method found.");
+  const submit = (formValues: ProjectFormValues): void => {
+    if (!mutate) {
+      console.error("No SWR mutate method found.");
+      return;
+    }
 
-    const newProject = new Project(projectId, formValues);
-    const optimisticData = projects.map((project) =>
-      project.id == projectId ? newProject : project
-    );
-
-    const applyProjectUpdate = async () => {
+    const newProject = new Project(projectId, { ...project, ...formValues });
+    const applyProjectUpdate = async (): Promise<Project> => {
       const updated = await updateProject(newProject);
-      return projects.map((project) =>
-        project.id == projectId ? updated : project
-      );
+      // Navigate to previous page for now
+      navigate(-1);
+      return updated;
     };
 
-    await mutate(["projects/", `projects/${projectId}`], applyProjectUpdate, {
-      optimisticData,
-      rollbackOnError: true,
-      populateCache: true,
-      revalidate: false,
-    });
+    void mutate(applyProjectUpdate, { optimisticData: newProject });
 
-    navigate("/");
+    // Not yet needed
+    //
+    // void globalMutate(
+    //   "projects/",
+    //   projects.map((project) =>
+    //     project.id === projectId ? newProject : project
+    //   )
+    // );
   };
 
   return (

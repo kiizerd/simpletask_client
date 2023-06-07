@@ -1,6 +1,6 @@
-import { TimerState } from "types/timer";
+import { type TimerState } from "types/timer";
 
-export const calculateProgress = (timer: TimerState) => {
+export const calculateProgress = (timer: TimerState): number => {
   return (timer.time * 100) / (timer.timerLength * 60);
 };
 

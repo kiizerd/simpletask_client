@@ -13,21 +13,13 @@ const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
   const { classes } = projectCardStyles(getImage(project.id));
 
   return (
-    <Paper
-      shadow="md"
-      p="md"
-      radius="md"
-      className={classes.card}
-    >
+    <Paper shadow="md" p="md" radius="md" className={classes.card}>
       <div>
         <Group position="apart" className={classes.titleRow}>
           <Title lineClamp={4} order={3} className={classes.title}>
             {project.title}
           </Title>
-          <ProjectCardMenu
-            classNames={{ link: classes.link }}
-            project={project}
-          />
+          <ProjectCardMenu project={project} />
         </Group>
 
         <Text lineClamp={6} size="xs" className={classes.description}>

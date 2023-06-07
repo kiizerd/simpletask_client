@@ -3,13 +3,13 @@ import EditProjectBtn from "./EditProjectBtn";
 import DeleteProjectBtn from "./DeleteProjectBtn";
 import ProjectDescription from "./ProjectDescription";
 import projectHeaderStyles from "./ProjectHeaderStyles";
-import Project from "types/Project";
+import type Project from "types/Project";
 
 interface HeaderProps {
   project: Project;
 }
 
-const ProjectHeader = ({ project }: HeaderProps) => {
+const ProjectHeader = ({ project }: HeaderProps): JSX.Element => {
   const { id, title, description } = project;
   const { classes } = projectHeaderStyles();
 

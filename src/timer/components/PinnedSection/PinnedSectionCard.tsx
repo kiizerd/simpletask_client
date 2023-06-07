@@ -3,11 +3,15 @@ import SectionCard from "@common/components/SectionCard";
 import useSection from "@hooks/useSection";
 
 interface PinnedSectionCardProps {
-  ids: number[];
+  projectId: number;
+  sectionId: number;
 }
 
-const PinnedSectionCard = ({ ids }: PinnedSectionCardProps) => {
-  const { section, isLoading } = useSection(ids[0], ids[1]);
+const PinnedSectionCard = ({
+  projectId,
+  sectionId,
+}: PinnedSectionCardProps): JSX.Element => {
+  const { section, isLoading } = useSection(projectId, sectionId);
 
   if (!section || isLoading) return <Loader />;
 

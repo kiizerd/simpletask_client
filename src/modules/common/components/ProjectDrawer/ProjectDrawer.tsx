@@ -3,14 +3,14 @@ import { ActionIcon, Affix, Divider, Drawer } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons";
 import DrawerList from "./DrawerProjectList";
 
-const ProjectDrawer = () => {
+const ProjectDrawer = (): JSX.Element => {
   const [drawerOpened, setDrawerOpened] = useState(false);
 
   return (
     <>
       <Affix position={{ top: 120, left: 20 }}>
         <ActionIcon
-          onClick={() => setDrawerOpened(true)}
+          onClick={() => { setDrawerOpened(true); }}
           variant="outline"
           color="violet"
         >
@@ -21,7 +21,7 @@ const ProjectDrawer = () => {
         size="lg"
         title="Projects"
         opened={drawerOpened}
-        onClose={() => setDrawerOpened(false)}
+        onClose={() => { setDrawerOpened(false); }}
         sx={{
           ".drawer-title": { margin: "1rem 0 0 1rem" },
           ".drawer-close": { margin: "1rem 1rem 0 0" },

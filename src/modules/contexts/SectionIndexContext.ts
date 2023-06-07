@@ -1,11 +1,16 @@
 import { createContext } from "react";
-import { KeyedMutator } from "swr";
-import Section from "types/Section";
+import { type KeyedMutator } from "swr";
+import type Section from "types/Section";
 
 interface SectionIndexContextValue {
-  sections: Section[] | undefined;
-  mutate: KeyedMutator<Section[]> | undefined;
+  sections: Section[];
+  mutate: KeyedMutator<Section[]>;
 }
 
-const SectionIndexContext = createContext({} as SectionIndexContextValue);
+const emptySectionIndexContext: SectionIndexContextValue = {
+  sections: [],
+  mutate: async () => [],
+};
+
+const SectionIndexContext = createContext(emptySectionIndexContext);
 export default SectionIndexContext;

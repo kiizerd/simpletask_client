@@ -6,7 +6,7 @@ interface DeleteButtonProps {
   projectId: number;
 }
 
-const DeleteProjectBtn = ({ projectId }: DeleteButtonProps) => {
+const DeleteProjectBtn = ({ projectId }: DeleteButtonProps): JSX.Element => {
   const { openModal } = useDeleteModal(projectId);
   return (
     <Button size="xs" onClick={openModal} rightIcon={<IconTrash size={16} />}>

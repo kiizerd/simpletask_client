@@ -1,9 +1,9 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Text } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { mutate } from "swr";
 import { deleteProject } from "@api/projects";
-import Project from "types/Project";
+import type Project from "types/Project";
 
 const modalOptions = {
   title: "Delete this project",
@@ -18,24 +18,31 @@ const modalOptions = {
   confirmProps: { color: "red" },
 };
 
-export default function useDeleteModal(projectId: number) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const atRoot = location.pathname == "/";
+interface DeleteModal {
+  openModal: () => void;
+}
 
-  const onConfirm = async () => {
-    await mutate("projects/", await deleteProject(projectId), {
-      populateCache: true,
-      revalidate: !atRoot,
-      rollbackOnError: false,
-      optimisticData: (projects: Project[]): Project[] => {
-        return projects.filter((project) => project.id != projectId);
+export default function useDeleteModal(projectId: number): DeleteModal {
+  const navigate = useNavigate();
+
+  const onConfirm = (): void => {
+    void mutate(
+      "projects/",
+      async (currentData: Project[] | undefined) => {
+        await deleteProject(projectId);
+        return currentData?.filter((project) => project.id !== projectId);
       },
-    });
-    if (!atRoot) navigate("/");
+      {
+        optimisticData: (currentData: Project[]) =>
+          currentData?.filter((project) => project.id !== projectId),
+      }
+    );
+    navigate("/projects");
   };
 
-  const openModal = () => openConfirmModal({ ...modalOptions, onConfirm });
+  const openModal = (): void => {
+    openConfirmModal({ ...modalOptions, onConfirm });
+  };
 
   return { openModal };
 }

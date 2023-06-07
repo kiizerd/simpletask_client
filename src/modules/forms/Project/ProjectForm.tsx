@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TextInput, Button, Group, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { mutate } from "swr";
@@ -12,7 +12,7 @@ export interface ProjectFormValues {
   description: string;
 }
 
-const titleValidation = (title: string) => {
+const titleValidation = (title: string): string | null => {
   if (!title) return "Title is required.";
 
   const len = title.length;
@@ -25,7 +25,7 @@ const titleValidation = (title: string) => {
   return null;
 };
 
-const descriptionValidation = (description?: string) => {
+const descriptionValidation = (description?: string): string | null => {
   if (!description) return null;
 
   const len = description.length;
@@ -40,7 +40,7 @@ export const validate = {
   description: descriptionValidation,
 };
 
-const ProjectForm = () => {
+const ProjectForm = (): JSX.Element => {
   const navigate = useNavigate();
   // Context not currently provided.
   // Will be given a value when form
@@ -52,21 +52,22 @@ const ProjectForm = () => {
     validate,
   });
 
-  const submit = async (formValues: ProjectFormValues) => {
-    if (!mutate) return console.error("No SWR mutate method found.");
+  const submit = (formValues: ProjectFormValues): void => {
+    if (!mutate) {
+      console.error("No SWR mutate method found.");
+      return;
+    }
 
-    const newProject = await createProject(formValues);
-    await mutate("projects/", [...projects, newProject], {
-      optimisticData: (projects: Project[]) => [
-        ...projects,
-        new Project(0, formValues),
-      ],
-      rollbackOnError: true,
-      populateCache: true,
-      revalidate: false,
-    });
-
-    navigate(`/projects/${newProject.id}`);
+    const newProject = new Project(0, formValues);
+    void mutate(
+      "projects/",
+      async () => {
+        newProject.id = (await createProject(formValues)).id;
+        navigate(`/${newProject.route}`);
+        return [...projects, newProject];
+      },
+      { optimisticData: (projects: Project[]) => [...projects, newProject] }
+    );
   };
 
   return (

@@ -1,6 +1,6 @@
-import useSWR, { Key, Fetcher, KeyedMutator } from "swr";
+import useSWR, { type Key, type Fetcher, type KeyedMutator } from "swr";
 import { getProjectSection as getSection } from "@api/sections";
-import Section from "types/Section";
+import type Section from "types/Section";
 
 interface SectionHookData {
   section: undefined | Section;
@@ -16,7 +16,7 @@ export default function useSection(
   const ids = [projectId, sectionId] as const;
   const key: Key = `projects/${projectId}/sections/${sectionId}`;
   // Converts array into `readonly` tuple`
-  const fetcher: Fetcher<Section, string> = () => getSection(...ids);
+  const fetcher: Fetcher<Section, string> = async () => await getSection(...ids);
   const response = useSWR(key, fetcher);
   const { data: section, error, isLoading, mutate } = response;
 

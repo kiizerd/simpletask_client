@@ -1,11 +1,16 @@
-import { createContext, MutableRefObject } from "react";
-import { KeyedMutator } from "swr";
-import Task from "types/Task";
+import { createContext } from "react";
+import type { KeyedMutator } from "swr";
+import type Task from "types/Task";
 
 interface TaskIndexContextValue {
-  tasks: Task[] | undefined;
-  mutate: KeyedMutator<Task[]> | undefined;
+  tasks: Task[];
+  mutate: KeyedMutator<Task[]>;
 }
 
-const TaskIndexContext = createContext({} as TaskIndexContextValue);
+const emptyTaskIndexContext: TaskIndexContextValue = {
+  tasks: [],
+  mutate: async () => [],
+};
+
+const TaskIndexContext = createContext(emptyTaskIndexContext);
 export default TaskIndexContext;

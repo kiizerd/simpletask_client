@@ -4,11 +4,16 @@ import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons";
 interface ButtonProps {
   isPaused: boolean;
   disabled: boolean;
-  pause(): void;
-  resume(): void;
+  pause: () => void;
+  resume: () => void;
 }
 
-const PlayPauseButton = ({ isPaused, disabled, pause, resume }: ButtonProps) =>
+const PlayPauseButton = ({
+  isPaused,
+  disabled,
+  pause,
+  resume,
+}: ButtonProps): JSX.Element =>
   isPaused ? (
     <Button disabled={disabled} onClick={resume} leftIcon={<IconPlayerPlay />}>
       Resume

@@ -4,7 +4,7 @@ import useProject from "@hooks/useProject";
 import ProjectHeader from "./components/ProjectHeader";
 import SectionList from "./components/SectionList";
 
-const ShowProjectPage = () => {
+const ShowProjectPage = (): JSX.Element => {
   const id = Number(useLoaderData());
   const projectData = useProject(id);
   const { project, error, isLoading } = projectData;

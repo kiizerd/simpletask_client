@@ -7,7 +7,7 @@ import SecondaryButton from "./components/SecondaryButton";
 import PinnedSection from "./components/PinnedSection";
 import { useContext } from "react";
 
-const Timer = () => {
+const Timer = (): JSX.Element => {
   const timerData = useContext(TimerContext);
   const { classes } = timerData
 

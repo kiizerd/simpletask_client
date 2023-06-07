@@ -17,12 +17,12 @@ const sectionInputStyles = createStyles(() => ({
   inactive: {
     width: "100%",
     animation: "unset",
-    ["&[data-is-focused='true']"]: {
+    "&[data-is-focused='true']": {
       opacity: 0,
       display: "none",
       animation: "none",
     },
-    ["&[data-is-focused='false']"]: {
+    "&[data-is-focused='false']": {
       animation: `${inactiveAppear} 0.2s linear`,
     },
   },

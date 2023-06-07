@@ -23,7 +23,7 @@ export default class Task extends Base {
       details = "",
       projectId = 0,
       sectionId = 0,
-      position = 0
+      position = 0,
     } = taskData;
 
     this.name = name;
@@ -33,15 +33,15 @@ export default class Task extends Base {
     this.position = position;
   }
 
-  get route() {
+  get route(): string {
     return `projects/${this.projectId}/tasks/${this.id}`;
   }
 
-  get sectionRoute() {
+  get sectionRoute(): string {
     return `projects/${this.projectId}/sections/${this.sectionId}`;
   }
 
-  get projectRoute() {
+  get projectRoute(): string {
     return `projects/${this.projectId}`;
   }
 }

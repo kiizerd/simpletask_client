@@ -2,16 +2,12 @@ import { calculateProgress, formatTime } from "@helpers/timerHelper";
 import controller from "@state/timer";
 import { useEffect, useReducer } from "react";
 import timerStyles from "timer/TimerStyles";
-import { Timer, TimerState } from "types/timer";
+import { type Timer } from "types/timer";
 
 const { complete, reducer, initialState } = controller;
 
-function createTimerState(newState: TimerState) {
-  return { ...initialState, ...newState };
-}
-
-export default function useTimer() {
-  const [state, dispatch] = useReducer(reducer, initialState, createTimerState);
+export default function useTimer(): Timer {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const { time, timerLength, isStarted, isPaused } = state;
   const { classes } = timerStyles({
     angle: state.gradientAngle,
@@ -37,5 +33,5 @@ export default function useTimer() {
     };
   }, [isStarted, isPaused, time]);
 
-  return { state, dispatch, controller, classes } as Timer;
+  return { state, dispatch, controller, classes };
 }

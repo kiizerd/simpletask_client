@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { ActionIcon, Box, Flex, TextInput } from "@mantine/core";
+import { ActionIcon, Box, Flex } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconPlus } from "@tabler/icons";
 import { createProjectSection } from "@api/sections";
@@ -14,8 +14,8 @@ interface SectionFormProps {
   projectId: number;
 }
 
-const nameValidation = (name: string) => {
-  if (name.length == 0) return "Name is required.";
+const nameValidation = (name: string): string | null => {
+  if (name.length === 0) return "Name is required.";
 
   const tooLongMsg = `Name too long.\n Max 21 chars, currently ${name.length}.`;
   if (name.length > 21) return tooLongMsg;
@@ -25,26 +25,29 @@ const nameValidation = (name: string) => {
 
 export const validate = { name: nameValidation };
 
-const SectionForm = ({ projectId }: SectionFormProps) => {
+const SectionForm = ({ projectId }: SectionFormProps): JSX.Element => {
   const [focused, setFocused] = useState<boolean | undefined>();
   const { sections = [], mutate } = useContext(SectionIndexContext);
   const { classes } = sectionFormStyles();
   const form = useForm({ initialValues: { name: "" }, validate });
   const clickRef = useClickOutside(() => {
-    if (focused != undefined) setFocused(false);
+    if (focused !== undefined) setFocused(false);
     form.clearErrors();
   });
 
-  const submit = async (formValues: Partial<Section>) => {
-    if (!mutate) return console.error("No SWR mutate method found.");
+  const submit = (formValues: Partial<Section>): void => {
+    if (!mutate) {
+      console.error("No SWR mutate method found.");
+      return;
+    }
 
-    const newSection = await createProjectSection(projectId, formValues);
-    await mutate([...sections, newSection], {
-      optimisticData: [...sections, new Section(0, formValues)],
-      rollbackOnError: true,
-      populateCache: true,
-      revalidate: false,
-    });
+    void mutate(
+      async (currentData: Section[] | undefined) => {
+        const newSection = await createProjectSection(projectId, formValues);
+        return currentData ? [...currentData, newSection] : [newSection];
+      },
+      { optimisticData: [...sections, new Section(0, formValues)] }
+    );
 
     form.setValues({ name: "" });
 
@@ -65,7 +68,9 @@ const SectionForm = ({ projectId }: SectionFormProps) => {
             color="violet"
             type="submit"
             mt={4}
-            onClick={() => errorTimeout(form)}
+            onClick={() => {
+              errorTimeout(form);
+            }}
           >
             <IconPlus />
           </ActionIcon>

@@ -4,17 +4,19 @@ import { IconPlayerPlay } from "@tabler/icons";
 import TimerContext from "@contexts/TimerContext";
 import PlayPauseButton from "./PlayPauseButton";
 
-const PrimaryButton = () => {
+const PrimaryButton = (): JSX.Element => {
   const timerData = useContext(TimerContext);
   const { state: timer, dispatch, controller } = timerData;
   const { start, pause, resume } = controller;
   const { time, isStarted, isPaused } = timer;
 
-  const StartBtn = () => (
+  const StartBtn = (): JSX.Element => (
     <Button
       disabled={time === 0}
       leftIcon={<IconPlayerPlay />}
-      onClick={() => start(dispatch)}
+      onClick={() => {
+        start(dispatch);
+      }}
     >
       Start
     </Button>
@@ -26,8 +28,12 @@ const PrimaryButton = () => {
     <PlayPauseButton
       isPaused={isPaused}
       disabled={time === 0}
-      pause={() => pause(dispatch)}
-      resume={() => resume(dispatch)}
+      pause={() => {
+        pause(dispatch);
+      }}
+      resume={() => {
+        resume(dispatch);
+      }}
     />
   );
 };

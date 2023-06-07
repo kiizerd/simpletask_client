@@ -1,5 +1,5 @@
-import Base, { BaseData } from "./Base";
-import Task, { TaskData } from "./Task";
+import Base, { type BaseData } from "./Base";
+import Task, { type TaskData } from "./Task";
 
 export interface SectionData extends BaseData {
   name: string;
@@ -23,15 +23,15 @@ export default class Section extends Base {
     this.tasks = this.convertTasks(tasks);
   }
 
-  convertTasks(taskList: Task[] | TaskData[]) {
+  convertTasks(taskList: Task[] | TaskData[]): Task[] {
     return taskList.map((task) => new Task(task.id, task));
   }
 
-  get progress() {
+  get progress(): number {
     return this.taskProgress();
   }
 
-  taskProgress(taskList: Task[] = this.tasks) {
+  taskProgress(taskList: Task[] = this.tasks): number {
     if (taskList.length === 0) return -1;
 
     const total = taskList.length;
@@ -40,11 +40,11 @@ export default class Section extends Base {
     return progress;
   }
 
-  get route() {
+  get route(): string {
     return `projects/${this.projectId}/sections/${this.id}`;
   }
 
-  get projectRoute() {
+  get projectRoute(): string {
     return `projects/${this.projectId}`;
   }
 }

@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import { Box, Title } from "@mantine/core";
 import { EditProjectForm } from "@forms/Project";
 
-const EditProjectPage = () => {
+const EditProjectPage = (): JSX.Element => {
   const projectId = Number(useLoaderData());
 
   return (

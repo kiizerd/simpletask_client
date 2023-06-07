@@ -12,7 +12,7 @@ interface DrawerSectionProps {
   sectionId: number;
 }
 
-const DrawerSection = ({ projectId, sectionId }: DrawerSectionProps) => {
+const DrawerSection = ({ projectId, sectionId }: DrawerSectionProps): JSX.Element => {
   const { section, error, isLoading } = useSection(projectId, sectionId);
   const { classes } = drawerStyles();
   const [currentPinned, setPin] = useTimerPin(projectId, sectionId);

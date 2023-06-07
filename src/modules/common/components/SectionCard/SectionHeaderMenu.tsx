@@ -5,20 +5,23 @@ import { deleteProjectSection } from "@api/sections";
 import SectionContext from "@contexts/SectionContext";
 import SectionIndexContext from "@contexts/SectionIndexContext";
 
-const SectionHeaderMenu = () => {
+const SectionHeaderMenu = (): JSX.Element => {
   const { projectId, id } = useContext(SectionContext);
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const { sections = [], mutate } = useContext(SectionIndexContext);
 
-  const closeMenu = () => setMenuOpened(false);
-  const deleteSection = async () => {
-    if (!mutate) return console.error("No SWR mutate method found.");
+  const closeMenu = (): void => {
+    setMenuOpened(false);
+  };
+  const deleteSection = (): void => {
+    if (!mutate) {
+      console.error("No SWR mutate method found.");
+      return;
+    }
 
-    await mutate(deleteProjectSection(projectId, id), {
-      optimisticData: sections.filter((section) => section.id != id),
-      rollbackOnError: true,
-      populateCache: true,
-      revalidate: false,
+    closeMenu();
+    void mutate(deleteProjectSection(projectId, id), {
+      optimisticData: sections.filter((section) => section.id !== id),
     });
   };
 
@@ -31,7 +34,7 @@ const SectionHeaderMenu = () => {
       onChange={setMenuOpened}
     >
       <Menu.Target>
-        <ActionIcon variant='outline' color="red">
+        <ActionIcon variant="outline" color="red">
           <IconTrash size={16} />
         </ActionIcon>
       </Menu.Target>
@@ -44,13 +47,7 @@ const SectionHeaderMenu = () => {
           <ActionIcon color="red" onClick={closeMenu}>
             <IconX size={18} />
           </ActionIcon>
-          <ActionIcon
-            color="green"
-            onClick={() => {
-              closeMenu();
-              deleteSection();
-            }}
-          >
+          <ActionIcon color="green" onClick={deleteSection}>
             <IconCheck size={18} />
           </ActionIcon>
         </Group>

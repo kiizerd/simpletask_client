@@ -6,19 +6,18 @@ import {
   IconTrash,
 } from "@tabler/icons";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useDeleteModal from "@hooks/useDeleteModal";
-import Project from "types/Project";
+import type Project from "types/Project";
 
 interface CardMenuProps {
-  classNames: { link: string };
   project: Project;
 }
 
-const ProjectCardMenu = ({ classNames, project }: CardMenuProps) => {
+const ProjectCardMenu = ({ project }: CardMenuProps): JSX.Element => {
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const { openModal } = useDeleteModal(project.id);
-  const { link } = classNames;
+  const navigate = useNavigate();
 
   return (
     <Menu position={"left-start"} opened={menuOpened} onChange={setMenuOpened}>
@@ -30,10 +29,14 @@ const ProjectCardMenu = ({ classNames, project }: CardMenuProps) => {
 
       <Menu.Dropdown>
         <Menu.Label>Project options</Menu.Label>
-        <Menu.Item color="blue" icon={<IconEdit size={16} />}>
-          <Link className={link} to={`projects/${project.id}/edit?from=root`}>
-            Edit
-          </Link>
+        <Menu.Item
+          onClick={() => {
+            navigate(`/${project.route}/edit`);
+          }}
+          color="blue"
+          icon={<IconEdit size={16} />}
+        >
+          Edit
         </Menu.Item>
         <Menu.Item
           closeMenuOnClick={false}
@@ -44,13 +47,8 @@ const ProjectCardMenu = ({ classNames, project }: CardMenuProps) => {
           Delete
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item
-          className={link}
-          icon={<IconShare size={16} color="green" />}
-        >
-          <Link className={link} to={`projects/${project.id}/share`}>
-            Share
-          </Link>
+        <Menu.Item icon={<IconShare size={16} color="green" />}>
+          Share
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>
