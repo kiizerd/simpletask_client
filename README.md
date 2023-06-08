@@ -7,7 +7,7 @@ In today's fast-paced and multitasking world, people often juggle multiple proje
 
 SimpleTask aims to solve this problem by providing a clear, user-friendly, and efficient platform for managing tasks and projects. It enables users to keep track of their tasks, deadlines, and priorities in one place.
 
-Built to learn and gain more familiarity with React, Typescript, and Ruby on Rails.
+Built mainly to learn and gain more familiarity with React, Typescript, and Ruby on Rails.
 By the time the app was deployed, I had a better understanding of types, especially generics, in Typescript, and the flow of a request through a Rails app.
 Setting up ESLint + Prettier for the client was game changing in terms of staying organized and preventing errors.
 
