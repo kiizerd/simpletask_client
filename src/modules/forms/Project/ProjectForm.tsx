@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { TextInput, Button, Group, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { mutate } from "swr";
-import { createProject } from "@api/api";
+import { createProject } from "@api/projects";
 import ProjectIndexContext from "@contexts/ProjectIndexContext";
 import Project from "types/Project";
 

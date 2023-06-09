@@ -1,7 +1,5 @@
 import type { User } from "types/models";
-
-// const apiURL = import.meta.env.API_URL;
-const apiURL = "http://localhost:5100";
+import { apiURL } from "./api";
 
 const authFetch = async (url: string, body: object): Promise<Response> => {
   return await fetch(url, {
