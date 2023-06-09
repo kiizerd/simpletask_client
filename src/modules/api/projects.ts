@@ -1,7 +1,6 @@
 import Project, { type ProjectData } from "types/Project";
 import { apiURL } from "./api";
 
-// const apiURL = import.meta.env.API_URL;
 const projectsRoute = `${apiURL}/projects`;
 
 const getProject = async (id: number): Promise<Project> => {
