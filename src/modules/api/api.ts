@@ -2,6 +2,10 @@ import * as Project from "./projects";
 import * as Task from "./tasks";
 import * as Section from "./sections";
 
+export const apiURL = import.meta.env[
+  import.meta.env.PROD ? "apiURL" : "devURL"
+];
+
 export const getAllProjects = Project.getAllProjects;
 export const getProject = Project.getProject;
 export const createProject = Project.createProject;
