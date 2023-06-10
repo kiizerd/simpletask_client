@@ -6,6 +6,7 @@ const authFetch = async (url: string, body: object): Promise<Response> => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
+    mode: 'cors',
     body: JSON.stringify(body),
   });
 };
