@@ -1,8 +1,6 @@
-import imageCount from "imageCount";
-
 export default function getImage(index?: number): string {
-  const randomNumber: number = Math.floor(Math.random() * (imageCount + 1));
-  const image = index ? index % imageCount : randomNumber;
+  const randomNumber: number = Math.floor(Math.random() * (urls.length + 1));
+  const image = index ? index % urls.length : randomNumber;
   return urls[image];
 }
 
