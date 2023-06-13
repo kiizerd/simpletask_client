@@ -1,14 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "app/AppShell";
-import ProjectIndexPage from "./project_index";
-import ShowProjectPage from "./show_project";
+import RootPage from "pages/Root";
 import NewProjectPage from "./pages/NewProject";
 import EditProjectPage from "./pages/EditProject";
 import ErrorPage from "./pages/ErrorPage";
+import LandingPage from "pages/LandingPage";
+import ProjectIndexPage from "./project_index";
+import ShowProjectPage from "./show_project";
 import Timer from "./timer";
 import { LoginForm, SignupForm } from "@forms/Auth";
-import LandingPage from "pages/LandingPage";
-import RootPage from "pages/Root";
 
 interface LoaderParams {
   params: { projectId?: number };
