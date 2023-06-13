@@ -2,8 +2,10 @@ import { useState } from "react";
 import { ActionIcon, Affix, Divider, Drawer } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons";
 import DrawerList from "./DrawerProjectList";
+import { useRouteLoaderData } from "react-router-dom";
 
 const ProjectDrawer = (): JSX.Element => {
+  const userSignedIn = useRouteLoaderData("root");
   const [drawerOpened, setDrawerOpened] = useState(false);
 
   return (
@@ -13,6 +15,7 @@ const ProjectDrawer = (): JSX.Element => {
           onClick={() => { setDrawerOpened(true); }}
           variant="outline"
           color="violet"
+          disabled={!userSignedIn}
         >
           <IconChevronRight />
         </ActionIcon>

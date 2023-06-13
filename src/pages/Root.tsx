@@ -1,13 +1,11 @@
-import UserContext from "@contexts/UserContext"
-import ProjectIndexPage from "project_index/ProjectIndex"
-import { useContext } from "react"
-import LandingPage from "./LandingPage"
+import ProjectIndexPage from "project_index/ProjectIndex";
+import LandingPage from "./LandingPage";
+import { useRouteLoaderData } from "react-router-dom";
 
 const RootPage = (): JSX.Element => {
-  const { currentUser } = useContext(UserContext)
+  const user = useRouteLoaderData("root");
+  if (user) return <ProjectIndexPage />;
+  return <LandingPage />;
+};
 
-  if (currentUser) return <ProjectIndexPage />
-  return (<LandingPage />)
-}
-
-export default RootPage
+export default RootPage;

@@ -1,16 +1,14 @@
+import { Navigate, useRouteLoaderData } from "react-router-dom";
 import { Container, Group, Loader, Title } from "@mantine/core";
 import useProjectIndex from "@hooks/useProjectIndex";
 import NewProjectBtn from "./components/NewProjectBtn";
 import ProjectGrid from "./components/ProjectGrid";
-import { useContext } from "react";
-import UserContext from "@contexts/UserContext";
-import { Navigate } from "react-router-dom";
 
 const ProjectIndexPage = (): JSX.Element => {
-  const { currentUser } = useContext(UserContext)
-  const { projects, error, isLoading } = useProjectIndex();
+  const user = useRouteLoaderData("root");
+  if (!user) return <Navigate to="/" />;
 
-  if (!currentUser) return <Navigate to="/welcome" />
+  const { projects, error, isLoading } = useProjectIndex();
 
   if (isLoading) return <Loader />;
   if (error) throw error;
