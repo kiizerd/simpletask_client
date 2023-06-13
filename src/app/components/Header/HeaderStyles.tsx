@@ -70,6 +70,7 @@ const headerStyles = createStyles((theme) => ({
     [theme.fn.smallerThan("sm")]: {
       borderRadius: 0,
       padding: theme.spacing.md,
+      width: '100%'
     },
   },
 

@@ -7,7 +7,6 @@ import {
   Paper,
   Transition,
   Divider,
-  Box,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useLocation } from "react-router-dom";
@@ -27,6 +26,11 @@ const HeaderResponsive = (): JSX.Element => {
     setActive(newActive);
   };
 
+  const burgerOnClick = (newActive: string): void => {
+    setActive(newActive);
+    close();
+  };
+
   useEffect(() => {
     setActive(pathname);
   }, [pathname]);
@@ -36,11 +40,11 @@ const HeaderResponsive = (): JSX.Element => {
       <Container className={classes.header}>
         <Group className={classes.links}>
           <NavButtons activeLink={active} onClick={navOnClick} />
-          <ThemeToggle key="ThemeToggle" />
+          <ThemeToggle />
         </Group>
         <Group className={classes.links}>
           <UserProfile />
-          <AuthButtons activeLink={active} />
+          <AuthButtons onClick={navOnClick} activeLink={active} />
         </Group>
         <Burger
           opened={opened}
@@ -51,18 +55,10 @@ const HeaderResponsive = (): JSX.Element => {
         <Transition transition="pop-top-right" duration={200} mounted={opened}>
           {(styles) => (
             <Paper className={classes.dropdown} withBorder style={styles}>
-              <NavButtons
-                activeLink={active}
-                onClick={(newActive: string) => {
-                  navOnClick(newActive);
-                  close();
-                }}
-              />
+              <NavButtons activeLink={active} onClick={burgerOnClick} />
               <Divider />
-              <Box className={classes.link}>
-                <UserProfile compact={false} />
-              </Box>
-              <AuthButtons activeLink={active} />
+              <UserProfile compact={false} />
+              <AuthButtons activeLink={active} onClick={burgerOnClick} />
             </Paper>
           )}
         </Transition>

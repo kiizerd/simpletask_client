@@ -12,15 +12,24 @@ const authLinks = [
 
 interface AuthButtonsProps {
   activeLink: string;
+  onClick: (value: string) => void;
 }
 
-const AuthButtons = ({ activeLink }: AuthButtonsProps): JSX.Element => {
-  const { currentUser: user, logout } = useContext(UserContext);
+const AuthButtons = ({
+  activeLink,
+  onClick,
+}: AuthButtonsProps): JSX.Element => {
+  const revalidator = useRevalidator()
+  const navigate = useNavigate();
+  const { user, logout } = useContext(UserContext);
   const { classes, cx } = headerStyles();
   const AuthItems = authLinks.map((link) => (
     <Link
       key={link.label}
       to={link.link}
+      onClick={() => {
+        onClick(link.link);
+      }}
       className={cx(classes.link, {
         [classes.linkActive]: activeLink === link.link,
       })}
