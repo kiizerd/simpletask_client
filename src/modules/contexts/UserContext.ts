@@ -2,10 +2,10 @@ import { type AuthData } from "@hooks/useAuth";
 import { createContext } from "react";
 
 const emptyUserContext: AuthData = {
-  currentUser: undefined,
-  login: async () => undefined,
-  logout: async () => undefined,
-  register: async () => undefined,
+  user: undefined,
+  login: async () => ({ id: 0, email: "" }),
+  register: async () => ({ id: 0, email: "" }),
+  logout: async () => "",
   clearCache: async () => undefined,
 };
 
