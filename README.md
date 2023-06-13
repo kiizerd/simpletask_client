@@ -23,6 +23,7 @@ Setting up ESLint + Prettier for the client was game changing in terms of stayin
   - Timer completions will be stored in a User related model
   - Each task will be able to track timers spent on it
 - Seamless server interaction with SWR and native fetch
+- Images all generated with DALL-E
 
 ## Technologies Used
 
