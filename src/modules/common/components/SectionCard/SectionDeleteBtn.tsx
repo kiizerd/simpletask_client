@@ -5,7 +5,7 @@ import { deleteProjectSection } from "@api/sections";
 import SectionContext from "@contexts/SectionContext";
 import SectionIndexContext from "@contexts/SectionIndexContext";
 
-const SectionHeaderMenu = (): JSX.Element => {
+const SectionDeleteBtn = (): JSX.Element => {
   const { projectId, id } = useContext(SectionContext);
   const [menuOpened, setMenuOpened] = useState<boolean>(false);
   const { sections = [], mutate } = useContext(SectionIndexContext);
@@ -56,4 +56,4 @@ const SectionHeaderMenu = (): JSX.Element => {
   );
 };
 
-export default SectionHeaderMenu;
+export default SectionDeleteBtn;

@@ -3,7 +3,7 @@ import { ActionIcon, Box, Group, Progress, Title } from "@mantine/core";
 import { IconEdit, IconLock, IconLockOpen } from "@tabler/icons";
 import SectionContext from "@contexts/SectionContext";
 import { EditSectionForm } from "@forms/Section";
-import SectionHeaderMenu from "./SectionHeaderMenu";
+import SectionDeleteBtn from "./SectionDeleteBtn";
 import sectionCardStyles from "./SectionCardStyles";
 
 interface SectionHeaderProps {
@@ -51,7 +51,7 @@ const SectionCardHeader = ({
               <IconEdit size={16} />
             </ActionIcon>
 
-            <SectionHeaderMenu />
+            <SectionDeleteBtn />
           </Group>
         </Group>
       )}
