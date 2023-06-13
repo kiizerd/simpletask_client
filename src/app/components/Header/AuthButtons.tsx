@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useRevalidator } from "react-router-dom";
+import { UnstyledButton } from "@mantine/core";
 import UserContext from "@contexts/UserContext";
 import headerStyles from "./HeaderStyles";
 
@@ -29,16 +30,25 @@ const AuthButtons = ({ activeLink }: AuthButtonsProps): JSX.Element => {
   ));
 
   const SignOut = (
-    <Link
+    <UnstyledButton
       key={"Sign out"}
-      to={"/"}
-      onClick={logout}
-      className={cx(classes.link, {
-        [classes.linkActive]: activeLink === "/signout",
-      })}
+      onClick={() => {
+        logout()
+          .then((response) => {
+            if (typeof response === "string") {
+              revalidator.revalidate()
+              navigate("/");
+              onClick("/");
+            } else throw response?.error ?? new Error("Couldn't sign out");
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }}
+      className={classes.link}
     >
       Sign out
-    </Link>
+    </UnstyledButton>
   );
 
   if (user) return <>{SignOut}</>;
