@@ -17,16 +17,21 @@ interface LoaderParams {
 const getIdLoader = ({ params }: LoaderParams): number =>
   Number(params.projectId);
 
+// Return user data as a string
+const getUserLoader = (): string | null => {
+  const user = window.localStorage.getItem("current-user");
+  return user;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
+    id: "root",
     element: <App />,
     errorElement: <ErrorPage />,
+    loader: getUserLoader,
     children: [
-      {
-        index: true,
-        element: <RootPage />,
-      },
+      { index: true, element: <RootPage /> },
       {
         path: "/projects",
         children: [
