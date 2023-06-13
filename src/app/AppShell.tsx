@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-import { AppShell } from "@mantine/core";
-import MantineApp from "./components/Mantine";
-import Header from "./components/Header";
-import TimerContext from "@contexts/TimerContext";
-import useTimer from "@hooks/useTimer";
-import UserContext from "@contexts/UserContext";
-import useAuth from "@hooks/useAuth";
+import { SWRConfig } from "swr";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { SWRConfig } from "swr";
+import { AppShell } from "@mantine/core";
+import Header from "./components/Header";
+import MantineApp from "./components/Mantine";
+import TimerContext from "@contexts/TimerContext";
+import UserContext from "@contexts/UserContext";
+import useAuth from "@hooks/useAuth";
+import useTimer from "@hooks/useTimer";
 
 const App = (): JSX.Element => {
   // Track timer data in top level component to ensure
