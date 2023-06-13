@@ -12,7 +12,9 @@ const ProjectDrawer = (): JSX.Element => {
     <>
       <Affix position={{ top: 120, left: 20 }}>
         <ActionIcon
-          onClick={() => { setDrawerOpened(true); }}
+          onClick={() => {
+            setDrawerOpened(true);
+          }}
           variant="outline"
           color="violet"
           disabled={!userSignedIn}
@@ -24,11 +26,20 @@ const ProjectDrawer = (): JSX.Element => {
         size="lg"
         title="Projects"
         opened={drawerOpened}
-        onClose={() => { setDrawerOpened(false); }}
-        sx={{
-          ".drawer-title": { margin: "1rem 0 0 1rem" },
-          ".drawer-close": { margin: "1rem 1rem 0 0" },
+        onClose={() => {
+          setDrawerOpened(false);
         }}
+        sx={(theme) => ({
+          ".drawer-title": { margin: "1rem 0 0 1rem" },
+          ".mantine-Drawer-close": { margin: "1rem 1rem 0 0" },
+          [theme.fn.smallerThan("sm")]: {
+            ".drawer-title": { margin: "3rem 0 0 1rem" },
+            ".mantine-Drawer-close": {
+              margin: "2rem 1rem 0 0",
+              paddingTop: "1rem",
+            },
+          },
+        })}
       >
         <Divider />
         <DrawerList />
