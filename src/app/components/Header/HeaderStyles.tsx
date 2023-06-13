@@ -8,8 +8,12 @@ const headerStyles = createStyles((theme) => ({
     // position: "relative",
     zIndex: 100,
     marginBottom: theme.spacing.xs,
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[6]
+        : theme.colors.gray[3],
     // Ensure dropdown appears in front of Affix components
-    [theme.fn.smallerThan('sm')]: { zIndex: 500 }
+    [theme.fn.smallerThan("sm")]: { zIndex: 500 },
   },
 
   dropdown: {
@@ -56,21 +60,21 @@ const headerStyles = createStyles((theme) => ({
     color:
       theme.colorScheme === "dark"
         ? theme.colors.dark[0]
-        : theme.colors.gray[7],
+        : theme.colors.gray[9],
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
 
     "&:hover": {
       backgroundColor:
         theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
+          ? theme.colors.dark[4]
+          : theme.colors.gray[4],
     },
 
     [theme.fn.smallerThan("sm")]: {
       borderRadius: 0,
       padding: theme.spacing.md,
-      width: '100%'
+      width: "100%",
     },
   },
 

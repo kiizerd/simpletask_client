@@ -5,11 +5,11 @@ const sectionListStyles = createStyles((theme) => {
   const violet = theme.colors.violet[7];
 
   const darkBg = theme.colors.dark[7];
-  const lightBg = theme.white;
+  const lightBg = theme.colors.gray[1];
   const bgColor = isDarkModeOn ? darkBg : lightBg;
 
   const listDarkBg = "#16161D";
-  const listLightBg = "#e9e9e2";
+  const listLightBg = theme.colors.gray[4];
   const listBg = isDarkModeOn ? listDarkBg : listLightBg;
 
   return {

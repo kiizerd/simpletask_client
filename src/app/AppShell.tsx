@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-import { SWRConfig } from "swr";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { AppShell } from "@mantine/core";
-import Header from "./components/Header";
 import MantineApp from "./components/Mantine";
+import Header from "./components/Header";
 import TimerContext from "@contexts/TimerContext";
+import useTimer from "@hooks/useTimer";
 import UserContext from "@contexts/UserContext";
 import useAuth from "@hooks/useAuth";
-import useTimer from "@hooks/useTimer";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { SWRConfig } from "swr";
 
 const App = (): JSX.Element => {
   // Track timer data in top level component to ensure
@@ -21,7 +21,16 @@ const App = (): JSX.Element => {
       <UserContext.Provider value={authData}>
         <AppShell
           header={<Header />}
-          styles={{ main: { paddingLeft: 0, paddingRight: 0 } }}
+          styles={(theme) => ({
+            main: {
+              paddingLeft: 0,
+              paddingRight: 0,
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[7]
+                  : theme.colors.gray[1],
+            },
+          })}
         >
           {/* Only disabled to make server output cleaner for development */}
           <SWRConfig value={{ revalidateOnFocus: false }}>
