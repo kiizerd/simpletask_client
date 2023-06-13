@@ -9,7 +9,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useRevalidator } from "react-router-dom";
 import authFormStyles from "./AuthFormStyles";
 import { useContext } from "react";
 import UserContext from "@contexts/UserContext";
@@ -23,6 +23,7 @@ const LoginForm = (): JSX.Element => {
   const { classes } = authFormStyles();
   const { login } = useContext(UserContext);
   const navigate = useNavigate();
+  const revalidator = useRevalidator();
   const form = useForm({
     initialValues: {
       email: "",
@@ -39,6 +40,7 @@ const LoginForm = (): JSX.Element => {
     login(values.email, values.password)
       .then((response) => {
         if ("id" in response) {
+          revalidator.revalidate();
           navigate("/projects");
         } else if (response.status === 404) {
           form.setErrors({ email: "Email not registered." });
