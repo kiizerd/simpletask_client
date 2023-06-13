@@ -1,57 +1,53 @@
-import { signIn, signUp, signOut } from "@api/auth";
+import { signIn, signUp, signOut, type AuthError } from "@api/auth";
 import { useLocalStorage } from "@mantine/hooks";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { mutate } from "swr";
 import type { User } from "types/models";
 
 export interface AuthData {
-  currentUser: User | undefined;
-  login: (email: string, password: string) => Promise<User | undefined>;
-  logout: () => Promise<void>;
-  register: (email: string, password: string) => Promise<User | undefined>;
+  user: User | undefined;
+  login: (email: string, password: string) => Promise<User | AuthError>;
+  register: (email: string, password: string) => Promise<User | AuthError>;
+  logout: () => Promise<string | AuthError>;
   clearCache: () => Promise<void>;
 }
 
+// Sends requests to API for authorization and stores User data in client.
 export default function useAuth(): AuthData {
-  const navigate = useNavigate()
-  const [user, setUser] = useState<User | undefined>(undefined)
-  const [currentUser, setCurrentUser, removeValue] = useLocalStorage<
-    User | undefined
-  >({
-    key: "currentUser",
+  const [user, setUser, removeValue] = useLocalStorage<User | undefined>({
+    key: "current-user",
     defaultValue: undefined,
   });
-
-  useEffect(() => {
-    setUser(currentUser)
-  }, [currentUser])
 
   const login = async (
     email: string,
     password: string
-  ): Promise<User | undefined> => {
+  ): Promise<User | AuthError> => {
     await clearCache();
-    const user = await signIn(email, password);
-    setCurrentUser(user);
-    navigate("/projects")
-    return user;
-  };
-
-  const logout = async (): Promise<void> => {
-    await signOut();
-    await clearCache();
-    navigate("/welcome")
+    const loginResponse = await signIn(email, password);
+    if ("id" in loginResponse) {
+      setUser(loginResponse);
+      return loginResponse;
+    } else return loginResponse;
   };
 
   const register = async (
     email: string,
     password: string
-  ): Promise<User | undefined> => {
-    const user = await signUp(email, password);
-    setCurrentUser(user);
-    navigate("/projects")
-    return user;
+  ): Promise<User | AuthError> => {
+    await clearCache();
+    const registerResponse = await signUp(email, password);
+    if ("id" in registerResponse) {
+      setUser(registerResponse);
+      return registerResponse;
+    } else return registerResponse;
+  };
+
+  const logout = async (): Promise<string | AuthError> => {
+    const logoutResponse = await signOut();
+    if (!logoutResponse) {
+      await clearCache();
+      return 'success';
+    } else return logoutResponse;
   };
 
   const clearCache = async (): Promise<void> => {
@@ -59,5 +55,5 @@ export default function useAuth(): AuthData {
     await mutate(() => true, undefined, { revalidate: false });
   };
 
-  return { currentUser: user, login, logout, register, clearCache };
+  return { user, login, logout, register, clearCache };
 }
