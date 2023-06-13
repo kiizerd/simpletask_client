@@ -4,7 +4,7 @@ import { HEADER_HEIGHT } from "app/components/Header/HeaderStyles";
 const authFormStyles = createStyles((theme) => ({
   wrapper: {
     backgroundSize: "cover",
-    backgroundImage: 'url(./wide/0.png)',
+    backgroundImage: "url(https://iili.io/H6BbDJV.png)",
     backgroundPosition: "bottom right",
     position: "absolute",
     top: HEADER_HEIGHT,
