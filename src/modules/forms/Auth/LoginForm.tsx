@@ -9,7 +9,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import authFormStyles from "./AuthFormStyles";
 import { useContext } from "react";
 import UserContext from "@contexts/UserContext";
@@ -22,6 +22,7 @@ export interface UserFormValues {
 const LoginForm = (): JSX.Element => {
   const { classes } = authFormStyles();
   const { login } = useContext(UserContext);
+  const navigate = useNavigate();
   const form = useForm({
     initialValues: {
       email: "",
@@ -35,7 +36,19 @@ const LoginForm = (): JSX.Element => {
   });
 
   const submit = (values: UserFormValues): void => {
-    void login(values.email, values.password);
+    login(values.email, values.password)
+      .then((response) => {
+        if ("id" in response) {
+          navigate("/projects");
+        } else if (response.status === 404) {
+          form.setErrors({ email: "Email not registered." });
+        } else if (response.status === 401) {
+          form.setErrors({ password: "Incorrect password." });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
