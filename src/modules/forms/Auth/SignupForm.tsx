@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Anchor,
   Button,
@@ -18,6 +18,7 @@ import { type UserFormValues } from "./LoginForm";
 const SignupForm = (): JSX.Element => {
   const { classes } = authFormStyles();
   const { register } = useContext(UserContext);
+  const navigate = useNavigate();
   const form = useForm({
     initialValues: {
       email: "",
@@ -31,7 +32,22 @@ const SignupForm = (): JSX.Element => {
   });
 
   const submit = (values: UserFormValues): void => {
-    void register(values.email, values.password);
+    register(values.email, values.password)
+      .then((response) => {
+        if ("id" in response) {
+          navigate("/projects");
+        } else {
+          if (response?.messages?.email) {
+            form.setErrors({ email: response.messages.email });
+          }
+          if (response?.messages?.password) {
+            form.setErrors({ password: response.messages.password });
+          }
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
