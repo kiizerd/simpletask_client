@@ -5,7 +5,7 @@ import { Flex, type FlexProps } from "@mantine/core";
 interface ScrollDragProps {
   className: string;
   children: React.ReactNode;
-  ignoredElements?: string[] | string;
+  ignoredElements?: string[];
 }
 
 const DragScroll: React.FC<ScrollDragProps & FlexProps> = ({
@@ -49,14 +49,12 @@ const DragScroll: React.FC<ScrollDragProps & FlexProps> = ({
 
     let isIgnored = false;
     const target: HTMLElement = event.target as HTMLElement;
-    const selector = Array.isArray(ignored) ? ignored.join(" ") : ignored;
-    const matchingElements: HTMLElement[] = Array.from(
-      document.querySelectorAll(selector)
-    );
-    matchingElements.forEach((element) => {
-      if (element.contains(target)) {
-        isIgnored = true;
-      }
+    ignored.forEach((selector) => {
+      document.querySelectorAll(selector).forEach((element) => {
+        if (element.contains(target)) {
+          isIgnored = true;
+        }
+      });
     });
 
     return isIgnored;
