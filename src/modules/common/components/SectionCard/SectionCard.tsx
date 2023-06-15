@@ -1,7 +1,9 @@
-import { useState } from "react";
 import { Card } from "@mantine/core";
-import SectionContext from "@contexts/SectionContext";
-import useSection from "@hooks/useSection";
+import {
+  SectionContext,
+  SectionDispatchContext,
+} from "@contexts/SectionContext";
+import useSectionCard from "@hooks/useSectionCard";
 import Header from "./SectionHeader";
 import DroppableTaskList from "../TaskList/DroppableTaskList";
 import TaskList from "../TaskList/TaskList";
@@ -12,18 +14,16 @@ export interface SectionCardProps {
 }
 
 const SectionCard = ({ section: _section }: SectionCardProps): JSX.Element => {
-  const { id, projectId } = _section;
-  const { section = _section } = useSection(projectId, id);
-  const [dragLocked, setDragLocked] = useState<boolean>(false);
-  const toggleDragLocked = (): void => {
-    setDragLocked(!dragLocked);
-  };
+  const { state, dispatch } = useSectionCard(_section);
+  const { dragLocked } = state;
 
   return (
     <Card p="xs" className="section-card">
-      <SectionContext.Provider value={section}>
-        <Header dragLocked={dragLocked} toggleDragLocked={toggleDragLocked} />
-        {dragLocked ? <TaskList /> : <DroppableTaskList />}
+      <SectionContext.Provider value={state}>
+        <SectionDispatchContext.Provider value={dispatch}>
+          <Header />
+          {dragLocked ? <TaskList /> : <DroppableTaskList />}
+        </SectionDispatchContext.Provider>
       </SectionContext.Provider>
     </Card>
   );

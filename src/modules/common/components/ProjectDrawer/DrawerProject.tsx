@@ -39,8 +39,7 @@ const DrawerProject = ({ projectId }: DrawerProjectProps): JSX.Element => {
           {project.sections.map((section) => (
             <DrawerSection
               key={section.id}
-              projectId={project.id}
-              sectionId={section.id}
+              section={section}
             />
           ))}
         </Accordion>
