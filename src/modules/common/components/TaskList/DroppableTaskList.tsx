@@ -3,7 +3,7 @@ import { useContext, useCallback, useState, useEffect } from "react";
 import { Box, Divider } from "@mantine/core";
 import { useDrop } from "react-dnd";
 import TaskForm from "@forms/Task";
-import SectionContext from "@contexts/SectionContext";
+import { SectionContext } from "@contexts/SectionContext";
 import TaskIndexContext from "@contexts/TaskIndexContext";
 import useTaskIndex from "@hooks/useTaskIndex";
 import { DraggableTaskCard, type DragItem } from "../TaskCard";
@@ -12,7 +12,10 @@ import { ItemTypes } from "types/dragndrop";
 import { moveSectionTask } from "@api/tasks";
 
 const DroppableTaskList = (): JSX.Element => {
-  const section = useContext(SectionContext);
+  const {
+    showComplete,
+    sectionData: { section },
+  } = useContext(SectionContext);
   const { tasks, mutate } = useTaskIndex(section.projectId, section.id);
   const [draggableTasks, setDraggableTasks] = useState(tasks);
 
@@ -50,14 +53,16 @@ const DroppableTaskList = (): JSX.Element => {
     <TaskIndexContext.Provider value={{ tasks, mutate }}>
       <Box className="task-list">
         <div ref={drop}>
-          {draggableTasks.map((task: Task, index: number) => (
-            <DraggableTaskCard
-              key={task.id}
-              task={task}
-              index={index}
-              moveTask={moveTask}
-            />
-          ))}
+          {draggableTasks.map((task: Task, index: number) =>
+            !showComplete && task.isComplete() ? null : (
+              <DraggableTaskCard
+                key={task.id}
+                task={task}
+                index={index}
+                moveTask={moveTask}
+              />
+            )
+          )}
         </div>
       </Box>
       <Divider />

@@ -1,6 +1,9 @@
-import { createContext } from "react";
-import Section from "types/Section";
+import {
+  type Action,
+  type SectionCardState,
+  initialState,
+} from "@state/sectionCard";
+import { type Dispatch, createContext } from "react";
 
-const defaultSection = new Section(0, {});
-const SectionContext = createContext(defaultSection);
-export default SectionContext;
+export const SectionContext = createContext<SectionCardState>(initialState);
+export const SectionDispatchContext = createContext<Dispatch<Action>>(() => {});

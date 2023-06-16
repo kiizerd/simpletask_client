@@ -4,24 +4,24 @@ import { useForm } from "@mantine/form";
 import { mutate } from "swr";
 import { useClickOutside } from "@mantine/hooks";
 import { updateProjectSection } from "@api/sections";
-import SectionContext from "@contexts/SectionContext";
+import { SectionContext } from "@contexts/SectionContext";
 import { errorTimeout } from "@helpers/formHelpers";
 import sectionFormStyles from "./EditSectionFormStyles";
 import { validate } from "../New/SectionForm";
 import Section from "types/Section";
 
 interface SectionFormProps {
-  setEditMode: (value: boolean) => void;
+  toggleEditMode: () => void;
 }
 
-const EditSectionForm = ({ setEditMode }: SectionFormProps): JSX.Element => {
-  const section = useContext(SectionContext);
+const EditSectionForm = ({ toggleEditMode }: SectionFormProps): JSX.Element => {
+  const {
+    sectionData: { section },
+  } = useContext(SectionContext);
   const { id, name, projectId, route } = section;
   const { classes } = sectionFormStyles();
 
-  const clickRef = useClickOutside(() => {
-    setEditMode(false);
-  });
+  const clickRef = useClickOutside(toggleEditMode);
   const form = useForm({
     initialValues: { name },
     validate,
@@ -36,7 +36,7 @@ const EditSectionForm = ({ setEditMode }: SectionFormProps): JSX.Element => {
         optimisticData: newSection,
       }
     );
-    setEditMode(false);
+    toggleEditMode();
   };
 
   return (

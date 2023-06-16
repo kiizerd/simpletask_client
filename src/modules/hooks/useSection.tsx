@@ -2,7 +2,7 @@ import useSWR, { type Key, type Fetcher, type KeyedMutator } from "swr";
 import { getProjectSection as getSection } from "@api/sections";
 import type Section from "types/Section";
 
-interface SectionHookData {
+export interface SectionHookData {
   section: undefined | Section;
   error: undefined | Error;
   isLoading: boolean;

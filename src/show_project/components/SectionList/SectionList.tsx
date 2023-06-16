@@ -25,7 +25,7 @@ const SectionList = ({ projectId }: SectionListProps): JSX.Element => {
 
   return (
     <SectionIndexContext.Provider value={{ sections, mutate }}>
-      <DragScroll ignoredElements={[".section-card"]} className={classes.list}>
+      <DragScroll ignoredElements={[".section-card", ".section-card-menu"]} className={classes.list}>
           {sectionCards}
           <SectionForm projectId={projectId} />
       </DragScroll>

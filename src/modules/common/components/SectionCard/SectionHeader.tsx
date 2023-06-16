@@ -1,28 +1,35 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ActionIcon, Box, Group, Progress, Title } from "@mantine/core";
 import { IconEdit, IconLock, IconLockOpen } from "@tabler/icons";
-import SectionContext from "@contexts/SectionContext";
+import {
+  SectionContext,
+  SectionDispatchContext,
+} from "@contexts/SectionContext";
 import { EditSectionForm } from "@forms/Section";
-import SectionHeaderMenu from "./SectionHeaderMenu";
+import SectionMenu from "./SectionMenu";
 import sectionCardStyles from "./SectionCardStyles";
 
-interface SectionHeaderProps {
-  dragLocked: boolean;
-  toggleDragLocked: () => void;
-}
-
-const SectionCardHeader = ({
-  dragLocked,
-  toggleDragLocked,
-}: SectionHeaderProps): JSX.Element => {
-  const [editMode, setEditMode] = useState<boolean>();
-  const { name, progress } = useContext(SectionContext);
+const SectionCardHeader = (): JSX.Element => {
   const { classes } = sectionCardStyles();
+  const {
+    editMode,
+    dragLocked,
+    sectionData: {
+      section: { name, progress },
+    },
+  } = useContext(SectionContext);
+  const dispatch = useContext(SectionDispatchContext);
+  const toggleDragLocked = (): void => {
+    dispatch({ type: "SET_DRAG_LOCKED", payload: !dragLocked });
+  };
+  const toggleEditMode = (): void => {
+    dispatch({ type: "SET_EDIT_MODE", payload: !editMode });
+  };
 
   return (
     <Box className="section-header">
       {editMode ? (
-        <EditSectionForm setEditMode={setEditMode} />
+        <EditSectionForm toggleEditMode={toggleEditMode} />
       ) : (
         <Group position="apart" className={classes.header}>
           {/* Prevent animation on first render */}
@@ -30,28 +37,23 @@ const SectionCardHeader = ({
             className={editMode === undefined ? "" : classes.title}
             order={5}
             style={{ cursor: "pointer" }}
-            onClick={() => { setEditMode(true); }}
+            onClick={toggleEditMode}
           >
             {name}
           </Title>
 
           <Group spacing="sm" my={2} className="section-button-group">
+            <ActionIcon variant="outline" color="cyan" onClick={toggleEditMode}>
+              <IconEdit size={16} />
+            </ActionIcon>
             <ActionIcon
               variant="outline"
-              color="blue"
+              color={dragLocked ? "orange" : "blue"}
               onClick={toggleDragLocked}
             >
               {dragLocked ? <IconLock size={16} /> : <IconLockOpen size={16} />}
             </ActionIcon>
-            <ActionIcon
-              variant="outline"
-              color="blue"
-              onClick={() => { setEditMode(true); }}
-            >
-              <IconEdit size={16} />
-            </ActionIcon>
-
-            <SectionHeaderMenu />
+            <SectionMenu />
           </Group>
         </Group>
       )}
